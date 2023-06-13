@@ -8,7 +8,7 @@ mathjax: true
 
 ## 知识结构
 
-![概率图-知识结构](../pictures/概率图-知识结构.jpg)
+![概率图-知识结构](https://github.com/uneypan/uneypan.github.io/raw/master/assets/images/%E6%A6%82%E7%8E%87%E5%9B%BE-%E7%9F%A5%E8%AF%86%E7%BB%93%E6%9E%84.jpg?raw=true)
 
 
 ## 概率图模型基础
@@ -53,7 +53,7 @@ $$
 
 $ x_{pa(i)} $ 是 $ x_i $ 的父亲集合。
 
-![三种节点类型](../pictures/三种节点类型.jpg)
+![三种节点类型](https://github.com/uneypan/uneypan.github.io/raw/master/assets/images/三种节点类型.jpg?raw=true)
 
 *1. tail to tail*  
 若a被观测，则路径被阻塞。  
@@ -93,7 +93,7 @@ $$ -->
 
 ## 贝叶斯网络 - 知识结构
 
-![Bayesian_Network](../pictures/Bayesian_Network.png)
+![Bayesian_Network](https://github.com/uneypan/uneypan.github.io/raw/master/assets/images/Bayesian_Network.png?raw=true)
 
 ## Markov Network（Markov Random Field 马尔可夫随机场）
 
@@ -146,7 +146,7 @@ $2.$条件概率（后验概率）：$P(x_A\mid x_B),\quad x = x_A \cup x_B$;
 
 $3.$最大后验 MAP: $\hat{z} = \arg\max_{z} P(z|x) \propto \arg\max P(z,x)$;    
 
-![Inferece知识结构](../pictures/Inferece知识结构.png)
+![Inferece知识结构](https://github.com/uneypan/uneypan.github.io/raw/master/assets/images/Inferece%E7%9F%A5%E8%AF%86%E7%BB%93%E6%9E%84.png?raw=true)
 
 
 HMM Inference 中的三个问题:
@@ -161,7 +161,7 @@ HMM $\Rightarrow$ Dynamic Bayesian Network
 
 ## Inference - Variable Elimination 变分推断
 (VE的核心思想：乘法分配律)
-![hmm](../pictures/hmm.png)
+![hmm](/assets/images/hmm.png)
 $$
 P(d) = \sum_{a,b,c} P(a,b,c,d) = \sum_{a,b,c}P(a)P(b\mid a)P(c\mid b) P(d\mid c)
 $$
