@@ -27,4 +27,4 @@ Piccirillo J. 博士撰写的 [“The Art and Science of Selecting Robot Motors�
 
 ## 译文
 
-<center><embed src="/assets/Art_and_Science_of_Selecting_Robot_Motors_-_Final (中文版).pdf"></center>
+<center><embed src="/assets/Art_and_Science_of_Selecting_Robot_Motors_-_Final (中文版).pdf" width="850" height="1200"></center>
