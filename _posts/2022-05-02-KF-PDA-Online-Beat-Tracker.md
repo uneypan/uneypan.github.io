@@ -1,6 +1,7 @@
 ---
 layout: article
 title: 基于概率数据关联滤波器的在线节拍跟踪器
+mathjax: true
 ---
 
 # **基于概率数据关联滤波器的在线节拍跟踪器**

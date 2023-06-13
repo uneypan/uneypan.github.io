@@ -20,9 +20,9 @@ Sum Rule: $ P(x_1) = \int P(x_1,x_2)\mathrm{d} x_2 $
 
 Product Rule: $P(x_1,x_2) = P(x_1) \cdot P(x_2\mid x_1) = P(x_2) \cdot P(x_1\mid x_2)$
 
-Chain Rule: $P(x_1,x_2, \dots,x_p) = \prod_{i=1}^{p} P(x_i\mid x_1,x_2, \dots,x_{i-1})$
+Chain Rule: $P(x_1,x_2, \dots,x_p) = \displaystyle\prod_{i=1}^{p} P(x_i\mid x_1,x_2, \dots,x_{i-1})$
 
-Bayesian Rule: $P(x_2\mid x_1) = \dfrac{P(x_1,x_2)}{P(x_1)}=\dfrac{P(x_1,x_2)}{\int P(x_1,x_2)\mathrm{d} x_2} = \dfrac{P(x_1,x_2)}{\int P(x_2) \cdot P(x_1\mid x_2)\mathrm{d} x_2} $
+Bayesian Rule: $P(x_2\mid x_1) = \dfrac{P(x_1,x_2)}{P(x_1)}=\dfrac{P(x_1,x_2)}{\displaystyle\int P(x_1,x_2)\mathrm{d} x_2} = \dfrac{P(x_1,x_2)}{\displaystyle\int P(x_2) \cdot P(x_1\mid x_2)\mathrm{d} x_2} $
 
 困境：维度高，求解复杂。$P(x_1,x_2, \dots,x_p)$ 计算量太大。
 
@@ -142,11 +142,11 @@ Markov Random Field $\Leftrightarrow$ Gibbs Distribution，证明略。
 
 Tasks: 给定 $P(x) = P(x_1,x_2,\dots,x_p)$ 求：
 
-$1.$边缘概率： $P(x_i) = \sum_{x_1}\dots\sum_{x_{i-1}}\sum_{x_{i+1}}\dots\sum_{x_p}P(x)$;
+$1.$边缘概率： $P(x_i) = \displaystyle\sum_{x_1}\dots\sum_{x_{i-1}}\sum_{x_{i+1}}\dots\sum_{x_p}P(x)$;
 
 $2.$条件概率（后验概率）：$P(x_A\mid x_B),\quad x = x_A \cup x_B$;   
 
-$3.$最大后验 MAP: $\hat{z} = \arg \max_{z} P(z|x) \propto \arg \max P(z,x)$ ;    
+$3.$最大后验 MAP: $\hat{z} = \displaystyle \argmax_{z} P(z\mid x) \propto \argmax P(z,x)$ ;    
 
 ![Inferece知识结构](/pictures/Inferece知识结构.png)
 
@@ -173,11 +173,74 @@ $$
 $$
 
 
-推广到无向图，$K$ 是最大团的个数： 
+推广到无向图，使用最大团分解，$K$ 是最大团的个数： 
 
 $$P(a,b,c,d) = \dfrac{1}{Z}\prod_{i=1}^{K}\phi_{C_i}(x_{Ci})$$
 
 由于是最大团，不能再添加其他结点，因此团与团的联系较小，同时每一个结点几乎不可能同时存在于所有团，因此同样可以使用Variable Elimination方法进行计算。
 
-因此，可以用因子乘积 
-$$P(x) = \prod_{x_c}\phi_c(x_c)$$
+VE算法的局限性：
+
+- 上述例子只计算了结点 d ，若需要计算其他结点，又要重新计算，每次计算的中间结果没有存储，导致重复计算。
+- 变量消除的次序会决定时间复杂度，已被证明找到最优次序是一个NP-Hard问题，因此也可以使用一些启发式思想进行次序选择。
+
+## Inference-Belief Propagation
+
+以5节点链为例，先进行因子分解：
+$$
+P(a,b,c,d,e)=P(a)P(b|a)P(c|b)P(d|c)P(e|d)
+$$
+
+$$
+\begin{split} P(e)&=\sum_{a,b,c,d} P(a,b,c,d,e)\\ &=\sum_dP(e|d)\sum_cP(d|c)\sum_bP(c|b)\sum_aP(b|a)P(a)\\ &=\sum_dP(e|d)\sum_cP(d|c)\sum_bP(c|b) \color{red}{m_{a\to b}(b)}\\ &=\sum_dP(e|d)\sum_cP(d|c) \color{red}{m_{b\to c}(c)}\\ &=\sum_dP(e|d) \color{red}{m_{c\to d}(d)}\\ &= \color{red}{m_{d\to e}(e)}\\ \end{split}
+$$
+
+上述是一个前向传播过程（Forward Algorithm），类似于HMM的过程。
+
+若我们需要求 $P(c)$ ,则：
+
+$$
+P(c)=(\sum_{b}P(c|b)\sum_aP(b|a)P(a))\cdot(\sum_{d}P(d|c)\sum_eP(e|d))
+$$
+
+先从 a 到 b , 再从 e 到 d ，先前向传播，再反向传播（Forward-Backward Algorithm）
+其中前向传播的计算与求 $P(e)$ 的部分计算一样，重复计算。
+
+从这个例子可以看出上节讲的VE算法的缺点：重复计算。
+本节引入Belief Propagation算法，其基本思想与VE一致  
+不同的是：将中间过程存储起来，简化计算，避免重复计算。
+
+以 P(a) 为例：
+$$
+\begin{split} P(a)&=\sum_{b,c,d}P(a,b,c,d)\\ &=\psi_a\sum_b((\sum_c\psi_c\psi_{b,c})\cdot \psi_b\cdot(\sum_d\psi_d\psi_{b,d})\cdot \psi_{ab})\\ &=\psi_a\sum_b(m_{c\to b}(b)\cdot \psi_b\cdot m_{d\to b}(b)\cdot \psi_{ab})\\ &=\psi_a m_{b\to a}(a) \end{split}
+$$
+
+此式共有两个部分：
+$$
+\begin{cases} m_{b \to a}(a)=\displaystyle\sum_b \psi_{a,b} \psi_b m_{c\to b}(b)m_{d\to b}(b)\\ P(a)=\psi_a m_{b \to a}(a) \end{cases}
+$$
+
+进行简化( $NB(b)$ 为 b 结点的邻居结点所组成的集合)：
+$$
+\begin{cases} m_{b \to a}(a)=\displaystyle\sum_b \psi_{a,b} \psi_b \prod_{k\in NB(b)}m_{k \to b}(b)\\ P(a)=\psi_a m_{b \to a}(a) \end{cases}
+$$
+
+再进行归纳（generalize），得到边缘概率的递推公式：
+$$
+\begin{cases} m_{j \to i}(i)=\displaystyle\sum_j \psi_{i,j} \psi_j \prod_{k\in NB(j)}m_{k \to j}(j)\\ P(i)=\psi_i \displaystyle\prod _{k\in NB(i)}m_{k \to i}(i) \end{cases}
+$$
+
+其中 $\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$ 称为 $Belief(j) m_{k \to j}$ 称为 $j$ 的Child.
+$$
+\begin{cases} belief(j)=\psi(j)\cdot Children(j)\\ m_{j \to i } = \displaystyle\sum_j\psi_{i,j}\cdot belief(j) \end{cases}
+$$
+
+根据避免重复计算的思路，可得出结论：
+
+不要直接求边缘概率 $(P(a),P(b),\cdots)$ ，只需求 $m_{i\to j}$
+
+相当于做了一个cach，存储中间结果
+
+那么如何求 $m_{i\to j}$ ，就需要Belief Propagation.
+
+
