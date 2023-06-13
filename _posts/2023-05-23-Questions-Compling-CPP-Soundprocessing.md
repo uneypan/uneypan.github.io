@@ -5,7 +5,7 @@ mathjax: true
 ---
 
 
-# 编译 NAO 机器人 C++ 例程 soundprocessing 模块遇到的问题
+<!-- # 编译 NAO 机器人 C++ 例程 soundprocessing 模块遇到的问题 -->
 
 ## 1.准备工作
 

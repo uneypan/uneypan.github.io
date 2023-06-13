@@ -4,7 +4,7 @@ title: 概率图理论
 mathjax: true
 ---
 
-# 概率图模型 PGM
+<!-- # 概率图模型 PGM -->
 
 ## 知识结构
 

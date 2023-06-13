@@ -91,7 +91,7 @@ mathjax_autoNumber: true
 ## 插入 PDF
 
 ```markdown
-<center><embed src="/assets/example.pdf"></center>
+<center><embed src="/assets/example.pdf" width="850" height="600" ></center>
 ```
 
 ## 发布
