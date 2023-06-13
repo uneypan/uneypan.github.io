@@ -531,6 +531,5 @@ $$
 $$
 A=n/\bar{\rho} \tag{D.3}
 $$
-<img src="/Users/uneypan/Library/Application Support/typora-user-images/截屏2022-02-18 19.21.47.png" alt="截屏2022-02-18 19.21.47" style="zoom:50%;" />
 
 图5描述了上述过程，其中正确测量值使用 “ * ” 表示，错误测量值使用 “ + ” 表示。在这种情况下，因为 $A \gg A_v$ ，有效的不正确回波值的是均值为 $A_v \rho$ 的随机数。这个产生错误回波的过程可认为较准确地模拟了现实中杂波或虚警率较高的情况。在每一次运行中，参数 $\bar{r}$ 保持不变。 
