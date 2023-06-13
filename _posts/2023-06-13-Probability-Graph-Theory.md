@@ -283,6 +283,37 @@ Max-product: BP 的改进，Viterbi 的推广。
 
 ![](/pictures/Max-product-tree.png)
 
+图中 $m_{c \to b}$ 表示能使得 c 结点概率最大的值， $m_{d \to b}$ 同理
+
+$m_{b \to a}$ 表示能使得 c,b,d 联合概率最大的值
+
+因此传递到结点 a 后，便是能使得 P(a,b,c,d) 最大的值
+
 $$
-P(\hat{a},\hat{b},\hat{c},\hat{d}) = \argmax_{a,b,c,d} P(x_a,x_b,x_c,x_d \mid E)
+(x_a^*,x_b^*,x_c^*,x_d^*)=arg\underset{x_a,x_b,x_c,x_d}{max}P(x_a,x_b,x_c,x_d|E)
 $$
+
+在BP算法中： $m_{j\to i}(i)=\sum_j \psi_{i,j} \psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$
+
+而在Max-Product算法中： 
+
+$$m_{j\to i}(i)=\underset{j}{\max} \psi_{i,j} \psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$$
+
+$$
+m_{c\to b}=\underset{x_c}{\max} \psi_c \psi_{b,c}
+$$
+
+可以把 $\psi_c \psi_{b,c}$ 看作是一个关于 $x_c$ 的函数，也就是找到这个函数的最大值
+
+$$m_{d\to b}=\underset{x_d}{\max} \psi_d \psi_{b,d}$$
+
+$$m_{b\to a}=\underset{x_b}{\max} \psi_b \psi_{a,b}\cdot m_{c \to b} m_{d \to b}$$
+
+$\psi_b \psi_{a,b}\cdot m_{c \to b} m_{d \to b}$ 是图中所有关于 $x_b$ 的函数
+因此 
+
+$$\max P(x_a,x_b,x_c,x_d)=\underset{x_a}{\max}\psi_a\cdot m_{b\to a}$$
+
+最后自上到下返回就可求得最优时的状态序列 $x_a^*,x_b^*,x_c^*,x_d^*$
+
+由此可以看出此算法与Vitebi算法如出一辙
