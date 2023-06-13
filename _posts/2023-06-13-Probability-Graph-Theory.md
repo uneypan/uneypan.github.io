@@ -132,7 +132,7 @@ $$
 形式上为指数族分布 
 
 $$
-P(x) = h(x)\exp \{\eta^{\mathrm{T}}\phi(x)-A(\eta) \} = \dfrac{1}{Z(\eta)} h(x) \exp \{{ \eta^{\mathrm{T}}\phi(x) \}}
+P(x)=h(x)\exp\{\eta^T\phi(x)-A(\eta)\}={1\over Z(\eta)}h(x)\exp\{\eta^T\phi(x)\}
 $$
 
 
@@ -157,19 +157,19 @@ $1.$ Evalution 边际化: $P(O) = \sum_{I} P(I,O) \Rightarrow$ 解决方法：�
 
 $2.$ Learning: $\hat{\lambda}$；
 
-$3.$ Decoding: $\tilde{I} = \arg\max_{I} P(I\mid O)$ $\Rightarrow$ Vitebi Algorithm(动态规划).
+$3.$ Decoding: $\tilde{I} = \arg\max_{I} P(I\mid O)$ $\Rightarrow$ Viterbi Algorithm(动态规划).
 
 HMM $\Rightarrow$ Dynamic Bayesian Network
 
 ## Inference - Variable Elimination 变分推断
 (VE的核心思想：乘法分配律)
-![hmm](/pictures/hmm.png)
+![](/pictures/ve-example.png)
 $$
-P(d) = \sum_{a,b,c} P(a,b,c,d) = \sum_{a,b,c}P(a)P(b\mid a)P(c\mid b) P(d\mid c)
-$$
-$$
-= \sum_{b,c} P(c\mid b)P(d\mid c) \underbrace{\sum_a P(a)P(b\mid a)}_{\phi_a(b)} 
-= \sum_{c} P(d\mid c) \underbrace{\sum_b P(c\mid b) \phi_a(b)}_{\phi_b(c)}= \phi_c(d)
+\begin{split} p(d)&=\sum_{a,b,c} p(a)p(b|a)p(c|b)p(d|c)\\ 
+&=\sum_{b,c}p(c|b)p(d|c)\sum_{a} p(a)p(b|a)\\ 
+&=\sum_{b,c}p(c|b)p(d|c)\underbrace{\sum_{a} p(a,b)}_{\phi_a(b)}\\ 
+&=\sum_{c}p(d|c)\underbrace{\sum_{b}p(c|b)\phi_a(b)}_{\phi_b(c)}\\ 
+&=\phi_c(d) \end{split}
 $$
 
 
@@ -186,7 +186,7 @@ VE算法的局限性：
 
 ## Inference-Belief Propagation
 
-以5节点链为例，先进行因子分解：
+以5节点链 a->b->c->d->e 为例，先进行因子分解：
 $$
 P(a,b,c,d,e)=P(a)P(b|a)P(c|b)P(d|c)P(e|d)
 $$
@@ -209,7 +209,7 @@ $$
 从这个例子可以看出上节讲的VE算法的缺点：重复计算。
 本节引入Belief Propagation算法，其基本思想与VE一致  
 不同的是：将中间过程存储起来，简化计算，避免重复计算。
-
+![](/pictures/BP-tree.png)
 以 P(a) 为例：
 $$
 \begin{split} P(a)&=\sum_{b,c,d}P(a,b,c,d)\\ &=\psi_a\sum_b((\sum_c\psi_c\psi_{b,c})\cdot \psi_b\cdot(\sum_d\psi_d\psi_{b,d})\cdot \psi_{ab})\\ &=\psi_a\sum_b(m_{c\to b}(b)\cdot \psi_b\cdot m_{d\to b}(b)\cdot \psi_{ab})\\ &=\psi_a m_{b\to a}(a) \end{split}
@@ -227,12 +227,15 @@ $$
 
 再进行归纳（generalize），得到边缘概率的递推公式：
 $$
-\begin{cases} m_{j \to i}(i)=\displaystyle\sum_j \psi_{i,j} \psi_j \prod_{k\in NB(j)}m_{k \to j}(j)\\ P(i)=\psi_i \displaystyle\prod _{k\in NB(i)}m_{k \to i}(i) \end{cases}
+\begin{cases} m_{j \to i}(i)=\displaystyle\sum_j \psi_{i,j} \cdot \underbrace{\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)}_{\mathrm{Belief}(j)}\\ P(i)=\psi_i \displaystyle\prod _{k\in NB(i)}\underbrace{m_{k \to i}(i) }_{j\mathrm{的Children}}\end{cases}
 $$
 
-其中 $\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$ 称为 $Belief(j) m_{k \to j}$ 称为 $j$ 的Child.
+其中 $\displaystyle\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$ 称为 $\mathrm{Belief}(j)$
+
+$ m_{k \to j}$ 称为 $j$ 的Child.
+
 $$
-\begin{cases} belief(j)=\psi(j)\cdot Children(j)\\ m_{j \to i } = \displaystyle\sum_j\psi_{i,j}\cdot belief(j) \end{cases}
+\begin{cases} \mathrm{Belief}(j)=\psi(j)\cdot \mathrm{Children}(j)\\ m_{j \to i } = \displaystyle\sum_j\psi_{i,j}\cdot \mathrm{Belief}(j) \end{cases}
 $$
 
 根据避免重复计算的思路，可得出结论：
@@ -241,6 +244,45 @@ $$
 
 相当于做了一个cach，存储中间结果
 
-那么如何求 $m_{i\to j}$ ，就需要Belief Propagation.
 
+算法流程：
 
+*Belief Propagation (Sequential Implementation)*
+1. Get Root, assume a is root
+2. Collect Message (求 $m_{x_i \to \mathrm{Root}}$)
+    ```python
+    for x_i in NB(Root):
+        collectMsg(x_i)
+    ```
+3. Distribute Message (求 $m_{\mathrm{Root} \to x_j}$)
+    ```python
+    for x_j in NB(Root):
+        distribute(x_j)
+    ```
+
+可得 $m_{ij}$ for all $i,j\in$ 节点集合 $V$
+从而 $P(x_k), k\in V$
+
+*Belief Propagation (Parellel Implementation)*
+
+1. 随机找一个点 x
+2. 求信息量 （刚开始只有 $\psi _x$）
+3. 向他的邻居结点发生通知
+4. 邻居结点收到通知后进行同样的操作
+5. 然后将消息传递回去
+
+最终会收敛，求得所有的 $m_{i \to j}$
+
+## Inference-Max Product
+
+![](/pictures/hmm.png)
+Decoding: $\displaystyle \hat{Y}=\argmax_{Y} P(Y\mid X)$
+具体的算法：Viterbi，实际上是动态规划问题。
+
+Max-product: BP 的改进，Viterbi 的推广。
+
+![](/pictures/Max-product-tree.png)
+
+$$
+P(\hat{a},\hat{b},\hat{c},\hat{d}) = \argmax_{a,b,c,d} P(x_a,x_b,x_c,x_d \mid E)
+$$
