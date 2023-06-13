@@ -34,7 +34,7 @@ Sea[2]和Singer等人[3,4]处理了这里考虑的问题，并开发了一种改
 $$
 \mathbf{x}_{k+1}=\mathbf{F}_{k} \mathbf{x}_{k}+\mathbf{w}_{k}, \quad k=0,1, \ldots, \tag{2.1}
 $$
-其中 $\mathbf{x}_{k}$ 是 $n$ 维状态向量，$\mathbf{F}_k$是传递矩阵（已知），$\mathbf{w}_k$是过程噪声，假设服从均值为零的正态分布，方差为
+其中 $\mathbf{x}_k$ 是 $n$ 维状态向量，$\mathbf{F}_k$是传递矩阵（已知），$\mathbf{w}_k$是过程噪声，假设服从均值为零的正态分布，方差为
 $$
 E(\mathbf{w}_k\mathbf{w}_j')=\mathbf{Q}_k \delta_{kj} \tag{2.2}
 $$
