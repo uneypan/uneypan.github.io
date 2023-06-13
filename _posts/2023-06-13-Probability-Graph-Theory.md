@@ -8,7 +8,7 @@ mathjax: true
 
 ## 知识结构
 
-![概率图-知识结构](/assets/images/概率图-知识结构.jpg)
+![概率图-知识结构](/pictures/概率图-知识结构.jpg)
 
 
 ## 概率图模型基础
@@ -53,7 +53,7 @@ $$
 
 $ x_{pa(i)} $ 是 $ x_i $ 的父亲集合。
 
-![三种节点类型](/assets/images/三种节点类型.jpg)
+![三种节点类型](/pictures/三种节点类型.jpg)
 
 *1. tail to tail*  
 若a被观测，则路径被阻塞。  
@@ -93,7 +93,7 @@ $$ -->
 
 ## 贝叶斯网络 - 知识结构
 
-![Bayesian_Network](/assets/images/Bayesian_Network.png)
+![Bayesian_Network](/pictures/Bayesian_Network.png)
 
 ## Markov Network（Markov Random Field 马尔可夫随机场）
 
@@ -131,7 +131,9 @@ $$
 
 形式上为指数族分布 
 
-$$P(x)=h(x)\exp{\{\eta^{\mathrm{T}}\phi(x)-A(\eta) \}} = \dfrac{1}{Z(\eta)} h(x) \exp{\{{ \eta^{\mathrm{T}}\phi(x) \}}}$$
+$$
+P(x) = h(x)\exp \{\eta^{\mathrm{T}}\phi(x)-A(\eta) \} = \dfrac{1}{Z(\eta)} h(x) \exp \{{ \eta^{\mathrm{T}}\phi(x) \}}
+$$
 
 
 Markov Random Field $\Leftrightarrow$ Gibbs Distribution，证明略。
@@ -146,7 +148,7 @@ $2.$条件概率（后验概率）：$P(x_A\mid x_B),\quad x = x_A \cup x_B$;
 
 $3.$最大后验 MAP: $\hat{z} = \arg \max_{z} P(z|x) \propto \arg \max P(z,x)$ ;    
 
-![Inferece知识结构](/assets/images/Inferece知识结构.png)
+![Inferece知识结构](/pictures/Inferece知识结构.png)
 
 
 HMM Inference 中的三个问题:
@@ -161,7 +163,7 @@ HMM $\Rightarrow$ Dynamic Bayesian Network
 
 ## Inference - Variable Elimination 变分推断
 (VE的核心思想：乘法分配律)
-![hmm](/assets/images/hmm.png)
+![hmm](/pictures/hmm.png)
 $$
 P(d) = \sum_{a,b,c} P(a,b,c,d) = \sum_{a,b,c}P(a)P(b\mid a)P(c\mid b) P(d\mid c)
 $$
