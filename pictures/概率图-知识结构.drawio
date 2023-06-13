@@ -1,0 +1,122 @@
+<mxfile host="Electron" modified="2023-06-09T11:15:13.769Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/18.0.6 Chrome/100.0.4896.143 Electron/18.2.3 Safari/537.36" etag="tawGVPl91NbAE7POUQ_t" compressed="false" version="18.0.6" type="device">
+  <diagram id="UNdAnGm-ryga_1Sun4uP" name="第 1 页">
+    <mxGraphModel dx="676" dy="480" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-1" value="概率图" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="330" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="VMO6FEAk2V6MPQe3Cklp-2" target="VMO6FEAk2V6MPQe3Cklp-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-2" value="Representation&lt;br&gt;表示" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="420" y="270" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-3" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="20" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="VMO6FEAk2V6MPQe3Cklp-5" target="VMO6FEAk2V6MPQe3Cklp-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="540" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="530" y="345" />
+              <mxPoint x="530" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-5" value="Inference&lt;br&gt;推断" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="420" y="330" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;" edge="1" parent="1" source="VMO6FEAk2V6MPQe3Cklp-6" target="VMO6FEAk2V6MPQe3Cklp-21">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="405" />
+              <mxPoint x="510" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-6" value="Learning&lt;br&gt;学习" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="420" y="390" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-7" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="240" width="20" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-8" value="有向图 Bayesian Network" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="230" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-10" value="高斯图（连续）" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="275" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-11" value="无向图 Markov Network" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="320" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-12" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="370" width="20" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-13" value="Gaussian BN" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="700" y="255" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-14" value="Gaussian MN" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="700" y="295" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-15" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="685" y="265" width="20" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-16" value="精确推断" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="360" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-17" value="近似推断" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="420" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-18" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;size=0.5;" vertex="1" parent="1">
+          <mxGeometry x="650" y="410" width="20" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-19" value="确定性近似（变分推断）" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="670" y="400" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-20" value="随机近似（MCMC）" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="670" y="440" width="130" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-21" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="505" width="20" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-22" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;size=0.5;" vertex="1" parent="1">
+          <mxGeometry x="650" y="490" width="20" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-23" value="参数学习" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="495" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-24" value="结构学习" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="590" y="555" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-25" value="完备数据" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="670" y="480" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-26" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="730" y="480" width="10" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-27" value="有向" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="740" y="470" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-28" value="无向" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="740" y="490" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="VMO6FEAk2V6MPQe3Cklp-29" target="VMO6FEAk2V6MPQe3Cklp-30">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="530" />
+              <mxPoint x="740" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-29" value="隐变量" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="670" y="520" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="VMO6FEAk2V6MPQe3Cklp-30" value="EM" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="520" width="30" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
