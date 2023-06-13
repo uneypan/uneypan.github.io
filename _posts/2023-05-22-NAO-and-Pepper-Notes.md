@@ -24,7 +24,7 @@ http://doc.aldebaran.com/index.html
 NAO的安全休息状态是跪姿，充电接口在背部，网络接口在后脑；胸部按钮长按开机，等待3-5min启动过程完成，直到机器人说“OGNAK GNOUK”；开机后点按一次胸部按钮报出IP地址，同一局域网电脑浏览器输入该IP地址登陆，账号和密码都是：nao，然后会有配置引导页面出现。
 
 **注意：不要改动账号密码，否则需要售后**。
-![](nao说明书.jpg)
+![](/pictures/nao说明书.jpg)
 
 ## 网络配置：
 
@@ -112,7 +112,7 @@ NAOqi是跨平台的，支持在Linux、Windows和MacOS平台上使用Python、C
 1.NAOqi进程  
 在NAO上执行NAOqi是通过一个**代理程序Broker**完成的。启动机器人时，代理程序会自动加载/etc/naoqi/ autoload.ini文件， autoload.ini文件中指定了需要加载NAOqi的哪些库，这些库文件位于/usr/lib/naoqi目录下。
 
-![](NAOqi进程.jpg)
+![](/pictures/NAOqi进程.jpg)
 
 一个库包含一个或者多个模块，加载的模块形成了一种树型结构。  
 
@@ -241,7 +241,7 @@ NAOqi模块都是库中的类。从autoload.ini加载库时，这些模块类将
 **2.远程模块的连接**  
 **远程模块可以通过使用代理方法，将其代理连接到其他模块的代理上，实现与其他模块通信**。连接方式如图所示，可以是：Broker到Broker；Proxy到Broker
 
-![](远程模块的连接.jpg)
+![](/pictures/远程模块的连接.jpg)
 
 **3.ALModule方法**
 ALModule模块类是自定义模块类的基类，负责为其子类通告方法。
@@ -737,7 +737,7 @@ ALAudioDevice管理音频的输入和输出，提供了一组操作音频输入�
 ALAudioDevice基于标准的Linux ALSA(Linux声音库)库，通过声音驱动程序，与麦克风和扬声器通信。
 
 
-![](ALAudioDevice与其他模块关系.jpg)
+![](/pictures/ALAudioDevice与其他模块关系.jpg)
 ## 输出
 **1.数据格式 ** 
 ALAudioDevice可以通过以下帧速率之一将数据发送到扬声器：  
