@@ -316,4 +316,4 @@ $$\max P(x_a,x_b,x_c,x_d)=\underset{x_a}{\max}\psi_a\cdot m_{b\to a}$$
 
 最后自上到下返回就可求得最优时的状态序列 $x_a^*,x_b^*,x_c^*,x_d^*$
 
-由此可以看出此算法与Vitebi算法如出一辙
+由此可以看出此算法与Vitebi算法如出一辙 
