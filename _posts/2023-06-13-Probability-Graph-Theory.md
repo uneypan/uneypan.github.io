@@ -146,7 +146,7 @@ $2.$条件概率（后验概率）：$P(x_A\mid x_B),\quad x = x_A \cup x_B$;
 
 $3.$最大后验 MAP: $\hat{z} = \arg\max_{z} P(z|x) \propto \arg\max P(z,x)$;    
 
-![](../pictures/Inferece知识结构.png)
+![Inferece知识结构](../pictures/Inferece知识结构.png)
 
 
 HMM Inference 中的三个问题:
