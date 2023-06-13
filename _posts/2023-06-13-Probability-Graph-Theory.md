@@ -8,7 +8,7 @@ mathjax: true
 
 ## 知识结构
 
-![](../pictures/概率图-知识结构.jpg)
+![概率图-知识结构](../pictures/概率图-知识结构.jpg)
 
 
 ## 概率图模型基础
@@ -53,7 +53,7 @@ $$
 
 $ x_{pa(i)} $ 是 $ x_i $ 的父亲集合。
 
-![](../pictures/三种节点类型.jpg)
+![三种节点类型](../pictures/三种节点类型.jpg)
 
 *1. tail to tail*  
 若a被观测，则路径被阻塞。  
@@ -93,7 +93,7 @@ $$ -->
 
 ## 贝叶斯网络 - 知识结构
 
-![](../pictures/Bayesian_Network.png)
+![Bayesian_Network](../pictures/Bayesian_Network.png)
 
 ## Markov Network（Markov Random Field 马尔可夫随机场）
 
@@ -161,7 +161,7 @@ HMM $\Rightarrow$ Dynamic Bayesian Network
 
 ## Inference - Variable Elimination 变分推断
 (VE的核心思想：乘法分配律)
-![](../pictures/hmm.png)
+![hmm](../pictures/hmm.png)
 $$
 P(d) = \sum_{a,b,c} P(a,b,c,d) = \sum_{a,b,c}P(a)P(b\mid a)P(c\mid b) P(d\mid c)
 $$

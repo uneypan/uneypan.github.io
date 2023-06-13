@@ -1,7 +1,6 @@
 ---
 layout: article
 title: 基于概率数据关联滤波器的在线节拍跟踪器
-mathjax: true
 ---
 
 # **基于概率数据关联滤波器的在线节拍跟踪器**
@@ -18,15 +17,18 @@ mathjax: true
 
 分帧：将源音频（44.1 kHz）按每帧 1024 个采样点、步长128 点分割，产生一系列采样率约为 344.5 Hz 的帧
 
-对数能量谱：每一帧都乘以汉宁窗，然后用离散傅里叶变换计算对数幅值谱 $L_P$。假设幅值谱用 $|{X(k,n)}|$ 表示，那么对数能量谱就是 
+对数能量谱：每一帧都乘以汉宁窗，然后用离散傅里叶变换计算对数幅值谱 $L_P$。假设幅值谱用 $|{X(k,n)}|$ 表示，那么对数能量谱就是
+
 $$
 L_P (k,n) = \ln{(1+1000.0 \cdot |{X(k,n)}|)};
 $$
 
 频谱通量：对对数幅值谱所有具有正向差分的频率进行求和，得到谱通量。设 $N$ 是傅里叶变换得到离散频谱中正频率点的数量，这里 $N = 513$，计算中忽略离散频谱的直流分量（FFT 第 0 点）。$I_{PF}(k,n)$ 是一个指示函数，对频率谱对数幅度中的正差分进行选择。
+
 $$
 F_{lux}(n) = \sum_{k=1}^{N-1}(L_P(k,n)-L_P(k,n-1)) \cdot  I_{PF}(k,n)
 $$
+
 低通滤波：用 14 阶 FIR 滤波器对信号进行低通滤波，截止频率为 7 Hz ，汉明窗法。
 
 ### 2.2  起始点强度信号（OSS）
@@ -57,10 +59,10 @@ PDAF 需要设置初始节拍周期和第一拍位置，正确的初始化对于
 
 
 得到速度图后，首先需要按照人类的偏好曲线对速度谱进行加权，以削弱周期倍半频的影响。加权函数 $W$ 是对数时间域上的正态分布函数，其中 $\tau_0$ 是偏好节拍周期，$\sigma_\tau$ 控制加权函数的宽度。
-
 $$
 W(\tau) = \exp\{-\frac{1}{2}(\frac{ \log_2{\tau/\tau_0}}{\sigma_\tau} ) ^2  \}
 $$
+
 将每一帧速度图中最大值对应的速度连起来，得到主局部速度曲线（Predominant Local Tempo Curve，PLTC）。然后，把 PLTC 变化较快（差分大）的点打断，这样就得到速度相对平稳的几个阶段（例如下图的蓝绿两线）。最后找到持续时间最长的一个阶段，将这一阶段中 PLTC 在速度图中数值最大的点（绿点）对应的速度作为全局估计速度。
 
 
@@ -77,6 +79,7 @@ PDAF 的典型应用是跟踪观测到的节拍，并在一定的限度内修正
 ### 4.1 问题描述
 
 节拍跟踪器的动力学特性使用以下线性状态传递方程描述
+
 $$
 \begin{aligned}
 &\mathbf{x}(k)=\mathbf{F}(k-1) \mathbf{x}(k-1)+\mathbf{v}(k-1),\quad k=1,2, \ldots \\ 
@@ -86,7 +89,7 @@ $$
 
 其中 $\mathbf{x}(k) = \begin{bmatrix} \hat{\tau}(k) \\ \hat{\Delta}(k) \end{bmatrix}$ 是 $2$ 维状态向量，$\hat{\tau}(k)$ 是节拍时间，$\hat{\Delta}(k)$ 是节拍周期；
 
- $\mathbf{z}(k)$ 是观测到的节拍位置；$\mathbf{F}(k) = \begin{bmatrix} 1&1\\0&1\end{bmatrix}$是传递矩阵，$\mathbf{H}(k) = \begin{bmatrix} 1&0\end{bmatrix}$ 是观测矩阵；
+$\mathbf{z}(k)$ 是观测到的节拍位置；$\mathbf{F}(k) = \begin{bmatrix} 1&1\\0&1\end{bmatrix}$是传递矩阵，$\mathbf{H}(k) = \begin{bmatrix} 1&0\end{bmatrix}$ 是观测矩阵；
 
 过程噪声 $\mathbf{w}(k) \sim \mathbf{N}(0,\mathbf{Q}(k))$ ，测量噪声 $\mathbf{y}(k) \sim \mathbf{N}(0,\mathbf{R}(k))$  均服从正态分布。
 
@@ -97,12 +100,15 @@ $$
 PDAF 的预测步与 KF 相同，即
 
 先验状态估计、先验估计协方差
+
 $$
 \hat{\mathbf{x}}(k\mid k-1) = \mathbf{F}(k-1)\hat{\mathbf{x}}(k-1\mid k-1)\\
 \\
 \mathbf{P}(k\mid k-1) = \mathbf{F}(k-1)\mathbf{P}(k-1\mid k-1)\mathbf{F}(k-1)'+\mathbf{Q}(k-1)
 $$
+
 先验观测、预测残差协方差
+
 $$
 \begin{aligned}
 &\hat{\mathbf{z}}(k\mid k-1) = \mathbf{H}(k)\hat{\mathbf{x}}(k-1\mid k-1)\\
@@ -124,11 +130,13 @@ $$
 其中 $p_{11}$ 是节拍位置 $\tau(k)$的方差， $\sigma_{\mathbf{w}}^2$ 是观测噪声 $\mathbf{w}(k)$ 的方差。$\gamma = 9$ 时关联门内包含正确观测的概率 $P_{G}$ 是 $99.7$%， $\gamma = 4$ 的概率是 $95.4$%.
 
 对于一维观测值（节拍位置），关联门的体积是
+
 $$
 V(k) = 2\gamma^{\frac{1}{2}}|\mathbf{S}(k)|^{\frac{1}{2}}
 $$
 
 落入关联门的观测值称“**有效观测**”，表示为
+
 $$
 \mathbf{z}(k) = \{ z_i(k) \}^{m(k)}_{i=1}
 $$
