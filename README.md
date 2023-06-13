@@ -1,9 +1,9 @@
-# 使用指南
-## fork 此仓库，更名为 [github_user].github.io 
+# Github Pages 使用指南
+## fork 此仓库
 
-[github_user] 就是你的 github 用户名
+更名为 “[github_user].github.io”，其中 [github_user] 就是你的 github 用户名；
 
-这个仓库的名字[github_user].github.io 就是访问网站的网址。
+这个仓库的名字 [github_user].github.io 就是访问网站的网址。
 
 ## 修改配置文件 _config.yml
 
@@ -29,25 +29,15 @@ repository_tree: master
 author:
   type      : # "person" (default), "organization"
   name      : 我的名字
-  url       :
-  avatar    : # path or url of avatar image (square)
-  bio       : I am an amazing person.
-  email     :
-  facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
-  twitter   : # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
-  weibo     : # "user_id"   the last part of your profile url, e.g. https://www.weibo.com/user_id/profile?...
-  googleplus: # "user_id"   the last part of your profile url, e.g. https://plus.google.com/u/0/user_id
-  telegram  : # "user_name" the last part of your profile url, e.g. https://t.me/user_name
-  medium    : # "user_name" the last part of your profile url, e.g. https://medium.com/user_name
-  zhihu     : # "user_name" the last part of your profile url, e.g. https://www.zhihu.com/people/user_name
-  douban    : # "user_name" the last part of your profile url, e.g. https://www.douban.com/people/user_name
-  linkedin  : # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
-  github    : github_user # "user_name" the last part of your profile url, e.g. https://github.com/user_name
-  npm       : # "user_name" the last part of your profile url, e.g. https://www.npmjs.com/~user_name
+  ...
 
 ```
 
-修改 Markdown Enhancements 全局开关设置：mathjax 渲染器，mathjax_autoNumber 自动编号，流程图 Mermaid，交互表格Chart。
+Markdown Enhancements 全局设置：
+- 用于渲染$\LaTeX$ 公式的 mathjax 渲染器
+- mathjax_autoNumber 公式自动编号
+- Mermaid 流程图
+- Chart 交互表格
 ```yml
 ## => Markdown Enhancements
 ##############################
@@ -98,9 +88,11 @@ mathjax_autoNumber: true
 
 这样才能在 Github Pages 上正确显示
 
-## Push 到 [github_user].github.io 仓库
+## 发布
+
+Push 到 [github_user].github.io 仓库
 
 等待几分钟 Github 自动编译即可。
 
 ## License
-基于 [TeXt Theme](https://github.com/kitian616/jekyll-TeXt-theme) （MIT License）
+基于 [TeXt Theme](https://github.com/kitian616/jekyll-TeXt-theme) (MIT License)
