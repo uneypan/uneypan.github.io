@@ -88,6 +88,12 @@ mathjax_autoNumber: true
 
 这样才能在 Github Pages 上正确显示
 
+## 插入 PDF
+
+```markdown
+<center><embed src="/assets/example.pdf"></center>
+```
+
 ## 发布
 
 Push 到 [github_user].github.io 仓库
