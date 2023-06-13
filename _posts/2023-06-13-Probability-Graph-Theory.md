@@ -209,30 +209,36 @@ $$
 从这个例子可以看出上节讲的VE算法的缺点：重复计算。
 本节引入Belief Propagation算法，其基本思想与VE一致  
 不同的是：将中间过程存储起来，简化计算，避免重复计算。
+
 ![](/pictures/BP-tree.png)
+
 以 P(a) 为例：
+
 $$
 \begin{split} P(a)&=\sum_{b,c,d}P(a,b,c,d)\\ &=\psi_a\sum_b((\sum_c\psi_c\psi_{b,c})\cdot \psi_b\cdot(\sum_d\psi_d\psi_{b,d})\cdot \psi_{ab})\\ &=\psi_a\sum_b(m_{c\to b}(b)\cdot \psi_b\cdot m_{d\to b}(b)\cdot \psi_{ab})\\ &=\psi_a m_{b\to a}(a) \end{split}
 $$
 
 此式共有两个部分：
+
 $$
 \begin{cases} m_{b \to a}(a)=\displaystyle\sum_b \psi_{a,b} \psi_b m_{c\to b}(b)m_{d\to b}(b)\\ P(a)=\psi_a m_{b \to a}(a) \end{cases}
 $$
 
 进行简化( $NB(b)$ 为 b 结点的邻居结点所组成的集合)：
+
 $$
 \begin{cases} m_{b \to a}(a)=\displaystyle\sum_b \psi_{a,b} \psi_b \prod_{k\in NB(b)}m_{k \to b}(b)\\ P(a)=\psi_a m_{b \to a}(a) \end{cases}
 $$
 
 再进行归纳（generalize），得到边缘概率的递推公式：
+
 $$
 \begin{cases} m_{j \to i}(i)=\displaystyle\sum_j \psi_{i,j} \cdot \underbrace{\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)}_{\mathrm{Belief}(j)}\\ P(i)=\psi_i \displaystyle\prod _{k\in NB(i)}\underbrace{m_{k \to i}(i) }_{j\mathrm{的Children}}\end{cases}
 $$
 
-其中 $\displaystyle\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$ 称为 $\mathrm{Belief}(j)$
+- $\displaystyle\psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$ 称为 $\mathrm{Belief}(j)$
 
-$ m_{k \to j}$ 称为 $j$ 的Child.
+- $ m_{k \to j}$ 称为 $j$ 的Child.
 
 $$
 \begin{cases} \mathrm{Belief}(j)=\psi(j)\cdot \mathrm{Children}(j)\\ m_{j \to i } = \displaystyle\sum_j\psi_{i,j}\cdot \mathrm{Belief}(j) \end{cases}
