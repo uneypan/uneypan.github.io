@@ -6,7 +6,7 @@ mathjax: true
 
 《Automatica》，第11卷，第451-460页。Pergamon出版社，1975年。英国印刷。
 
-# 杂波环境下基于概率数据关联的跟踪
+<!-- # 杂波环境下基于概率数据关联的跟踪 -->
 
 YAAKOV BAR-SHALOM 和 EDISON TSE
 
