@@ -34,10 +34,12 @@ Sea[2]和Singer等人[3,4]处理了这里考虑的问题，并开发了一种改
 $$
 \mathbf{x}_{k+1}=\mathbf{F}_{k} \mathbf{x}_{k}+\mathbf{w}_{k}, \quad k=0,1, \ldots, \tag{2.1}
 $$
+
 其中 $\mathbf{x}_k$ 是 $n$ 维状态向量，$\mathbf{F}_k$是传递矩阵（已知），$\mathbf{w}_k$是过程噪声，假设服从均值为零的正态分布，方差为
 $$
 E(\mathbf{w}_k\mathbf{w}_j')=\mathbf{Q}_k \delta_{kj} \tag{2.2}
 $$
+
 初始状态同样服从均值为$\mathbf{\hat{x}_{0|0}}$，方差为$\mathbf{P_{0|0}}$，与$\mathbf{w}_k$相互独立。
 
 测量系统建模如下。如果测量源于轨迹中的对象，则
@@ -48,6 +50,7 @@ $$
 $$
 E(\mathbf{v}_k\mathbf{v}_j')=\mathbf{R}_k \delta_{kj} \tag{2.4}
 $$
+
 第4节讨论了动态和/或测量方程为非线性的情况。
 
 假设有一种“候选测量”的有效规则可用，确保以给定的概率保留正确回波值。这将在后面进行更详细的讨论。
@@ -58,14 +61,17 @@ $$
 $$
 Z_k = {\{ \mathbf{z}_{k,i} \}_{i=1}}^{m_k} \tag{2.5}
 $$
+
 和
 $$
 Z^{k} \triangleq {\left\{Z_{j}\right\}_{j=1} }^{k} \tag{2.6}
 $$
+
 因此，最小方差估计，即条件平均值
 $$
 \hat{\mathbf{x}}_{k | k}=\int \mathbf{x}_{k}\ p\left(\mathbf{x}_{k} \mid Z^{k}\right) \mathrm{d} \mathbf{x}_{k} \tag{2.7}
 $$
+
 上述方程构成了新方法的数学基础：在最小均方差意义上，最佳估计是在观察到的随机变量的条件下来计算的，这些随机变量在某些非零概率下依赖于 $\mathbf{x}_k$。因此，必须使用所有可能来自轨迹中物体的测量值。这种对所有随机变量的条件作用，在一些非零概率的情况下，依赖于 $\mathbf{x}_k$ 是这种方法区别于以前方法的主要特征。
 
 ## 3. 概率数据关联（PDA）方法
@@ -74,10 +80,12 @@ $$
 $$
 \chi_{k, i}=\left\{\mathbf{z}_{k, i} \text { 是正确的返回值 }\right\}, \quad i=1, \ldots, m_{k} \tag{3.1}
 $$
+
 和
 $$
 \chi_{k, 0}=\left\{\mathbf{z}_{k, i} \text { 所有已验证的返回值都不是正确的 }\right\}. \tag{3.2}
 $$
+
 因为只有一个回波值是正确的，所以上述事件是互斥和完备的。据此，（2.7）可以写成*：
 $$
 \begin{aligned}
@@ -85,12 +93,14 @@ $$
                       & = \sum_{i=0}^{m_{k}} E\left\{\mathbf{x}_{k} \mid \chi_{k, j}, Z^{k}\right\} P\left\{\chi_{k, i} \mid Z^{k}\right\}
 \end{aligned} \tag{3.3}
 $$
+
 *观察到的回波数 $m_k$ 包含在条件中。
 
 因此，我们需要的是找到下式的表达
 $$
 \beta_{k,i} \triangleq P \{\chi_{k,i} |Z^k  \}, \quad i = 0,\ldots,m_k, \tag{3.4}
 $$
+
 即每个回波值来源于轨迹中物体的后验概率。这就是“概率数据关联”。如引言所述，假设无法从过去的数据推断错误回波值的数量。一个现实的假设是，传感器仅在有效区域内“看”，因此没有关于当前“杂波密度”的信息。Singer等人[7]假设这种密度是可用的，并使用带有一个固定的已知参数的泊松模型来处理无关报告。虽然这种模型适用于虚警，但它是否适用于可能存在杂波的环境（例如，集中在空间的某些区域）仍有疑问。假设我们对于环境无知，即无法推断错误回波值的数量，如附录C所示，等同于错误回波数量的不正确或“分散”均匀分布。
 
 PDA方法中做出以下假设：
@@ -99,12 +109,14 @@ PDA方法中做出以下假设：
 $$
 p\left(\mathbf{z}_{k, i} \mid \chi_{k, i}, Z^{k-1}\right) \triangleq f\left(\mathbf{z}_{k, i} \mid Z^{k-1}\right) \tag{3.5}
 $$
+
 假设它可以求得。下一节将详细讨论这种概率密度，其中介绍改进后的滤波器。为了获得只占用固定内存的滤波器，将该概率密度近似为正态分布。
 
 (2) 测量值不正确的概率密度在关联门内是均匀的，关联门的体积用$V_k$表示，即
 $$
 p\left(\mathbf{z}_{k, i} \mid \chi_{k, j}, Z^{k-1}\right) = V_k^{-1}, j \neq i. \tag{3.6}
 $$
+
 (3) 无法从过去的数据中推断出有效的回波值数量。
 
 (4) 在已有过往数据都条件下每次回波正确的概率是相同的，即没有使用目标特征信息；可以修改程序以使用此类信息。
@@ -117,15 +129,16 @@ $$
 \end{aligned} \tag{3.7}
 $$
 
-
 其中
 $$
 b_{k} \triangleq m_{k} V_{k}^{-1} \frac{\alpha_{1}+\alpha_{2}-\alpha_{1} \alpha_{2}}{\left(1-\alpha_{1}\right)\left(1-\alpha_{2}\right)}. \tag{3.8}
 $$
+
 $\alpha_{1}$ 是正确回波不在有效区域内的概率，$\alpha_2$是正确回波不被检测到的概率。所有回波值都不正确的后验概率是
 $$
 \beta_{k, 0}=b_{k} /\left[b_{k}+\sum_{i=1}^{m_{k}} f\left(z_{k, i} \mid Z^{k-1}\right)\right] \tag{3.9}
 $$
+
 等式（3.7）和（3.9）构成了概率数据关联方法。
 
 ## 4. 概率数据关联滤波器
@@ -136,12 +149,14 @@ $$
 $$
 p(\mathbf{x}_k|Z^{k-1})= \mathcal{N}(\hat{\mathbf{x}}_{k|k-1},\mathbf{P}_{k|k-1}) \tag{4.1}
 $$
+
 为了得到一个可行解，在其他相关问题中也做出了类似的假设，例如[8]。在[3]中也使用了这一假设，尽管没有明确说明。假设(4.1)的可行性因最终算法的简易性可认为是合理的，其在实际问题中的性能如下一节阐述。
 
 如前所述，由于计算方面的考虑，只有通过特定有效测试的测量回波才会被考虑用于更新一条特定的轨迹。紧随(4.1)，与正确回波值相对应的残差或新息[9]，这里用$\mathbf{z}_{k|k-1}$表示，为
 $$
 \mathbf{v}_{k, j} \triangleq \mathbf{z}_{k, j}-\hat{\mathbf{z}}_{k \mid k-1} \tag{4.2}
 $$
+
 其中 $\hat{z}_{k \mid k-1}$ 是在近似(4.1)基础上观测值的条件均值，同样假设其服从均值为零，方差为$S_{k}$ 的正态分布
 $$
 \mathbf{S}_{k}=\mathbf{H}_{k} \mathbf{P}_{k \mid k-1} \mathbf{H}_{k}{ }^{\prime}+\mathbf{R}_{k} . \tag{4.3}
@@ -162,16 +177,19 @@ $\boldsymbol{\nu}_{k,i}$表示与测量值$\mathbf{z}_{k,i}$相对应的残差�
 $$
 Y_{k|k-1} = \{\hat{\mathbf{x}}_{k|k-1},\mathbf{P}_{k|k-1} \} \tag{4.6}
 $$
+
 由(4.1)-(4.5)，给定一个测量值来源于轨迹中的物体，已经有效且以$Z^{k-1}$为条件，其概率密度(3.5)是一个截断的正态分布，即
 $$
 f\left(\mathbf{z}_{k, i} \mid Y_{k \mid k-1}\right)=\left(1-\alpha_{1}\right)^{-1} \mathcal{N}\left(H_{k} \hat{\mathbf{x}}_{k \mid k-1}, S_{k}\right) \tag{4.7}
 $$
+
 仅分布于关联门内，而在关联门外概率为零。
 
 根据假设(4.1)和上一节描述的PDA方法，附录A推导了概率数据关联滤波器(PDAF)。状态变量的近似条件平均值如下所示：
 $$
 E\left\{\mathbf{x}_{k} \mid Z_{k}, Y_{k \mid k-1}\right\} \triangleq \hat{\mathbf{x}}_{k \mid k}=\hat{\mathbf{x}}_{k \mid k-1}+\mathbf{W}_{k} \boldsymbol{\nu}_{k} \tag{4.8}
 $$
+
 其中
 $$
 \boldsymbol{\nu}_{k} \triangleq \sum_{i=1}^{m_{k}} \beta_{k, i} \boldsymbol{\nu}_{k, i} \tag{4.9}

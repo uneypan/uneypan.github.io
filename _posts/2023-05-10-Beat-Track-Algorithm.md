@@ -1,7 +1,8 @@
 ---
 layout: article
-title: 算法概述
+title: 节拍跟踪算法概述
 mathjax: true
+mathjax_autoNumber: true
 ---
 
 
