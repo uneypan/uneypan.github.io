@@ -282,8 +282,8 @@ $$
 ## Inference-Max Product
 
 ![](/pictures/hmm.png)
-Decoding: $\displaystyle \hat{Y}=\argmax_{Y} P(Y\mid X)$
-具体的算法：Viterbi，实际上是动态规划问题。
+
+Decoding: $\displaystyle \hat{Y}=\argmax_{Y} P(Y\mid X)$. 具体的算法：Viterbi，实际上是动态规划问题。
 
 Max-product: BP 的改进，Viterbi 的推广。
 
@@ -322,4 +322,39 @@ $$\max P(x_a,x_b,x_c,x_d)=\underset{x_a}{\max}\psi_a\cdot m_{b\to a}$$
 
 最后自上到下返回就可求得最优时的状态序列 $x_a^*,x_b^*,x_c^*,x_d^*$
 
-由此可以看出此算法与Vitebi算法如出一辙 
+由此可以看出此算法与Vitebi算法如出一辙。
+
+## 道德图（Moral Graph）
+
+将有向图转为无向图
+
+head-to-tail, tail-to-tail 将有向边替换为无向边，使用基于最大团的因子分解，和有向图的结果等价。head-to-head 则需要连接两个父节点。
+
+总结为一个通用的规则：
+- $\forall x_i \in G$ , 将 $\mathrm{parent}(x_i)$ 两两连接（将自己多个父节点【如果有】互相连接）
+- 将有向边替换为无向边
+
+在道德图上做划分等价于在原图上的D划分。
+
+## 因子图（Factor Graph）
+
+道德图可以将有向图转换为无向图，但是可能会引入环（head-to-head类型），可能变成图，但是之前讲的BP（Belief Propagation）算法只能在树上操作。
+
+因此需要引入因子图（Factor Graph），此方法有两大出发点：
+
+- 消去环
+- 简便
+
+因子图： $\displaystyle P(x)=\prod_s f_s(x_s)$
+
+其中 $s$ 是图的节点子集， $x_s$ 是 $x$ 的随机变量子集
+
+![](/pictures/factor_graph.png)
+
+$f=f(a,b,c)$, $P(x)=f_1(a,b)f_2(a,c)f_3(b,c)$, 还可以更细的分解，如 $f_a(a),f_b(b)$
+
+因子图：看作是对因式分解的进一步分解
+
+在因子图中，原节点之间不再有联系。
+
+每一种因子图都可以使用这种两层结构来表示。

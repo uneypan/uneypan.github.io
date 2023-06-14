@@ -1,13 +1,13 @@
 ---
 layout: article
-title: 简单翻译 Piccirillo J. 《 The Art and Science of Selecting Robot Motors》
+title: 简单翻译 Piccirillo J. The Art and Science of Selecting Robot Motors
 ---
 
-Piccirillo J. 博士撰写的 [“The Art and Science of Selecting Robot Motors”](https://lafavre.us/robotics/Art_and_Science_of_Selecting_Robot_Motors_-_FinalV2.pdf)
+Piccirillo J. 博士撰写的 [The Art and Science of Selecting Robot Motors](https://lafavre.us/robotics/Art_and_Science_of_Selecting_Robot_Motors_-_FinalV2.pdf)
 
 很好的介绍了如何选择小型直流有刷(PMDC)电机所需的相关知识，过程全部实例化，非常通俗易懂。
 
-　　文章尾注推导的公式给出了这些关系：
+文章尾注推导的公式给出了这些关系：
 
 1. 加速到给定速度的时间
 
@@ -21,9 +21,7 @@ Piccirillo J. 博士撰写的 [“The Art and Science of Selecting Robot Motors�
 
 这些公式可直接用于编程计算机器人的运动学特性。
 
-文章为方便阅读稍微翻译了一下，限于水平和时间，只求不造成误解，如有错误劳烦读者指出。
-
-另外文章仅供学习参考，请勿用于任何商业用途！！！
+文章为方便阅读稍微翻译了一下。
 
 ## 译文
 
