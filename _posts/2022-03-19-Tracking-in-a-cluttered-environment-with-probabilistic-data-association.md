@@ -2,6 +2,8 @@
 layout: article
 title: 翻译：杂波环境下基于概率数据关联的跟踪
 mathjax: true
+chart: false
+mermaid: false
 ---
 
 《Automatica》，第11卷，第451-460页。Pergamon出版社，1975年。英国印刷。
@@ -40,7 +42,7 @@ $$
 E(\mathbf{w}_k\mathbf{w}_j')=\mathbf{Q}_k \delta_{kj} \tag{2.2}
 $$
 
-初始状态同样服从均值为$\mathbf{\hat{x}_{0|0}}$，方差为$\mathbf{P_{0|0}}$，与$\mathbf{w}_k$相互独立。
+初始状态同样服从均值为$\mathbf{\hat{x}_{0\mid 0}}$，方差为$\mathbf{P_{0\mid 0}}$，与$\mathbf{w}_k$相互独立。
 
 测量系统建模如下。如果测量源于轨迹中的对象，则
 $$
@@ -69,7 +71,7 @@ $$
 
 因此，最小方差估计，即条件平均值
 $$
-\hat{\mathbf{x}}_{k | k}=\int \mathbf{x}_{k}\ p\left(\mathbf{x}_{k} \mid Z^{k}\right) \mathrm{d} \mathbf{x}_{k} \tag{2.7}
+\hat{\mathbf{x}}_{k \mid  k}=\int \mathbf{x}_{k}\ p\left(\mathbf{x}_{k} \mid Z^{k}\right) \mathrm{d} \mathbf{x}_{k} \tag{2.7}
 $$
 
 上述方程构成了新方法的数学基础：在最小均方差意义上，最佳估计是在观察到的随机变量的条件下来计算的，这些随机变量在某些非零概率下依赖于 $\mathbf{x}_k$。因此，必须使用所有可能来自轨迹中物体的测量值。这种对所有随机变量的条件作用，在一些非零概率的情况下，依赖于 $\mathbf{x}_k$ 是这种方法区别于以前方法的主要特征。
@@ -98,7 +100,7 @@ $$
 
 因此，我们需要的是找到下式的表达
 $$
-\beta_{k,i} \triangleq P \{\chi_{k,i} |Z^k  \}, \quad i = 0,\ldots,m_k, \tag{3.4}
+\beta_{k,i} \triangleq P \{\chi_{k,i} \mid Z^k  \}, \quad i = 0,\ldots,m_k, \tag{3.4}
 $$
 
 即每个回波值来源于轨迹中物体的后验概率。这就是“概率数据关联”。如引言所述，假设无法从过去的数据推断错误回波值的数量。一个现实的假设是，传感器仅在有效区域内“看”，因此没有关于当前“杂波密度”的信息。Singer等人[7]假设这种密度是可用的，并使用带有一个固定的已知参数的泊松模型来处理无关报告。虽然这种模型适用于虚警，但它是否适用于可能存在杂波的环境（例如，集中在空间的某些区域）仍有疑问。假设我们对于环境无知，即无法推断错误回波值的数量，如附录C所示，等同于错误回波数量的不正确或“分散”均匀分布。
@@ -145,14 +147,14 @@ $$
 
 正如[5]中指出的，以所有有效测量值为条件计算状态的精确概率密度，即一个高斯密度和，相当于轨迹分裂，因此成本太高而不可行。因此，必须进行近似计算，才能得到一个能够实时实现的算法。
 
-为了得到这样一个滤波器，基于过去观测值的状态变量可近似为服从均值为$\hat{\mathbf{x}}_{k|k-1}$，方差为$\mathbf{P}_{k|k-1}$，即
+为了得到这样一个滤波器，基于过去观测值的状态变量可近似为服从均值为$\hat{\mathbf{x}}_{k\mid k-1}$，方差为$\mathbf{P}_{k\mid k-1}$，即
 $$
-p(\mathbf{x}_k|Z^{k-1})= \mathcal{N}(\hat{\mathbf{x}}_{k|k-1},\mathbf{P}_{k|k-1}) \tag{4.1}
+p(\mathbf{x}_k\mid Z^{k-1})= \mathcal{N}(\hat{\mathbf{x}}_{k\mid k-1},\mathbf{P}_{k\mid k-1}) \tag{4.1}
 $$
 
 为了得到一个可行解，在其他相关问题中也做出了类似的假设，例如[8]。在[3]中也使用了这一假设，尽管没有明确说明。假设(4.1)的可行性因最终算法的简易性可认为是合理的，其在实际问题中的性能如下一节阐述。
 
-如前所述，由于计算方面的考虑，只有通过特定有效测试的测量回波才会被考虑用于更新一条特定的轨迹。紧随(4.1)，与正确回波值相对应的残差或新息[9]，这里用$\mathbf{z}_{k|k-1}$表示，为
+如前所述，由于计算方面的考虑，只有通过特定有效测试的测量回波才会被考虑用于更新一条特定的轨迹。紧随(4.1)，与正确回波值相对应的残差或新息[9]，这里用$\mathbf{z}_{k\mid k-1}$表示，为
 $$
 \mathbf{v}_{k, j} \triangleq \mathbf{z}_{k, j}-\hat{\mathbf{z}}_{k \mid k-1} \tag{4.2}
 $$
@@ -175,7 +177,7 @@ $\boldsymbol{\nu}_{k,i}$表示与测量值$\mathbf{z}_{k,i}$相对应的残差�
 
 根据式(4.1)，过往测量值的近似充分统计表示为
 $$
-Y_{k|k-1} = \{\hat{\mathbf{x}}_{k|k-1},\mathbf{P}_{k|k-1} \} \tag{4.6}
+Y_{k\mid k-1} = \{\hat{\mathbf{x}}_{k\mid k-1},\mathbf{P}_{k\mid k-1} \} \tag{4.6}
 $$
 
 由(4.1)-(4.5)，给定一个测量值来源于轨迹中的物体，已经有效且以$Z^{k-1}$为条件，其概率密度(3.5)是一个截断的正态分布，即
@@ -206,7 +208,7 @@ $$
 $$
 \mathbf{P}_{k} \triangleq \mathbf{W}_{k}\left[\sum_{i=1}^{m_{k}} \beta_{k, i} \boldsymbol{\nu}_{k, i} \boldsymbol{\nu}_{k, i}{ }^{\prime}-\boldsymbol{\nu}_{k} \boldsymbol{\nu}_{k}{ }^{\prime}\right] \mathbf{W}_{k}{ }^{\prime} \tag{4.12}
 $$
-是一个半正定矩阵，当增大附录A中所述的更新$\mathbf{P}_{k|k}$的协方差，不正确测量值的影响增大。从(4.12)中可以看出，估计的置信度是实际有效的回波数及位置的函数。这是新滤波器的一个重要功能。
+是一个半正定矩阵，当增大附录A中所述的更新$\mathbf{P}_{k\mid k}$的协方差，不正确测量值的影响增大。从(4.12)中可以看出，估计的置信度是实际有效的回波数及位置的函数。这是新滤波器的一个重要功能。
 
 该算法的另一个重要特征是，当窗口中只有一个回波值时，其计算量与标准滤波器相同，并且仅当需要处理多个回波时，其计算要求才会增加。表1显示了新滤波器的计算量与标准滤波器*相比，计算机指令计数关于有效区域中回波值个数的函数近似增加。
 
@@ -311,17 +313,17 @@ $$
 
 注意到 (3.1) 和 (3.2) 定义的$\chi_{k,i},i=0,...,m_k$，是互斥且完备的，我们有
 $$
-p(\mathbf{x}_{k}|Z_k,Y_{k|k-1})=\sum^{m_k}_{i=1}p(\mathbf{x}_k|\chi_{k,i},Z_k,Y_{k|k-1})\beta_{k,i}, \tag{A.1}
+p(\mathbf{x}_{k}\mid Z_k,Y_{k\mid k-1})=\sum^{m_k}_{i=1}p(\mathbf{x}_k\mid \chi_{k,i},Z_k,Y_{k\mid k-1})\beta_{k,i}, \tag{A.1}
 $$
 其中
 $$
-\beta_{k,i} \triangleq P\{ \chi_{k,i}|Z_k,Y_{k|k-1} \} \tag{A.2}
+\beta_{k,i} \triangleq P\{ \chi_{k,i}\mid Z_k,Y_{k\mid k-1} \} \tag{A.2}
 $$
 从 $\chi_{k,i}$ 的定义和 (4.1) 可以看出，对于 $i=1,...,m_k$
 $$
 \begin{aligned}
-p(\mathbf{x}_k|\chi_{k,i},Z_k,Y_{k|k-1})&= p(\mathbf{x}_k|\chi_{k,i},\mathbf{z}_{k,i},Y_{k|k-1})\\
-&= \mathcal{N}(\hat{\mathbf{x}}_{k|k,i},\mathbf{P}_{k|k,i}), 
+p(\mathbf{x}_k\mid \chi_{k,i},Z_k,Y_{k\mid k-1})&= p(\mathbf{x}_k\mid \chi_{k,i},\mathbf{z}_{k,i},Y_{k\mid k-1})\\
+&= \mathcal{N}(\hat{\mathbf{x}}_{k\mid k,i},\mathbf{P}_{k\mid k,i}), 
 \end{aligned}
 \tag{A.3}
 $$
@@ -340,7 +342,7 @@ $$
 \mathbf{P}_{k \mid k, i} =\left(I-\mathbf{W}_{k} \mathbf{H}_{k}\right) \mathbf{P}_{k \mid k-1} \triangleq \mathbf{P}_{k \mid k}{ }^{*}. \tag{A.6}
 $$
 
-注意到权重矩阵 $\mathbf{W}_{k,i}$ 和 $i$ 无关。然而，式 (A.6) 中的 $\mathbf{P}_{k|k,i}=\mathbf{P}_{k \mid k}{ }^{*}$ 是以 $\chi_{k,i}$ 为条件，状态估计 (A.4) 的协方差，虽然它和 $i$ 的取值无关，后面会看到它不是最终估计的协方差。
+注意到权重矩阵 $\mathbf{W}_{k,i}$ 和 $i$ 无关。然而，式 (A.6) 中的 $\mathbf{P}_{k\mid k,i}=\mathbf{P}_{k \mid k}{ }^{*}$ 是以 $\chi_{k,i}$ 为条件，状态估计 (A.4) 的协方差，虽然它和 $i$ 的取值无关，后面会看到它不是最终估计的协方差。
 
 如果事件 $\chi_{k,0}$ 发生，即没有一个有效的回波值是正确的，则 (A.3) 和 (A.6) 保持不变，且
 $$
@@ -448,68 +450,68 @@ $$
 利用贝叶斯法则，式 (3.4) 中的概率可以写成 $[P1]$
 $$
 \begin{aligned}
-P\{\chi_{k,i}|Z^k,m_k \}&= P\{\chi_{k,i}|Z^k,Z^{k-1},m_k \} \\
-&=c_k^{-1}p(Z_k|\chi_{k,i},Z^{k-1},m_k) \\
-&\quad \quad  \times P\{m_k|\chi_{k,i},Z^{k-1}\}P\{\chi_{k,i}|Z^{k-1}\}
+P\{\chi_{k,i}\mid Z^k,m_k \}&= P\{\chi_{k,i}\mid Z^k,Z^{k-1},m_k \} \\
+&=c_k^{-1}p(Z_k\mid \chi_{k,i},Z^{k-1},m_k) \\
+&\quad \quad  \times P\{m_k\mid \chi_{k,i},Z^{k-1}\}P\{\chi_{k,i}\mid Z^{k-1}\}
 \end{aligned}
 \tag{C.1}
 $$
 其中，关于在 $k$ 时刻等于 $m_k$ 时观察到的总回波数的条件已经明确写出，且
 $$
-c_k = \sum^{m_k}_{i=0}p(Z_k|\chi_{k,i},Z^{k-1},m_k)P\{m_k|\chi_{k,i},Z^{k-1}\}\\ 
-\times P\{\chi_{k,i}|Z^{k-1}\} \tag{C.2}
+c_k = \sum^{m_k}_{i=0}p(Z_k\mid \chi_{k,i},Z^{k-1},m_k)P\{m_k\mid \chi_{k,i},Z^{k-1}\}\\ 
+\times P\{\chi_{k,i}\mid Z^{k-1}\} \tag{C.2}
 $$
 是一个归一化常数。
 
 注意到在 $\chi_{k,0}$ (没有回波值是正确的) 和 $Z^{k-1}$ 的条件下，观察到回波总数等于 $m_k$ 的概率是
 $$
-P\{m_k|\chi_{k,0},Z^{k-1}\}=P\{I_k=m_k|Z^{k-1}\}, \quad i=1,...,m_k \tag{C.3}
+P\{m_k\mid \chi_{k,0},Z^{k-1}\}=P\{I_k=m_k\mid Z^{k-1}\}, \quad i=1,...,m_k \tag{C.3}
 $$
 期中 $I_k$ 是 $k$ 时刻观察到的不正确的回波数。在 $\chi_{k,i}$ ($i\neq0$) 和 $Z^{k-1}$ 的条件下，观察到回波总数等于 $m_k$ 的概率是
 $$
-P\{m_k|\chi_{k,i},Z^{k-1}\}=P\{I_k=m_k-1|Z^{k-1}\}, \quad i=1,...,m_k \tag{C.4}
+P\{m_k\mid \chi_{k,i},Z^{k-1}\}=P\{I_k=m_k-1\mid Z^{k-1}\}, \quad i=1,...,m_k \tag{C.4}
 $$
 因为在这种情况下，有一个回波是正确的。
 
  “无法根据从过往数据中作出推理” 这个假设，可以翻译成：事件 $I_k=m_k$ 和事件 $I_k=m_k-1$ 大致是等价的，即
 $$
-P\{I_k=m_k|Z^{k-1}\}=P\{I_k=m_k-1|Z^{k-1}\}= {\prod}_0. \tag{C.5}
+P\{I_k=m_k\mid Z^{k-1}\}=P\{I_k=m_k-1\mid Z^{k-1}\}= {\prod}_0. \tag{C.5}
 $$
 注意到 ${\prod}_0$ 的值是无关紧要的，因为它在 (C.1) 中被消去了。这种分布常用于描述模糊的先验知识，这是不恰当的，因为其积分是无限的；然而由于上述消除，最后的结果是正确的。对于不正确的先验分布的详细讨论见[12].
 
 对于 $i=0$，即所有有效的回波都是不正确的，从第2节讨论的视角来看，其联合概率是
 $$
-p(Z_k|\chi_{k,0},Z^{k-1},m_k)= \prod^{m_k}_{i=1}p(z_{k,i}|\chi_{k,0},Z^{k-1},m_k)=V_k^{-m_k} \tag{C.6}
+p(Z_k\mid \chi_{k,0},Z^{k-1},m_k)= \prod^{m_k}_{i=1}p(z_{k,i}\mid \chi_{k,0},Z^{k-1},m_k)=V_k^{-m_k} \tag{C.6}
 $$
 由于 $V_k$ 表示关联门的体积，则
 $$
-p(z_{k,i}|\chi_{k,j},Z^{k-1},m_k)=V_k^{-1},j\neq i \tag{C.7}
+p(z_{k,i}\mid \chi_{k,j},Z^{k-1},m_k)=V_k^{-1},j\neq i \tag{C.7}
 $$
 这样因为我们假设不正确的测量值是均匀分布的。
 
 基于过往数据，$\chi_{k,0}$ 的概率是
 $$
-P\{\chi_{k,0}|Z^{k-1},m_k\} = \alpha_1+(1-\alpha_1)\alpha_2, \tag{C.8}
+P\{\chi_{k,0}\mid Z^{k-1},m_k\} = \alpha_1+(1-\alpha_1)\alpha_2, \tag{C.8}
 $$
 其中 $\alpha_1$ 是正确回波不落在关联门内的概率， $\alpha_2$ 是正确回波不被探测到的概率。
 
 对于 $i=1,..,m_k$ 我们可以将概率写在 (C.1) 的右手边
 $$
 \begin{aligned}
-p&\{Z_k|x_{k,i},Z^{k-1},m_ks\}\\
-&=p(z_{k,i}|\chi_k,i,Z^{k-1}) \prod_{j=1,i\neq j}^{m_k}p(z_{k,j}|\chi_{k,i},Z^{k-1},m_k)\\
-&=[V_k]^{-(m_k-1)} p(z_{k,j}|\chi_{k,i},Z^{k-1},m_k).
+p&\{Z_k\mid x_{k,i},Z^{k-1},m_ks\}\\
+&=p(z_{k,i}\mid \chi_k,i,Z^{k-1}) \prod_{j=1,i\neq j}^{m_k}p(z_{k,j}\mid \chi_{k,i},Z^{k-1},m_k)\\
+&=[V_k]^{-(m_k-1)} p(z_{k,j}\mid \chi_{k,i},Z^{k-1},m_k).
 \end{aligned} \tag{C.9}
 $$
 基于过往数据，$z_{k,i}$ 是正确回波的概率密度假设已知，用下式表示
 $$
-p(z_{k,i}|\chi_{k,i},Z^{k-1}) \triangleq f(z_{k,i}|Z^{k-1}) \tag{C.10}
+p(z_{k,i}\mid \chi_{k,i},Z^{k-1}) \triangleq f(z_{k,i}\mid Z^{k-1}) \tag{C.10}
 $$
 基于过往数据， 假设 $\chi_{k,i}$ 的概率对于所有的 $i$ 相同，除非可以使用目标的特征信息。如果没有这种信息可用，则
 $$
 \begin{aligned}
-P\{\chi_{k,i}|&Z^{k-1}\}\\
-&=\frac{1-P\{\chi_{k,0}|Z^{k-1}\}}{m_k}\\
+P\{\chi_{k,i}\mid &Z^{k-1}\}\\
+&=\frac{1-P\{\chi_{k,0}\mid Z^{k-1}\}}{m_k}\\
 &=\frac{(1-\alpha_1)(1-\alpha_2)}{m_k} ,\quad i=1,...,m_k. 
 \end{aligned} \tag{C.11}
 $$

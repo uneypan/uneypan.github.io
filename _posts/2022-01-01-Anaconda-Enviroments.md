@@ -6,24 +6,23 @@ mathjax: false
 
 ## 2023.06 更新
 
-根据官方提示，如果是conda的一般用法，例如 conda create，pip install 等，请在安装anacoda或minicoda之后，**直接在 Anaconda Prompt 中完成操作即可，添加环境变量不是必要的。**
+根据官方提示，如果不是必须在 cmd 里面调用 conda，请在安装 anacoda 或 minicoda 之后，**直接在 Anaconda Prompt 中完成操作即可，例如 conda create，pip install 等，添加环境变量不是必要的。**
 
-----
 ## 原文
-Python报错：
+Python 报错：
 
 ```
->>conda activate base
+>> conda activate base
 conda : 无法将“conda”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写，如果包括路径，请确保路径正确，然后再试一次。
 ```
 
-CMD运行报错：
+cmd 运行报错：
 ```
->>conda
+>> conda
 'conda' 不是内部或外部命令，也不是可运行的程序
 或批处理文件。
 
->>anaconda
+>> anaconda 
 'anaconda' 不是内部或外部命令，也不是可运行的程序
 或批处理文件。
 ```
@@ -33,7 +32,7 @@ CMD运行报错：
 第一步：找到Anaconda安装位置。打开Anaconda Prompt，运行命令
 
 ```
->>(base) C:\Users\47370>where conda
+>> where conda
 C:\ProgramData\Anaconda3\Library\bin\conda.bat
 C:\ProgramData\Anaconda3\Scripts\conda.exe
 C:\ProgramData\Anaconda3\condabin\conda.bat
@@ -47,15 +46,13 @@ C:\ProgramData\Anaconda3\condabin\conda.bat
 
 ```
 C:\ProgramData\Anaconda3\
-
 C:\ProgramData\Anaconda3\Scripts\
-
 C:\ProgramData\Anaconda3\Scripts\Library\bin
 ```
 
 验证：
 
-CMD 运行 conda list 可见conda可以使用了
+cmd 运行 conda list 可见conda可以使用了
 
 ```
 >> conda list
