@@ -162,11 +162,12 @@ $3.$ Decoding: $\tilde{I} = \arg\max_{I} P(I\mid O)$ $\Rightarrow$ Viterbi Algor
 HMM $\Rightarrow$ Dynamic Bayesian Network
 
 ## Inference - Variable Elimination 变分推断
-(VE的核心思想：乘法分配律)
+
 ![](/pictures/ve-example.png)
+
+(VE的核心思想：乘法分配律)
 $$
-\begin{split} p(d)&=\sum_{a,b,c} p(a)p(b\mid a)p(c\mid b)p(d\mid c)\\ 
-&=\sum_{b,c}p(c\mid b)p(d\mid c)\sum_{a} p(a)p(b\mid a)\\ 
+\begin{split} p(d)&=\sum_{a,b,c} p(a)p(b\mid a)p(c\mid b)p(d\mid c)\\ &=\sum_{b,c}p(c\mid b)p(d\mid c)\sum_{a} p(a)p(b\mid a)\\ 
 &=\sum_{b,c}p(c\mid b)p(d\mid c)\underbrace{\sum_{a} p(a,b)}_{\phi_a(b)}\\ 
 &=\sum_{c}p(d\mid c)\underbrace{\sum_{b}p(c\mid b)\phi_a(b)}_{\phi_b(c)}\\ 
 &=\phi_c(d) \end{split}
@@ -187,6 +188,7 @@ VE算法的局限性：
 ## Inference-Belief Propagation
 
 以5节点链 a->b->c->d->e 为例，先进行因子分解：
+
 $$
 P(a,b,c,d,e)=P(a)P(b\mid a)P(c\mid b)P(d\mid c)P(e\mid d)
 $$

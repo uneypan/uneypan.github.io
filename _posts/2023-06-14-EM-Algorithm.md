@@ -9,13 +9,13 @@ mermaid: false
 
 MLE 问题：$P(x\mid \theta)$
 
-$$\displaystyle \theta_{MLE} = \arg\underset{\theta}{\max} \underbrace{\log P(x\mid \theta)}_{\mathrm{log-likelihood}}$$
+$$\displaystyle \theta_{MLE} = \arg\max_{\theta} \underbrace{\log P(x\mid \theta)}_{\mathrm{log-likelihood}}$$
 
 EM算法的公式：
 
 $$ \begin{split}
-\theta^{(t+1)} &= \argmax_{\theta} \int_{z} \underbrace{\log P(x,z\mid \theta)}_{完整数据，对数联合概率} \cdot \underbrace{P(z\mid x,\theta^{(t)})}_{后验概率} \mathrm{d} z\\ 
-&=\argmax_{\theta}\quad E_{z\mid x,\theta^{(t)}}[\log P(x,z\mid \theta)]
+\theta^{(t+1)} &= \arg\max_{\theta} \int_{z} \underbrace{\log P(x,z\mid \theta)}_{完整数据，对数联合概率} \cdot \underbrace{P(z\mid x,\theta^{(t)})}_{后验概率} \mathrm{d} z\\ 
+&=\arg\max_{\theta}\quad E_{z\mid x,\theta^{(t)}}[\log P(x,z\mid \theta)]
 \end{split}$$
 
 其中$x$是给定数据，$z$是隐变量，$\theta^{(t)}$ 是t时刻的参数。
@@ -40,7 +40,7 @@ $$\log P(x\mid \theta) = \log P(x,z\mid \theta) - \log P(z\mid x,\theta)$$
 
 
 $$ \begin{split}
-左边 = \log P(x\mid \theta) \int_z \underbrace{P(z\mid x,\theta^{(t)})}_{只跟z有关，积分等于1}\mathrm{d}z= \log P(x\mid \theta)
+左边 = \log P(x\mid \theta) \underbrace{\int_z P(z\mid x,\theta^{(t)})\mathrm{d}z}_{只跟z有关，积分等于1}= \log P(x\mid \theta)
 \end{split}$$
 
 等于什么都没做。
@@ -57,8 +57,8 @@ $$ \begin{split}
 由 $\theta^{(t+1)}$ 的定义
 
 $$ \begin{split} 
-\theta^{(t+1)} &= \argmax_{\theta} \int_{z} \log P(x,z\mid \theta)\cdot P(z\mid x,\theta^{(t)}) \mathrm{d} z \\
-&= \argmax_{\theta} Q(\theta,\theta^{(t)})
+\theta^{(t+1)} &= \arg\max_{\theta} \int_{z} \log P(x,z\mid \theta)\cdot P(z\mid x,\theta^{(t)}) \mathrm{d} z \\
+&= \arg\max_{\theta} Q(\theta,\theta^{(t)})
 \end{split} $$
 
 很明显，$Q(\theta^{(t+1)},\theta^{(t)}) \ge Q(\theta^{(t)},\theta^{(t)})$. 
@@ -77,7 +77,7 @@ $$
 
 所以可知 $H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)}) \le 0$
 
-也可以使用 Jensen 不等式来解决，由于 $\log(x)$ 为凹函数，可以看出 $E[\log x] \le \log E[x]$
+也可以使用 Jensen 不等式来解决，由于 $\log(x)$ 为凹函数，可以看出 $E[\log x] \le \log E[x]$.
 
 > Jensen 不等式: 若 $f(x)$ 是凸函数，则 $E[f(x)] \ge f(E[x])$
 
@@ -85,8 +85,8 @@ $$
 
 $$\begin{split} &\ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\\ &=\int_z P(z\mid x,\theta^{(t)})\cdot \log {P(z\mid x,\theta^{(t+1)})\over P(z\mid x,\theta^{(t)})}\mathrm{d}z\\ &\le \log \int_z P(z\mid x,\theta^{(t)})\cdot {P(z\mid x,\theta^{(t+1)})\over P(z\mid x,\theta^{(t)})}\mathrm{d}z\\ &=\log \int_z P(z\mid x,\theta^{(t+1)})\mathrm{d}z\\ &=0 \end{split}$$
 
-所以 $H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)}) \le0$
+所以 $H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)}) \le0$.
 
-因此得证 $Q(\theta^{(t)},\theta^{(t)})-H(\theta^{(t)},\theta^{(t)}) \le Q(\theta^{(t+1)},\theta^{(t)})-H(\theta^{(t+1)},\theta^{(t)})$
+因此得证 $Q(\theta^{(t)},\theta^{(t)})-H(\theta^{(t)},\theta^{(t)}) \le Q(\theta^{(t+1)},\theta^{(t)})-H(\theta^{(t+1)},\theta^{(t)})$.
 
-故 $\log P(x\mid \theta^{(t)}) \le \log P(x\mid \theta^{(t+1)})$
+故 $\log P(x\mid \theta^{(t)}) \le \log P(x\mid \theta^{(t+1)})$.
