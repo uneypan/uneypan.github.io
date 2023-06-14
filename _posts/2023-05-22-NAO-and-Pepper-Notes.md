@@ -673,6 +673,7 @@ qi_use_lib(myproject ALCOMMON ALPROXIES)
 扩展main.cpp使之能与NAOqi进行通信，并从NAOqi的模块调用bind函数。
 使用--pip和--pport选项实现命令行参数输入；
 为使用的模块创建代理，包含<alcommon / alproxy.h>。
+
 ```cpp
 // main.cpp
 #include <iostream>
@@ -937,7 +938,8 @@ FFT变换结果为对称的，即1365个采样数据，经过变换后得到1365
 同时运行播放正弦波声音和音频处理自定义模块，播放正弦波声音，并通过麦克风输入读取，结果如图所示。  
 playSine(frequence,gain,pan,duration)
 播放正弦波声音。其中frequence为频率(Hz)；gain为音量大小，取值范围为[0,100]；pan为左右声道占比，取值为{-1,0,1}，取0表示左右声道同时发声；duration为持继时间(s)。
-```python 播放正弦波声音
+
+```python
 class  MyClass(GeneratedClass):
     def  __init__(self):
         GeneratedClass.__init__(self)
@@ -953,6 +955,8 @@ class  MyClass(GeneratedClass):
         self.onUnload()
         self.onStopped()
 ```
+
+
 ## ALAudioDevice方法
 
 作用  
