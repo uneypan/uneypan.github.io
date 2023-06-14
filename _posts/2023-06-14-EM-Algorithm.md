@@ -9,9 +9,10 @@ mermaid: false
 
 MLE 问题：$P(x\mid \theta)$
 
-$$\displaystyle \theta_{MLE} = \argmax_{\theta} \underbrace{\log P(x\mid \theta)}_{\mathrm{log-likelihood}}$$
+$$\displaystyle \theta_{MLE} = \arg\underset{\theta}{\max} \underbrace{\log P(x\mid \theta)}_{\mathrm{log-likelihood}}$$
 
 EM算法的公式：
+
 $$ \begin{split}
 \theta^{(t+1)} &= \argmax_{\theta} \int_{z} \underbrace{\log P(x,z\mid \theta)}_{完整数据，对数联合概率} \cdot \underbrace{P(z\mid x,\theta^{(t)})}_{后验概率} \mathrm{d} z\\ 
 &=\argmax_{\theta}\quad E_{z\mid x,\theta^{(t)}}[\log P(x,z\mid \theta)]

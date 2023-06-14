@@ -146,7 +146,7 @@ $1.$边缘概率： $P(x_i) = \displaystyle\sum_{x_1}\dots\sum_{x_{i-1}}\sum_{x_
 
 $2.$条件概率（后验概率）：$P(x_A\mid x_B),\quad x = x_A \cup x_B$;   
 
-$3.$最大后验 MAP: $\hat{z} = \displaystyle \argmax_{z} P(z\mid x) \propto \argmax P(z,x)$ ;    
+$3.$最大后验 MAP: $\hat{z} = \displaystyle \arg\max_{z} P(z\mid x) \propto \arg\max_{z} P(z,x)$ ;    
 
 ![Inferece知识结构](/pictures/Inferece知识结构.png)
 
@@ -165,10 +165,10 @@ HMM $\Rightarrow$ Dynamic Bayesian Network
 (VE的核心思想：乘法分配律)
 ![](/pictures/ve-example.png)
 $$
-\begin{split} p(d)&=\sum_{a,b,c} p(a)p(b|a)p(c|b)p(d|c)\\ 
-&=\sum_{b,c}p(c|b)p(d|c)\sum_{a} p(a)p(b|a)\\ 
-&=\sum_{b,c}p(c|b)p(d|c)\underbrace{\sum_{a} p(a,b)}_{\phi_a(b)}\\ 
-&=\sum_{c}p(d|c)\underbrace{\sum_{b}p(c|b)\phi_a(b)}_{\phi_b(c)}\\ 
+\begin{split} p(d)&=\sum_{a,b,c} p(a)p(b\mid a)p(c\mid b)p(d\mid c)\\ 
+&=\sum_{b,c}p(c\mid b)p(d\mid c)\sum_{a} p(a)p(b\mid a)\\ 
+&=\sum_{b,c}p(c\mid b)p(d\mid c)\underbrace{\sum_{a} p(a,b)}_{\phi_a(b)}\\ 
+&=\sum_{c}p(d\mid c)\underbrace{\sum_{b}p(c\mid b)\phi_a(b)}_{\phi_b(c)}\\ 
 &=\phi_c(d) \end{split}
 $$
 
@@ -188,11 +188,11 @@ VE算法的局限性：
 
 以5节点链 a->b->c->d->e 为例，先进行因子分解：
 $$
-P(a,b,c,d,e)=P(a)P(b|a)P(c|b)P(d|c)P(e|d)
+P(a,b,c,d,e)=P(a)P(b\mid a)P(c\mid b)P(d\mid c)P(e\mid d)
 $$
 
 $$
-\begin{split} P(e)&=\sum_{a,b,c,d} P(a,b,c,d,e)\\ &=\sum_dP(e|d)\sum_cP(d|c)\sum_bP(c|b)\sum_aP(b|a)P(a)\\ &=\sum_dP(e|d)\sum_cP(d|c)\sum_bP(c|b) \color{red}{m_{a\to b}(b)}\\ &=\sum_dP(e|d)\sum_cP(d|c) \color{red}{m_{b\to c}(c)}\\ &=\sum_dP(e|d) \color{red}{m_{c\to d}(d)}\\ &= \color{red}{m_{d\to e}(e)}\\ \end{split}
+\begin{split} P(e)&=\sum_{a,b,c,d} P(a,b,c,d,e)\\ &=\sum_dP(e\mid d)\sum_cP(d\mid c)\sum_bP(c\mid b)\sum_aP(b\mid a)P(a)\\ &=\sum_dP(e\mid d)\sum_cP(d\mid c)\sum_bP(c\mid b) \color{red}{m_{a\to b}(b)}\\ &=\sum_dP(e\mid d)\sum_cP(d\mid c) \color{red}{m_{b\to c}(c)}\\ &=\sum_dP(e\mid d) \color{red}{m_{c\to d}(d)}\\ &= \color{red}{m_{d\to e}(e)}\\ \end{split}
 $$
 
 上述是一个前向传播过程（Forward Algorithm），类似于HMM的过程。
@@ -200,7 +200,7 @@ $$
 若我们需要求 $P(c)$ ,则：
 
 $$
-P(c)=(\sum_{b}P(c|b)\sum_aP(b|a)P(a))\cdot(\sum_{d}P(d|c)\sum_eP(e|d))
+P(c)=(\sum_{b}P(c\mid b)\sum_aP(b\mid a)P(a))\cdot(\sum_{d}P(d\mid c)\sum_eP(e\mid d))
 $$
 
 先从 a 到 b , 再从 e 到 d ，先前向传播，再反向传播（Forward-Backward Algorithm）
@@ -283,7 +283,7 @@ $$
 
 ![](/pictures/hmm.png)
 
-Decoding: $\displaystyle \hat{Y}=\argmax_{Y} P(Y\mid X)$. 具体的算法：Viterbi，实际上是动态规划问题。
+Decoding: $\displaystyle \hat{Y}=\arg\max_{Y} P(Y\mid X)$. 具体的算法：Viterbi，实际上是动态规划问题。
 
 Max-product: BP 的改进，Viterbi 的推广。
 
@@ -296,7 +296,7 @@ $m_{b \to a}$ 表示能使得 c,b,d 联合概率最大的值
 因此传递到结点 a 后，便是能使得 P(a,b,c,d) 最大的值
 
 $$
-(x_a^*,x_b^*,x_c^*,x_d^*)=arg\underset{x_a,x_b,x_c,x_d}{max}P(x_a,x_b,x_c,x_d|E)
+(x_a^*,x_b^*,x_c^*,x_d^*)=arg\underset{x_a,x_b,x_c,x_d}{max}P(x_a,x_b,x_c,x_d\mid E)
 $$
 
 在BP算法中： $m_{j\to i}(i)=\sum_j \psi_{i,j} \psi_j \prod_{k\in NB(j)}m_{k \to j}(j)$
