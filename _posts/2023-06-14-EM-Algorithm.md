@@ -2,6 +2,7 @@
 layout: article
 title: EM算法
 mathjax: true
+mermaid: false
 ---
 
 ## EM算法公式
@@ -48,7 +49,7 @@ $$ \begin{split}
 右边 &=\underbrace{ \int_z \log P(x,z\mid \theta) P(z\mid x,\theta^{(t)}) \mathrm{d}z}_{定义为Q(\theta,\theta^{(t)})} - \underbrace{\int_z P(z\mid x,\theta^{(t)}) \log P(z\mid x,\theta) \mathrm{d}z}_{定义为H(\theta,\theta^{(t)})} 
 \end{split} $$
 
-因此证明 $\log P(x|\theta^{(t)}) \le \log P(x|\theta^{(t+1)})$
+因此证明 $\log P(x\mid \theta^{(t)}) \le \log P(x\mid \theta^{(t+1)})$
 
 相当于证明 $Q(\theta^{(t)},\theta^{(t)})-H(\theta^{(t)},\theta^{(t)}) \le Q(\theta^{(t+1)},\theta^{(t)})-H(\theta^{(t+1)},\theta^{(t)})$
 
@@ -64,14 +65,14 @@ $$ \begin{split}
 然后证明 $H(\theta^{(t+1)},\theta^{(t)}) \le H(\theta^{(t)},\theta^{(t)})$, 两项相减：
 
 $$
-\begin{split} &\ \ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\\&=\int_z P(z|x,\theta^{(t)})\cdot \log P(z|x,\theta^{(t+1)})dz-\int_z P(z|x,\theta^{(t)})\cdot \log P(z|x,\theta^{(t)})dz\\ &=\int_z P(z|x,\theta^{(t)})\cdot \log {P(z|x,\theta^{(t+1)})\over P(z|x,\theta^{(t)})}dz\\ \end{split}
+\begin{split} &\ \ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\\&=\int_z P(z\mid x,\theta^{(t)})\cdot \log P(z\mid x,\theta^{(t+1)})dz-\int_z P(z\mid x,\theta^{(t)})\cdot \log P(z\mid x,\theta^{(t)})dz\\ &=\int_z P(z\mid x,\theta^{(t)})\cdot \log {P(z\mid x,\theta^{(t+1)})\over P(z\mid x,\theta^{(t)})}dz\\ \end{split}
 $$
 
-这里如果对 KL 散度熟悉的话，可以直接看出此式等于 $-KL(P(z|x,\theta^{(t)}) \Vert P(z|x,\theta^{(t+1)}))$
+这里如果对 KL 散度熟悉的话，可以直接看出此式等于 $-KL(P(z\mid x,\theta^{(t)}) \Vert P(z\mid x,\theta^{(t+1)}))$
 
 > Kullback–Leibler divergence: ${\displaystyle KL(P\parallel Q)=\int _{-\infty }^{\infty }p(x)\log \left({\frac {p(x)}{q(x)}}\right)\,\mathrm{d}x} $
 
-而 $KL(\cdot) \ge 0$ 故 $-KL(P(z|x,\theta^{(t)}) \Vert P(z|x,\theta^{(t+1)})) \le 0$
+而 $KL(\cdot) \ge 0$ 故 $-KL(P(z\mid x,\theta^{(t)}) \Vert P(z\mid x,\theta^{(t+1)})) \le 0$
 
 所以可知 $H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)}) \le 0$
 
@@ -81,10 +82,10 @@ $$
 
 因此
 
-$$\begin{split} &\ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\\ &=\int_z P(z|x,\theta^{(t)})\cdot \log {P(z|x,\theta^{(t+1)})\over P(z|x,\theta^{(t)})}\mathrm{d}z\\ &\le \log \int_z P(z|x,\theta^{(t)})\cdot {P(z|x,\theta^{(t+1)})\over P(z|x,\theta^{(t)})}\mathrm{d}z\\ &=\log \int_z P(z|x,\theta^{(t+1)})\mathrm{d}z\\ &=0 \end{split}$$
+$$\begin{split} &\ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)})\\ &=\int_z P(z\mid x,\theta^{(t)})\cdot \log {P(z\mid x,\theta^{(t+1)})\over P(z\mid x,\theta^{(t)})}\mathrm{d}z\\ &\le \log \int_z P(z\mid x,\theta^{(t)})\cdot {P(z\mid x,\theta^{(t+1)})\over P(z\mid x,\theta^{(t)})}\mathrm{d}z\\ &=\log \int_z P(z\mid x,\theta^{(t+1)})\mathrm{d}z\\ &=0 \end{split}$$
 
 所以 $H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\theta^{(t)}) \le0$
 
 因此得证 $Q(\theta^{(t)},\theta^{(t)})-H(\theta^{(t)},\theta^{(t)}) \le Q(\theta^{(t+1)},\theta^{(t)})-H(\theta^{(t+1)},\theta^{(t)})$
 
-故 $\log P(x|\theta^{(t)}) \le \log P(x|\theta^{(t+1)})$
+故 $\log P(x\mid \theta^{(t)}) \le \log P(x\mid \theta^{(t+1)})$
