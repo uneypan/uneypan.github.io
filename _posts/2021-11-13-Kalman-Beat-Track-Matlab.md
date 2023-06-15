@@ -5,9 +5,9 @@ mathjax: true
 mermaid: false
 ---
 
-## 摘要
-
 > Y. Shiu, N. Cho, P. -C. Chang and C. . -C. J. Kuo, "Robust on-line beat tracking with kalman filtering and probabilistic data association (KF-PDA)," in IEEE Transactions on Consumer Electronics, vol. 54, no. 3, pp. 1369-1377, August 2008, doi: 10.1109/TCE.2008.4637629.
+
+## 摘要
 
 搭建了 Kalman 滤波在线跟踪系统 [Source Code](https://github.com/uneypan/OnlineBeatTrack)，使用 Matlab 内置音频工具箱 AudioToolbox 可从文件或者设备读取音频流，放进 Buffer 内做重音（Onset）检测，作为卡尔曼滤波器的输入，得到下一拍的估计，实现了在线（实时）的节拍跟踪。拍位置的观测方法为局部最大值规则（LM），不过丢拍、错拍概率比较高，但还未统计正确率和最长持续跟踪时间。目前尝试PDA算法选取观测拍，但是统计重音强度分布时遇到了问题。
 
