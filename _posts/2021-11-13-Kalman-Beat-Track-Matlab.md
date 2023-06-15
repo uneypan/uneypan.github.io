@@ -7,9 +7,9 @@ mermaid: false
 
 ## 摘要
 
-搭建了 Kalman 滤波在线跟踪系统，使用 Matlab 内置音频工具箱 AudioToolbox 可从文件或者设备读取音频流，放进 Buffer 内做重音（Onset）检测，作为卡尔曼滤波器的输入，得到下一拍的估计，实现了在线（实时）的节拍跟踪。拍位置的观测方法为局部最大值规则（LM），不过丢拍、错拍概率比较高，但还未统计正确率和最长持续跟踪时间。目前尝试PDA算法选取观测拍，但是统计重音强度分布时遇到了问题。
+> Y. Shiu, N. Cho, P. -C. Chang and C. . -C. J. Kuo, "Robust on-line beat tracking with kalman filtering and probabilistic data association (KF-PDA)," in IEEE Transactions on Consumer Electronics, vol. 54, no. 3, pp. 1369-1377, August 2008, doi: 10.1109/TCE.2008.4637629.
 
-[Source Code](https://github.com/uneypan/OnlineBeatTrack)
+搭建了 Kalman 滤波在线跟踪系统 [Source Code](https://github.com/uneypan/OnlineBeatTrack)，使用 Matlab 内置音频工具箱 AudioToolbox 可从文件或者设备读取音频流，放进 Buffer 内做重音（Onset）检测，作为卡尔曼滤波器的输入，得到下一拍的估计，实现了在线（实时）的节拍跟踪。拍位置的观测方法为局部最大值规则（LM），不过丢拍、错拍概率比较高，但还未统计正确率和最长持续跟踪时间。目前尝试PDA算法选取观测拍，但是统计重音强度分布时遇到了问题。
 
 主文件为```beattrack.m```, 运行之前需要设置音频I/O设备或者文件路径。
 
@@ -62,14 +62,24 @@ $$
 
 ## 卡尔曼滤波器
 
-将节拍进行描述为一个动态线性系统，其具有两个状态变量拍子位置 $\tau$ 周期 $\hat{\Delta}$. 则第 $k$ 步状态变量描述为 $\mathbf{x}_{k}=\left[\hat{\tau}_{k}, \hat{\Delta}_{k}\right]^{T}$, 卡尔曼滤波预测阶段为：
+将节拍进行描述为一个动态线性系统，其具有两个状态变量拍子位置 $\tau$ 周期 $\hat{\Delta}$. 则第 $k$ 步状态变量描述为 
+
+$$\mathbf{x}_{k}=\left[\hat{\tau}_{k}, \hat{\Delta}_{k}\right]^{T}$$
+
+卡尔曼滤波预测阶段为：
 
 $$\begin{aligned}
 &\hat{\mathbf{x}}_{k \mid k-1}=\boldsymbol{\Phi}_{k} \hat{\mathbf{x}}_{k-1 \mid k-1} \\
 &\mathbf{P}_{k \mid k-1}=\boldsymbol{\Phi}_{k} \mathbf{P}_{k-1 \mid k-1} \boldsymbol{\Phi}_{k}^{\mathrm{T}}+\mathbf{Q}_{k-1}
 \end{aligned}$$
 
-其中 $\hat{\mathbf{x}}_{k \mid k-1}$ 和 $\mathbf{P}_{k \mid k-1}$ 分别表示预测状态和协方差；$\Phi_{k} = \left[\begin{array}{ll}1 & 1 \\ 0 & 1\end{array}\right]$；过程噪声 $\mathbf{w}_{k} \sim N\left(\mathbf{0}, \mathbf{Q}_{k}\right)$；
+其中 
+
+$\Phi_{k} = \left[\begin{array}{ll}1 & 1 \\ 0 & 1\end{array}\right]$；
+
+$\hat{\mathbf{x}}_{k \mid k-1}$ 和 $\mathbf{P}_{k \mid k-1}$ 分别表示预测状态和协方差；
+
+过程噪声 $\mathbf{w}_{k} \sim N\left(\mathbf{0}, \mathbf{Q}_{k}\right)$；
 
 卡尔曼滤波更新阶段为：  
 
@@ -80,7 +90,15 @@ $$\begin{aligned}
 \mathbf{P}_{k \mid k} &=\left(\mathbf{I}-\mathbf{K}_{k} \mathbf{M}_{k}\right) \mathbf{P}_{k \mid k-1}
 \end{aligned}$$
 
-其中  $\mathbf{K}_{k}$ 是卡尔曼增益；$\hat{\mathbf{x}}_{k \mid k}$ 和 $\mathbf{P}_{k \mid k}$ 分别表示第 $k$ 步滤波得到的状态和协方差； $\mathbf{M}_{k}=\left[\begin{array}{ll}1 & 0\end{array}\right]$, $\mathbf{R}_k$ 为观测噪声的方差；$ \mathbf{y}_k$ 是观测值。
+其中  $\mathbf{K}_{k}$ 是卡尔曼增益；
+
+$\hat{\mathbf{x}}_{k \mid k}$ 和 $\mathbf{P}_{k \mid k}$ 分别表示第 $k$ 步滤波得到的状态和协方差； 
+
+$\mathbf{M}_{k}=\left[\begin{array}{ll}1 & 0\end{array}\right]$, 
+
+$\mathbf{R}_k$ 为观测噪声的方差；
+
+$ \mathbf{y}_k$ 是观测值。
 
 上述过程Matlab实现如下：给定拍子位置 ```tao``` 和节拍周期 ```delta``` 以及对应的协方差 ```P```，并加入过程噪声 ```Q``` 和观测噪声 ```R``` ,于是卡尔曼滤波器实现如下：
 
@@ -133,9 +151,13 @@ $$ \begin{aligned}
 
 $$ p\left[I_{Y}(k) \mid \theta_{i}(k), \mathbf{Y}^{k}\right]=I_{i}\left(\mathbf{y}_{i}\right) \prod_{j=1, j \neq i}^{m_{k}} I_{0}\left(\mathbf{y}_{j}\right) $$  
 
-其中  $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ 是验证观测值 $y_{i}$ 的概率分布；  $I_{0}\left(\mathbf{y}_{j}\right)$ 是观测值 $y_{j}$ 不在验证空间内的概率分布
+其中,  $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ 是验证观测值 $y_{i}$ 的概率分布；  
 
-但是, 验证观测值 $\mathrm{y}_{\mathrm{i}}$ 的概率分布 $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ : 难以快速准确地确定。因此，使用一个固定概率分布 $I_{B}$ 来替代 $I_{i}(k)$, 此概率分布即为重音强度关于节拍位置的概率分布;使用概率分布 $I_{N}$ 来替代 $I_{0}(k)$, 此概率分布即为重音强度关于非节拍位置的概率分布。这两个固定概率分布通过统计的方法来估计。
+$I_{0}\left(\mathbf{y}_{j}\right)$ 是观测值 $y_{j}$ 不在验证空间内的概率分布
+
+但是, 验证观测值 $\mathrm{y}_{\mathrm{i}}$ 的概率分布 $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ : 难以快速准确地确定。
+
+因此，使用一个固定概率分布 $I_{B}$ 来替代 $I_{i}(k)$, 此概率分布即为重音强度关于节拍位置的概率分布;使用概率分布 $I_{N}$ 来替代 $I_{0}(k)$, 此概率分布即为重音强度关于非节拍位置的概率分布。这两个固定概率分布通过统计的方法来估计。
 
 利用MIREX数据集里20个音乐片段的前10s计算$I_B$和$I_N$, 绘出关于重音强度的直方图如图(Beat对应$I_B$，Non-Beat对应$I_N$)：  
 
@@ -144,27 +166,31 @@ $$ p\left[I_{Y}(k) \mid \theta_{i}(k), \mathbf{Y}^{k}\right]=I_{i}\left(\mathbf{
 可以得到一个基本结论：非节拍重音集中分布于较短的重音持续时间上。
 
 假设候选拍的位置服从高斯分布，则第二项可以写为
+
 $$
 p\left[\mathbf{y}_{k} \mid \mathbf{Y}^{k-1}\right]=N\left(\hat{\mathbf{y}}_{k \mid k-1}, \mathbf{S}_{k}\right)
 $$
-其中，预测观测值 $\hat{\mathbf{y}}_{k \mid k-1}=\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}$；相关协方差矩阵 $\mathbf{S}_{k}=\mathbf{M}_{k} \mathbf{P}_{k \mid k-1} \mathbf{M}_{k}^{\mathbf{T}}+\mathbf{R}_{k}$
+
+其中，预测观测值 $\hat{\mathbf{y}}_{k \mid k-1}=\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}$；
+
+相关协方差矩阵 $\mathbf{S}_{k}=\mathbf{M}_{k} \mathbf{P}_{k \mid k-1} \mathbf{M}_{k}^{\mathbf{T}}+\mathbf{R}_{k}$
 
 在Matlab里，权值系数```bta```计算方式如下： 
 
 假设验证区域中有多个候选拍，对于其中某个候选拍k为真实拍的概率可以分两部分计算。  
 *No.1* 一如卡尔曼滤波器假设，估计拍的分布是一个均值估计位置```pretao```,方差```P(1,1)```的高斯分布  
 
-   ``` matlab
+``` matlab
 pdf = normpdf(window, pretao, sqrt(P(1,1)))
-   ```
+```
 
 则某一候选拍为真实拍的的概率就是其位置在此高斯分布上的**位置概率**```ploc```，显然```ploc```与测量残差相关。
 
 *No.2* 使用已标注的数据集，统计检测函数上重音强度(Beat Intensity)和非重音强度(Non-Beat Intensity)的概率分布，则根据候选拍的重音强度可以在分布上取得其为真实拍的概率```pb```,和其他候选拍不是真实拍的概率值```pn1```, ```pn2```... 于是该候选拍的**强度概率**```pints```为  
 
-   ``` matlab
+``` matlab
 pints = pb·pn1·pn2...
-   ```  
+```  
 
 综合上述两项概率，则该候选拍为真实拍的概率为：  
 
@@ -174,18 +200,32 @@ pk = ploc * pints;
 
 那么所有候选拍的概率可以确定了，这就是他们的权值```bta```, 再根据贝叶斯概率公式计算出所有候选拍都不是真实拍的概率```bta0```：  
 
-   ``` matlab
+``` matlab
 bta0 = 1 - prod(1-bta);
-   ```
+```
 
 2、概率数据加权
 
 PDA将状态估计分解为候选观测值的线性组合，
 $$\begin{aligned} \hat{\mathbf{x}}_{k \mid k} &=E\left[\mathbf{x}_{k} \mid \mathbf{Y}^{k}\right] \\ &=\sum_{i=0}^{m_{k}} E\left[\mathbf{x}_{k} \mid \theta_{i}(k), \mathbf{Y}^{k}\right] p\left[\theta_{i}(k) \mid \mathbf{Y}^{k}\right] \\ &=\sum_{i=0}^{m_{k}} \hat{\mathbf{x}}_{i, k \mid k} \beta_{i}(k), \end{aligned}$$ 
+
 其中,  
-$m_{k}$ 是已验证候选拍的数量; $\hat{\mathbf{x}}_{i, k \mid k}$ 是以事件 $\theta_{i}(k)$ 为条件的更新得到的状态估计;  
-$\theta_{i}(k)$ 表示观测到的 $\hat{\mathbf{y}}_{i, k}$ 来自于目标拍; $\theta_{0}(k)$ 表示没有观测来自于目标拍;  
-$\beta_{i}(k)$ 表示事件 $\theta_{i}(k)$ 发生的概率, 即 $\beta_{i}(k)=p\left[\theta_{i}(k) \mid \mathbf{Y}^{k}\right], i=0, \cdots, m_{k}$, 且 $\sum_{i=0}^{m_{k}} \beta_{i}(k)=1$.  
+
+$m_{k}$ 是已验证候选拍的数量; 
+
+$\hat{\mathbf{x}}_{i, k \mid k}$ 是以事件 $\theta_{i}(k)$ 为条件的更新得到的状态估计;  
+
+$\theta_{i}(k)$ 表示观测到的 $\hat{\mathbf{y}}_{i, k}$ 来自于目标拍; 
+
+$\theta_{0}(k)$ 表示没有观测来自于目标拍;  
+
+$\beta_{i}(k)$ 表示事件 $\theta_{i}(k)$ 发生的概率, 即
+
+$$\beta_{i}(k)=p\left[\theta_{i}(k) \mid \mathbf{Y}^{k}\right], i=0, \cdots, m_{k}$$
+
+且 
+
+$$\sum_{i=0}^{m_{k}} \beta_{i}(k)=1$$  
 
 为了使PDA与卡尔曼滤波在运算上相匹配, 修改卡尔曼滤波更新阶段的算法, 将残差修改为概率加权残差:  
 
@@ -197,7 +237,11 @@ $$
 \end{aligned}
 $$
 
-其中，$\boldsymbol{\Psi}_{k}=\sum_{i=1}^{m_{k}}\left(\mathbf{y}_{i, k}-\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}\right) \beta_{i}(k)$ 可以视为PDA算法下的等效残差。
+其中，
+
+$$\boldsymbol{\Psi}_{k}=\sum_{i=1}^{m_{k}}\left(\mathbf{y}_{i, k}-\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}\right) \beta_{i}(k)$$ 
+
+可以视为PDA算法下的等效残差。
 
 根据文献 $[12]$, 误差协方差矩阵 $\mathbf{P}_{k \mid k}$ 修改为:
 
@@ -207,7 +251,8 @@ $$
 
 其中,  
 
-$$\quad \mathbf{P}_{k \mid k}^{0}=\left(\mathbf{I}-\mathbf{K}_{k} \mathbf{M}_{k}\right) \mathbf{P}_{k \mid k-1}$$  
+$$\quad \mathbf{P}_{k \mid k}^{0}=\left(\mathbf{I}-\mathbf{K}_{k} \mathbf{M}_{k}\right) \mathbf{P}_{k \mid k-1}$$
+
 $$\widetilde{\mathbf{P}}_{k}=\mathbf{K}_{k}\left[\sum_{i=1}^{m_{k}} \beta_{i}(k) \widetilde{\mathbf{y}}_{i, k} \tilde{\mathbf{y}}_{i, k}^{\mathbf{T}}-\tilde{\mathbf{y}}_{i, k} \tilde{\mathbf{y}}_{i, k}^{\mathbf{T}}\right] \mathbf{K}_{k}^{\mathbf{T}}
 $$
 
