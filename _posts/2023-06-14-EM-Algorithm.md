@@ -5,6 +5,8 @@ mathjax: true
 mermaid: false
 ---
 
+如果我们定义观测变量和潜在变量的⼀个联合概率分布，那么对应的观测变量本⾝的概率分 布可以通过求边缘概率的⽅法得到。**EM算法用于解决具有隐变量的混合模型的极大似然估计问题**。
+
 ## EM算法公式
 
 MLE 问题：$P(x\mid \theta)$
@@ -25,7 +27,7 @@ $$ \begin{split}
 $1.$ E step：计算 $\log p(x,z\mid \theta)$ 在概率分布 $p(z\mid x,\theta^t)$ 下的期望
 $2.$ M step：计算使这个期望最大化的参数得到下一个 EM 步骤的输入
 
-显然，EM是一个递推算法。EM算法用于解决具有隐变量的混合模型的极大似然估计问题。
+显然，EM是一个递推算法。
 
 
 ## EM算法的收敛性证明
@@ -90,3 +92,54 @@ $$\begin{split} &\ \ \ \ \ H(\theta^{(t+1)},\theta^{(t)}) - H(\theta^{(t)},\thet
 因此得证 $Q(\theta^{(t)},\theta^{(t)})-H(\theta^{(t)},\theta^{(t)}) \le Q(\theta^{(t+1)},\theta^{(t)})-H(\theta^{(t+1)},\theta^{(t)})$.
 
 故 $\log P(x\mid \theta^{(t)}) \le \log P(x\mid \theta^{(t+1)})$.
+
+
+## 混合⾼斯模型
+
+![](/pictures/prml/图2.21.png)
+
+这个数据集被称为“⽼忠实间歇喷泉”数据集，由美国黄⽯国家公园的⽼忠实间歇喷泉的272次喷发的测量数据组成。
+
+可以看到使用最⼤似然法（左）拟合的单一高斯分布不能描述数据中两个聚集区域，峰值区域内数据稀疏。而使用两个高斯分布线性组合得到的概率分布（右）给出了数据的一个更好的表示。
+
+通过将更基本的概率分布（例如⾼斯分布）进⾏线性组合的这样的叠加⽅法，可以被形式化为概率模型，被称为混合模型（mixture distributions）。
+
+⼀维⾼斯混合分布的例⼦
+
+![](/pictures/prml/图2.22.png)
+
+⼆维空间中3个⾼斯分布混合的例⼦
+
+![](/pictures/prml/图2.23.png)
+
+K 个⾼斯概率密度的叠加，形式为
+
+$$
+p(x) = \sum_{k=1}^{K} \pi_k \cdot \mathrm{N}(x \mid \mu_k,\Sigma_k)\\\quad \sum_{k=1}^{K} \pi_k =1, \quad 0 \le \pi_k \le 1.
+$$
+
+把 $\pi_k = p(k)$ 看成第k个成分的先验概率，密度 $\mathrm{N}(x \mid \mu_k,\Sigma_k)$ 看成以k为条件的x的概率。边缘概率密度为
+
+$$
+p(x)= \sum_{k=1}^{K} p(k)p(x\mid k)
+$$
+
+根据贝叶斯定理，后验概率 $\gamma_k(x)$ 可以表⽰为
+
+$$\begin{split}
+\gamma_k(x) &= p(k\mid x)\\
+&=\frac{p(k)p(x\mid k)}{\sum_l p(l)p(x\mid l)}\\
+&=\frac{\pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k)}{\sum_l \pi_l \mathrm{N}(x\mid\mu_l,\Sigma_l)}
+\end{split}$$
+
+对数似然函数为
+
+$$
+\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathrm{N}(x_n\mid\mu_k,\Sigma_k) \right\}
+$$
+
+因为对数中存在⼀个求和式，导致参数的最⼤似然解不再有⼀个封闭形式的解析解。⼀种最⼤化这个似然函数的⽅法是使⽤迭代数值优化⽅法，另⼀种⽅法便是EM算法。
+
+## K 均值聚类
+
+K 均值算法对应于⽤于⾼斯混合模型的EM算法的⼀个特定的⾮概率极限。
