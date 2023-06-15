@@ -1,6 +1,6 @@
 ---
 layout: article
-title: 节拍跟踪算法概述
+title: 节拍跟踪相关算法
 mathjax: true
 mathjax_autoNumber: true
 ---
