@@ -7,9 +7,12 @@ mermaid: false
 ---
 
 > Bar-Shalom, Yaakov and Edison T. S. Tse. “Tracking in a cluttered environment with probabilistic data association.” Autom. 11 (1975): 451-460.
-《Automatica》，第11卷，第451-460页。Pergamon出版社，1975年。英国印刷。
+
 
 # 杂波环境下基于概率数据关联的跟踪
+
+
+《Automatica》，第11卷，第451-460页。Pergamon出版社，1975年。英国印刷。
 
 YAAKOV BAR-SHALOM 和 EDISON TSE
 
