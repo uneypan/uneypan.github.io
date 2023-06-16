@@ -26,6 +26,7 @@ $$ \begin{split}
 这个公式包含了迭代的两步：
 
 $1.$ E step：计算 $\log p(x,z\mid \theta)$ 在概率分布 $p(z\mid x,\theta^t)$ 下的期望
+
 $2.$ M step：计算使这个期望最大化的参数得到下一个 EM 步骤的输入
 
 显然，EM是一个递推算法。
@@ -140,12 +141,6 @@ $$
 
 ## 混合⾼斯模型
 
-![](/pictures/prml/图2.21.png)
-
-这个数据集被称为“⽼忠实间歇喷泉”数据集，由美国黄⽯国家公园的⽼忠实间歇喷泉的272次喷发的测量数据组成。
-
-可以看到使用最⼤似然法（左）拟合的单一高斯分布不能描述数据中两个聚集区域，峰值区域内数据稀疏。而使用两个高斯分布线性组合得到的概率分布（右）给出了数据的一个更好的表示。
-
 通过将更基本的概率分布（例如⾼斯分布）进⾏线性组合的这样的叠加⽅法，可以被形式化为概率模型，被称为混合模型（mixture distributions）。
 
 |![](/pictures/prml/图2.22.png)|
@@ -153,6 +148,9 @@ $$
 |⼀维⾼斯混合分布的例⼦|
 |![](/pictures/prml/图2.23.png)|
 |⼆维空间中3个⾼斯分布混合的例⼦|
+|![](/pictures/prml/图2.21.png)|
+|这个数据集被称为“⽼忠实间歇喷泉”数据集，由美国黄⽯国家公园的⽼忠实间歇喷泉的272次喷发的测量数据组成。可以看到使用最⼤似然法（左）拟合的单一高斯分布不能描述数据中两个聚集区域，峰值区域内数据稀疏。而使用两个高斯分布线性组合得到的概率分布（右）给出了数据的一个更好的表示。|
+
 
 K 个⾼斯概率密度的叠加，形式为
 
@@ -208,7 +206,7 @@ $$ p(x) = \sum_z p(z)p(x\mid z) = \sum_{k=1}^{K} \pi_k \mathrm{N}(x\mid \mu_k,\S
 
 $$\begin{split}
 \displaystyle \gamma(z_k) = p(z_k=1\mid x) &=\frac{p(z_k=1)p(x\mid z_k=1)}{\sum_{j=1}^{K} p(z_j=1)p(x\mid z_j=1)} \\
-&=\frac{\pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathrm{N}(x\mid\mu_l,\Sigma_l)}
+&=\frac{\pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathrm{N}(x\mid\mu_j,\Sigma_j)}
 \end{split}$$
 
 $\gamma(z_k)$ 也可以被看做分量 $k$ 对于“解释”观测值 $x$ 的“责任”（responsibility）
@@ -240,4 +238,30 @@ $$
 
 将最⼤似然⽅法应⽤到⾼斯混合模型中时必须避免这种病态解，可以使⽤合适的启发式⽅法来避免这种奇异性，例如，如果检测到⾼斯分量收缩到⼀个点，那么就将它的均值重新设定为⼀个随机选择的值，并且重 新将它的⽅差设置为某个较⼤的值，然后继续最优化。
 
-后⾯会看到，如果我们使⽤贝叶斯⽅法，那么这种困难就不会出现。s
+后⾯会看到，如果我们使⽤贝叶斯⽅法，那么这种困难就不会出现。
+
+## ⽤于⾼斯混合模型的EM
+
+给定⼀个⾼斯混合模型，⽬标是关于参数（均值、协⽅差、混合系数）最⼤化似然函数。
+
+- 初始化均值 $\mu_k$， 协方差 $\Sigma_k$ 和混合系数 $\pi_k$, 计算对数似然函数的初始值。
+
+- E 步骤：使用当前参数值计算“责任”。   
+$$ \gamma(z_{nk}) =\frac{\pi_k \mathrm{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathrm{N}(x_n\mid\mu_j,\Sigma_j)} $$
+
+- M步骤：使⽤当前的“责任”重新估计参数。     
+$$\begin{split}
+\mu_k^{\text{new}} &= \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})x_n\\
+\Sigma_k^{\text{new}} &= \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})(x_n-\mu_k^{\text{new}})(x_n-\mu_k^{\text{new}})^T\\
+\pi_k^{\text{new}} &= \frac{N_k}{N}
+\end{split}$$
+其中，$N_k = \sum_{n=1}^N \gamma(z_{nk})$.
+
+- 计算对数似然函数    
+$$\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathrm{N}(x_n\mid\mu_k,\Sigma_k) \right\}$$
+
+检查参数或者对数似然函数的收敛性。如果没有满⾜收敛的准则，则返回第2步。
+
+|![](/pictures/prml/图9.8.png)|
+|:-:|
+| 对⽼忠实间歇喷泉数据集使⽤EM算法 | 
