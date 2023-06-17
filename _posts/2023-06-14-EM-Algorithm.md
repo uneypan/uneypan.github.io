@@ -155,10 +155,10 @@ $$
 K 个⾼斯概率密度的叠加，形式为
 
 $$
-p(x) = \sum_{k=1}^{K} \pi_k \cdot \mathrm{N}(x \mid \mu_k,\Sigma_k)\\\quad \sum_{k=1}^{K} \pi_k =1, \quad 0 \le \pi_k \le 1.
+p(x) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(x \mid \mu_k,\Sigma_k)\\\quad \sum_{k=1}^{K} \pi_k =1, \quad 0 \le \pi_k \le 1.
 $$
 
-把 $\pi_k = p(k)$ 看成第k个成分的先验概率，密度 $\mathrm{N}(x \mid \mu_k,\Sigma_k)$ 看成以k为条件的x的概率。边缘概率密度为
+把 $\pi_k = p(k)$ 看成第k个成分的先验概率，密度 $\mathcal{N}(x \mid \mu_k,\Sigma_k)$ 看成以k为条件的x的概率。边缘概率密度为
 
 $$
 p(x)= \sum_{k=1}^{K} p(k)p(x\mid k)
@@ -169,7 +169,7 @@ $$
 $$\begin{split}
 \gamma_k(x) &= p(k\mid x)\\
 &=\frac{p(k)p(x\mid k)}{\sum_l p(l)p(x\mid l)}\\
-&=\frac{\pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k)}{\sum_l \pi_l \mathrm{N}(x\mid\mu_l,\Sigma_l)}
+&=\frac{\pi_k \mathcal{N}(x\mid \mu_k,\Sigma_k)}{\sum_l \pi_l \mathcal{N}(x\mid\mu_l,\Sigma_l)}
 \end{split}$$
 
 引入一个“1-of-K”变量 $z$, 满足其中⼀个特定的元素 $z_k$ 等于1，其余所有的元素等于0, 有 $K$ 个可能的状态。对于每个观测数据点 $x_n$，对应一个潜在变量 $z_n$.
@@ -190,15 +190,15 @@ $$ p(z) = \prod_{k=1}^{K} \pi_k^{z_k}  $$
 
 类似地，给定 $z$， $x$ 的条件概率分布可以写成
 
-$$ p(x\mid z_k=1) = \mathrm{N}(x\mid \mu_k, \Sigma_k) $$
+$$ p(x\mid z_k=1) = \mathcal{N}(x\mid \mu_k, \Sigma_k) $$
 
 或者写成
 
-$$ p(x\mid z) = \prod_{k=1}^{K} \mathrm{N} (x\mid \mu_k,\Sigma_k)^{z_k} $$
+$$ p(x\mid z) = \prod_{k=1}^{K} \mathcal{N} (x\mid \mu_k,\Sigma_k)^{z_k} $$
 
 从⽽ $x$ 的边缘概率分布可以通过将联合概率分布 $p(z)p(x \mid z)$ 边缘化 $z$ 得到
 
-$$ p(x) = \sum_z p(z)p(x\mid z) = \sum_{k=1}^{K} \pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k) $$
+$$ p(x) = \sum_z p(z)p(x\mid z) = \sum_{k=1}^{K} \pi_k \mathcal{N}(x\mid \mu_k,\Sigma_k) $$
 
 现在能够对联合概率分布 $p(x,z)$ 操作， ⽽不是对边缘概率分布 $p(x)$ 操作，这会产⽣极⼤的计算上的简化。通过引⼊ EM 算法，即可看到这⼀点。
 
@@ -206,7 +206,7 @@ $$ p(x) = \sum_z p(z)p(x\mid z) = \sum_{k=1}^{K} \pi_k \mathrm{N}(x\mid \mu_k,\S
 
 $$\begin{split}
 \displaystyle \gamma(z_k) = p(z_k=1\mid x) &=\frac{p(z_k=1)p(x\mid z_k=1)}{\sum_{j=1}^{K} p(z_j=1)p(x\mid z_j=1)} \\
-&=\frac{\pi_k \mathrm{N}(x\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathrm{N}(x\mid\mu_j,\Sigma_j)}
+&=\frac{\pi_k \mathcal{N}(x\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathcal{N}(x\mid\mu_j,\Sigma_j)}
 \end{split}$$
 
 $\gamma(z_k)$ 也可以被看做分量 $k$ 对于“解释”观测值 $x$ 的“责任”（responsibility）
@@ -224,7 +224,7 @@ $\gamma(z_k)$ 也可以被看做分量 $k$ 对于“解释”观测值 $x$ 的�
 对数似然函数为
 
 $$
-\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathrm{N}(x_n\mid\mu_k,\Sigma_k) \right\}
+\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \right\}
 $$
 
 因为对数中存在⼀个求和式，导致参数的最⼤似然解不再有⼀个封闭形式的解析解。⼀种最⼤化这个似然函数的⽅法是使⽤迭代数值优化⽅法，另⼀种⽅法便是EM算法。
@@ -242,12 +242,59 @@ $$
 
 ## ⽤于⾼斯混合模型的EM
 
+知识回顾：多元高斯分布及其最大似然估计
+
+$$
+\mathcal{N}({x} \mid {\mu}, {\Sigma})=\frac{1}{(2 \pi)^{\frac{D}{2}}} \frac{1}{\mid {\Sigma}\mid ^{\frac{1}{2}}} \exp \left\{-\frac{1}{2}({x}-{\mu})^{T} {\Sigma}^{-1}({x}-{\mu})\right\} 
+$$
+
+$$
+\mu_{ML} = \frac{1}{N} \sum_{n=1}^{N} x_n
+$$
+
+$$
+\Sigma_{ML} = \frac{1}{N} \sum_{n=1}^{N} (x_n-\mu_{ML})(x_n-\mu_{ML})^T
+$$
+
+一种优雅的并且强大的寻找带有潜在变量的模型的最大似然解的方法被称为期望最大化算法（expectation-maximization algorithm），或EM算法。
+
+令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\mu_k$ 的导数等于0，有
+
+$$
+0 = \sum_{n=1} \underbrace{\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid mu_j,\Sigma_j)}}_{\gamma(z_{nk})} \Sigma^{-1}_k(x_n-\mu_k)
+$$
+
+后验概率（或者成 为“责任”）很⾃然地出现在了等式右侧。两侧同时乘以 $\Sigma_k$ （假设矩阵是⾮奇异的），整理，可得
+
+$$
+\mu_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk}) x_n 
+$$
+
+其中定义了 $N_k = \sum_{n=1}^N \gamma(z_{nk})$. 我们可以将其看做分配到聚类 k 的数据点的有效数量。
+
+这个解的形式为对数据集内所有的数据点加权平均得到“第 k 个高斯分量的均值 $\mu_k$” ，权重为后验概率 $\gamma(z_{nk})$ 给出。 $\gamma_(z_{nk})$ 表示分量 k 对生成 $x_n$ 的责任。 
+
+类似地，令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\Sigma_k$ 的导数等于0，推导得到
+
+$$
+\Sigma_{ML} = \frac{1}{N_k} \sum_{n=1}^{N} \gamma(z_{nk}) (x_n-\mu_k)(x_n-\mu_k)^T
+$$
+
+最后，我们关于混合系数 $ \pi_k$ 最⼤化 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$。考虑限制条件 $\sum_{k=1}^{K} \pi_k =1$，使用拉格朗日乘数法，最⼤化下⾯的量
+
+
+$$
+\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) + \lambda \left( \sum_{k=1}^{K} \pi_k =1 \right)
+$$
+
+
+
 给定⼀个⾼斯混合模型，⽬标是关于参数（均值、协⽅差、混合系数）最⼤化似然函数。
 
 - 初始化均值 $\mu_k$， 协方差 $\Sigma_k$ 和混合系数 $\pi_k$, 计算对数似然函数的初始值。
 
 - E 步骤：使用当前参数值计算“责任”。   
-$$ \gamma(z_{nk}) =\frac{\pi_k \mathrm{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathrm{N}(x_n\mid\mu_j,\Sigma_j)} $$
+$$ \gamma(z_{nk}) =\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathcal{N}(x_n\mid\mu_j,\Sigma_j)} $$
 
 - M步骤：使⽤当前的“责任”重新估计参数。     
 $$\begin{split}
@@ -258,10 +305,10 @@ $$\begin{split}
 其中，$N_k = \sum_{n=1}^N \gamma(z_{nk})$.
 
 - 计算对数似然函数    
-$$\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathrm{N}(x_n\mid\mu_k,\Sigma_k) \right\}$$
+$$\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \right\}$$
 
 检查参数或者对数似然函数的收敛性。如果没有满⾜收敛的准则，则返回第2步。
 
 |![](/pictures/prml/图9.8.png)|
 |:-:|
-| 对⽼忠实间歇喷泉数据集使⽤EM算法 | 
+| 对⽼忠实间歇喷泉数据集使⽤EM算法。图(a)⽤绿⾊标记出了数据点，以及初始的混合模型的配置。两个⾼斯分量的⼀个标准差位置的轮廓线分别⽤红⾊圆圈和蓝⾊圆圈标记。图(b)给出了初始E步骤的结果。图(c)给出了第⼀个M步骤之后的结果。图(d),(e)和(f)分别给出了2次、5次、20次完整的EM循环之后的结果。在图(f)中，算法接近收敛。 | 
