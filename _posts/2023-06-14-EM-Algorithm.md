@@ -292,7 +292,7 @@ $$
 
 
 $$
-\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) + \lambda \left( \sum_{k=1}^{K} \pi_k =1 \right)
+\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) + \lambda \left( \sum_{k=1}^{K} \pi_k -1 \right)
 $$
 
 得到
