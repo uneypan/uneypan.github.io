@@ -86,7 +86,31 @@ mathjax_autoNumber: true
 ![](/pictures/example.jpg)
 ```
 
-这样才能在 Github Pages 上正确显示
+这样才能在 Github Pages 上正确显示。
+
+## 使用 Google Drive 作为图床
+
+打开 [Google Drive](https://drive.google.com/drive/)，登入账户。选择其中一张图片，右键，选择“共享”，把“常规访问权限”从“受限”改为“知道链接的任何人”，然后点“复制链接”，得到类似这样的链接
+
+```url
+https://drive.google.com/file/d/[CODE]/view?usp=sharing
+```
+
+复制 `[CODE]`, 把链接改为
+
+```url
+https://drive.google.com/uc?export=view&id=[CODE]
+```
+
+或者
+
+```url
+
+https://drive.google.com/uc?export=download&id=[CODE]
+```
+
+可以作为图片插入文档
+
 
 ## 插入 PDF
 
