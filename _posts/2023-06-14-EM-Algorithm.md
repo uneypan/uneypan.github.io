@@ -150,7 +150,7 @@ $$
 |![](/pictures/prml/图2.23.png)|
 |⼆维空间中3个⾼斯分布混合的例⼦|
 |![](/pictures/prml/图2.21.png)|
-|这个数据集被称为“⽼忠实间歇喷泉”数据集，由美国黄⽯国家公园的⽼忠实间歇喷泉的272次喷发的测量数据组成。可以看到使用最⼤似然法（左）拟合的单一高斯分布不能描述数据中两个聚集区域，峰值区域内数据稀疏。而使用两个高斯分布线性组合得到的概率分布（右）给出了数据的一个更好的表示。|
+|“⽼忠实间歇喷泉”数据集，由美国黄⽯国家公园的⽼忠实间歇喷泉的272次喷发的测量数据组成。可以看到使用最⼤似然法（左）拟合的单一高斯分布不能描述数据中两个聚集区域，峰值区域内数据稀疏。而使用两个高斯分布线性组合得到的概率分布（右）给出了数据的一个更好的表示。|
 
 
 K 个⾼斯概率密度的叠加，形式为
@@ -243,12 +243,13 @@ $$
 
 ## ⽤于⾼斯混合模型的EM
 
-知识回顾：多元高斯分布及其最大似然估计
+知识回顾：多元高斯分布
 
 $$
 \mathcal{N}({x} \mid {\mu}, {\Sigma})=\frac{1}{(2 \pi)^{\frac{D}{2}}} \frac{1}{\mid {\Sigma}\mid ^{\frac{1}{2}}} \exp \left\{-\frac{1}{2}({x}-{\mu})^{T} {\Sigma}^{-1}({x}-{\mu})\right\} 
 $$
 
+最大似然估计
 $$
 \mu_{ML} = \frac{1}{N} \sum_{n=1}^{N} x_n
 $$
@@ -259,13 +260,19 @@ $$
 
 一种优雅的并且强大的寻找带有潜在变量的模型的最大似然解的方法被称为期望最大化算法（expectation-maximization algorithm），或EM算法。
 
-令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\mu_k$ 的导数等于0，有
+令似然函数 $\ln p(X\mid \pi, \mu, \Sigma)$ 关于 $\mu_k$ 的导数等于0，有
 
-$$
-0 = \sum_{n=1} \underbrace{\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid mu_j,\Sigma_j)}}_{\gamma(z_{nk})} \Sigma^{-1}_k(x_n-\mu_k)
-$$
+$$ \begin{split}
+0 &=\frac{\partial}{\partial \mu_k}\ln p(X\mid \pi, \mu, \Sigma) \\
+0 &=\frac{\partial}{\partial \mu_k} \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \right\}\\
+0 &= \sum_{n=1}^N \frac{\frac{\partial}{\partial \mu_k}\sum_{k=1}^{K}\pi_k\mathcal{N}(x_n\mid\mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\\
+0 &= \sum_{n=1}^N \frac{\pi_k\frac{\partial}{\partial \mu_k}\mathcal{N}(x_n\mid\mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\\
+0 &= \sum_{n=1}^{N} \underbrace{\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}}_{\gamma(z_{nk})} \Sigma^{-1}_k(x_n-\mu_k) 
+\end{split}$$
 
-后验概率（或者成 为“责任”）很⾃然地出现在了等式右侧。两侧同时乘以 $\Sigma_k$ （假设矩阵是⾮奇异的），整理，可得
+
+
+后验概率 $\gamma(z_{nk})$（或者称为“责任”）很⾃然地出现在了等式右侧。两侧同时乘以 $\Sigma_k$ （假设矩阵是⾮奇异的），整理可得
 
 $$
 \mu_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk}) x_n 
