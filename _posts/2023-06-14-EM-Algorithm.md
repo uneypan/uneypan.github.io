@@ -285,7 +285,7 @@ $$
 类似地，令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\Sigma_k$ 的导数等于0，推导得到
 
 $$
-\Sigma_{ML} = \frac{1}{N_k} \sum_{n=1}^{N} \gamma(z_{nk}) (x_n-\mu_k)(x_n-\mu_k)^T
+\Sigma_{k} = \frac{1}{N_k} \sum_{n=1}^{N} \gamma(z_{nk}) (x_n-\mu_k)(x_n-\mu_k)^T
 $$
 
 最后，我们关于混合系数 $ \pi_k$ 最⼤化 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$。考虑限制条件 $\sum_{k=1}^{K} \pi_k =1$，使用拉格朗日乘数法，最⼤化下⾯的量
