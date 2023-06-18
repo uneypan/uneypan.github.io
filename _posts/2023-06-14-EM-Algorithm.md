@@ -18,7 +18,7 @@ $$\displaystyle \theta_{MLE} = \arg\max_{\theta} \underbrace{\log P(x\mid \theta
 EM算法的公式：
 
 $$ \begin{split}
-\theta^{(t+1)} &= \arg\max_{\theta} \int_{z} \underbrace{\log P(x,z\mid \theta)}_{完整数据，对数联合概率} \cdot \underbrace{P(z\mid x,\theta^{(t)})}_{后验概率} \mathrm{d} z\\ 
+\theta^{(t+1)} &= \arg\max_{\theta} \int_{z} \underbrace{P(z\mid x,\theta^{(t)})}_{后验概率} \underbrace{\log P(x,z\mid \theta)}_{完整数据，对数联合概率} \mathrm{d} z\\ 
 &=\arg\max_{\theta}\quad E_{z\mid x,\theta^{(t)}}[\log P(x,z\mid \theta)]
 \end{split}$$
 
@@ -345,14 +345,16 @@ $$
 
 一个关键的现象是，**对于潜在变量的求和位于对数的内部**。即使联合概率分布$ p(X,Z\mid \theta) $属于指数族分布，由于这个求和式的存在，边缘概率分布$ p(X\mid \theta) $通常也不是指数族分布。求和式的出现阻止了对数运算直接作用于联合概率分布，**使得最大似然解的形式更加复杂**。
 
-现在**假定对于$ X $中的每个观测，我们都有潜在变量$ Z $的对应值。我们将$ {X, Z} $称为完整（complete）数据集，并且我们称实际的观测数据集 $X$ 是不完整的（incomplete）**，如图9.5所示。完整数据集的对数似然函数的形式为$ \ln p(X, Z\mid \theta) $，并且我们假定对这个完整数据的对数似然函数进行最大化是很容易的。
+现在假定对于$ X $中的每个观测，我们都有潜在变量$ Z $的对应值。我们将$ {X, Z} $称为完整（complete）数据集，并且我们称实际的观测数据集 $X$ 是不完整的（incomplete）。假定对这个**完整数据的对数似然函数 $\ln p(X, Z\mid \theta)$ 进行最大化是很容易的**。
 
 
 然而，在实际应用中，我们没有完整数据集$\{X, Z\} $，只有不完整的数据$ X $。我们**关于潜在变量$ Z $的取值的知识仅仅来源于后验概率分布$ p(Z\mid X, \theta) $**。由于我们不能使用完整数据的对数似然函数，因此我们反过来考虑**在潜在变量的后验概率分布下，它的期望值**，这对应于EM算法中的E步骤（稍后会看到）。**在接下来的M步骤中，我们最大化这个期望**。如果当前对于参数的估计为$ \theta^{old} $，那么一次连续的E步骤和M步骤会产生一个修正的估计$ \theta^{new} $。算法在初始化时选择了参数$ \theta_0 $的某个起始值。对期望的使用看起来多少有些随意，但是当我们在9.4节更深入地讨论EM算法时，我们会看到这种选择的原因。
 
 在E步骤中，我们使用当前的参数值$ \theta^{old} $寻找潜在变量的后验概率分布$ p(Z\mid X, \theta^{old} ) $。然后，我们使用这个后验概率分布计算完整数据对数似然函数对于一般的参数值$ \theta $的期望。这个期望被记作$ \mathcal{Q}(\theta, \theta^{old}) $，由
 
-$$ \mathcal{Q}(\theta, \theta^{old}) = \sum\limits_Zp(Z\mid X,\theta^{old})\ln p(X,Z\mid \theta)$$
+$$ \begin{split}\mathcal{Q}(\theta, \theta^{old}) &= \mathbb{E}_{Z\mid X,\theta^{old}}\left[\ln p(X,Z\mid \theta)\right]
+\\&= \sum\limits_Z p(Z\mid X,\theta^{old})\ln p(X,Z\mid \theta)
+\end{split}$$
 
 给出。在M步骤中，我们通过最大化
 
@@ -381,11 +383,11 @@ $$
 \ln p({X} \mid {\pi}, {\mu}, {\Sigma})=\sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_{k} \mathcal{N}\left({x}_{n} \mid {\mu}_{k}, {\Sigma}_{k}\right)\right\}
 $$
 
-我们现在考虑将EM算法的**潜在变量观点应用与一个具体的例子，即高斯混合模型**。回忆一 下，我们的目标是最大化对数似然函数，它是使用观测数据集 $ X $ 进行计算的。我们看到这个计算比单一高斯分布的情形更困难，因为对$ k $的求和出现在对数运算内部。假设除了观测数据集$ X $，我们还有对应的离散变量$ Z $的值。完整数据的图模型如图所示。
+我们现在考虑将EM算法的潜在变量观点应用于高斯混合模型，我们现在假定离散变量$ z_n $以及观测变量$ x_n $被观测到，图模型如图所示。
 
 |![](/pictures/prml/图9.9.png)|
 |:-:|
-|我们现在假定离散变量$ z_n $以及观测变量$ x_n $被观测到。|
+|高斯混合模型，我们现在假定离散变量$ z_n $以及观测变量$ x_n $被观测到。|
 
 
 
@@ -426,7 +428,7 @@ $$
 p(x\mid z) = \prod\limits_{k=1}^K\mathcal{N}(x\mid \mu_k,\Sigma_k)^{z_k} 
 $$
 
-以及贝叶斯定理，我们看到这个后验分布的形式为
+以及贝叶斯定理，我们看到这个潜在变量的后验分布的形式为
 
 $$ p(Z\mid X,\mu,\Sigma,\pi) \propto \prod\limits_{n=1}^N\prod\limits_{k=1}^K[\pi_k\mathcal{N}(x_n\mid \mu_k,\Sigma_k)]^{z_{nk}} $$
 
