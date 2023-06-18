@@ -310,15 +310,15 @@ $$ \pi_k = \frac{N_k}{N} $$
 - 初始化均值 $\mu_k$， 协方差 $\Sigma_k$ 和混合系数 $\pi_k$, 计算对数似然函数的初始值。
 
 - E 步骤：使用当前参数值计算“责任”。   
-$$ \gamma(z_{nk}) =\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathcal{N}(x_n\mid\mu_j,\Sigma_j)} $$
+$$ \displaystyle \gamma(z_{nk}) =\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_{j=1}^{K} \pi_j \mathcal{N}(x_n\mid\mu_j,\Sigma_j)} $$
 
-- M步骤：使⽤当前的“责任”重新估计参数。     
+- M步骤：使⽤当前的“责任”重新估计参数。        
 $$\begin{split}
 \mu_k^{\text{new}} &= \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})x_n\\
 \Sigma_k^{\text{new}} &= \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk})(x_n-\mu_k^{\text{new}})(x_n-\mu_k^{\text{new}})^T\\
 \pi_k^{\text{new}} &= \frac{N_k}{N}
-\end{split}$$
-其中，$N_k = \sum_{n=1}^N \gamma(z_{nk})$.
+\end{split}$$   
+其中，$N_k = \sum_{n=1}^N \gamma(z_{nk})$.   
 
 - 计算对数似然函数    
 $$\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma}) = \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \right\}$$
