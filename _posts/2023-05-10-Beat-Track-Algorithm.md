@@ -5,6 +5,8 @@ mathjax: true
 mathjax_autoNumber: true
 ---
 
+![](https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj)
+
 ## 节拍跟踪器的动力学方程描述
 
 这里讨论在一段较短的时间内，假设音乐中节拍进行的速度是恒定的。设 $t$ 是节拍时刻，$\Delta$ 是节拍周期。已知 $k-1$ 步的节拍时刻和周期，如果不考虑噪声，在 $k$ 时刻有
