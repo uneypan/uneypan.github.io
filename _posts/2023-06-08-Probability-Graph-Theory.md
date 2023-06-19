@@ -4,6 +4,9 @@ title: 概率图理论
 mathjax: true
 ---
 
+![](https://drive.google.com/uc?export=view&id=1zZJDtkVocwfFS4AgtP5cMDehHJuwGyJt) 
+
+
 <!-- # 概率图模型 PGM -->
 
 ## 知识结构

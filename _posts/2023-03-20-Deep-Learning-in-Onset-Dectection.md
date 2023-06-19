@@ -5,6 +5,8 @@ mathjax: true
 mermaid: false
 ---
 
+![](https://drive.google.com/uc?export=view&id=1Kk0_uMP1rHNiY4lSQdCs4MWR7ZXFrtbD) 
+
 ## 摘要
 
 本文探讨了深度学习在音乐节拍跟踪方向的应用，举例说明了几类常见的神经网络算法。另外，本文对文献[1]所用的RNN网络模型进行了探究试验，在自建数据集上进行训练和测试，并与通用信号处理框架进行比较，结果表明RNN在F-measure和P-score两项精度指标上均占优，但仍存在模型不稳定的问题。
