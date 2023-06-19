@@ -278,7 +278,7 @@ $$
 \mu_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk}) x_n 
 $$
 
-其中定义了 $N_k = \sum_{n=1}^N \gamma(z_{nk})$. 我们可以将其看做分配到聚类 k 的数据点的有效数量。
+其中定义了 $N_k = \sum_{n=1}^N \gamma(z_{nk})$，可以将其看做分配到聚类 k 的数据点的**有效样本数量**。
 
 这个解的形式为对数据集内所有的数据点加权平均得到“第 k 个高斯分量的均值 $\mu_k$” ，权重为后验概率 $\gamma(z_{nk})$ 给出。 $\gamma_(z_{nk})$ 表示分量 k 对生成 $x_n$ 的责任。 
 
@@ -447,3 +447,7 @@ $$ \begin{split} \mathbb{E}[z_{nk}] &= \frac{\sum\limits_{z_n}z_{nk}\prod_{k'}[\
 $$ \mathbb{E}_Z[\ln p(X,Z\mid \mu,\Sigma,\pi)] = \sum\limits_{n=1}^N\sum\limits_{k=1}^K\gamma(z_{nk})\{\ln \pi_k + \ln\mathcal{N}(x_n\mid \mu_k,\Sigma_k)\} $$
 
 我们现在可以按照下面的方式进行处理。首先，我们为参数$ \mu^{old}, \Sigma^{old}, \pi^{old} $选择某个初始值，使用这些初始值计算“责任”(E步骤)。然后我们保持“责任”固定，关于$ \mu_k,\Sigma_k, \pi_k $最大化对数似然函数的期望（M步骤）。同样的，这会得到$ \mu^{new}, \Sigma^{new}, \pi^{new} $的解析解。这与之前推导的高斯混合模型的EM算法完全相同。
+
+
+
+https://soptq.me/2020/06/19/matrix-derivation/
