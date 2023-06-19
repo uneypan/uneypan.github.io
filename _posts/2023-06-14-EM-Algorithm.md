@@ -4,7 +4,7 @@ title: EM算法
 mathjax: true
 mermaid: false
 ---
-![space-1.jpg](https://drive.google.com/uc?export=view&id=1MfbLmcvy4cfm2HL-h6DA5WQWSnt6yQiu) 
+![space-1.jpg](https://drive.google.com/uc?export=view&id=1Ws4FvCSoNttkISGhz3Etrx3Q8jj7pxeY) 
 
 如果我们定义观测变量和潜在变量的⼀个联合概率分布，那么对应的观测变量本⾝的概率分布可以通过求边缘概率的⽅法得到。**EM算法用于解决具有隐变量的混合模型的极大似然估计问题**。
 

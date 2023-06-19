@@ -111,12 +111,17 @@ https://drive.google.com/uc?export=download&id=[CODE]
 
 可以作为图片插入文档
 
+![](https://drive.google.com/uc?export=view&id=1Ws4FvCSoNttkISGhz3Etrx3Q8jj7pxeY)
+
+![](https://drive.google.com/uc?export=view&id=1E_ocZdPUoX1LBo7Fc1nT6hubdxloWhi1) 
 
 ## 插入 PDF
 
 ```markdown
 <center><embed src="/assets/example.pdf" width="850" height="600" ></center>
 ```
+
+<center><embed src="/assets/下肢外骨骼调研.pdf" width="850" height="600" ></center>
 
 ## 发布
 
