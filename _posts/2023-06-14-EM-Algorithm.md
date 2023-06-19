@@ -265,13 +265,16 @@ $$
 
 $$ \begin{split}
 0 &=\frac{\partial}{\partial \mu_k}\ln p(X\mid \pi, \mu, \Sigma) \\
-0 &=\frac{\partial}{\partial \mu_k} \sum_{n=1}^{N} \ln \left\{\sum_{k=1}^{K} \pi_k \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \right\}\\
-0 &= \sum_{n=1}^N \frac{\frac{\partial}{\partial \mu_k}\sum_{k=1}^{K}\pi_k\mathcal{N}(x_n\mid\mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\\
-0 &= \sum_{n=1}^N \frac{\pi_k\frac{\partial}{\partial \mu_k}\mathcal{N}(x_n\mid\mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\\
-0 &= \sum_{n=1}^{N} \underbrace{\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}}_{\gamma(z_{nk})} \Sigma^{-1}_k(x_n-\mu_k) 
+&= \sum_{n=1}^N \frac{1}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\frac{\partial}{\partial \mu_k}\sum_{k=1}^{K}\pi_k\mathcal{N}(x_n\mid\mu_k,\Sigma_k)\\
+&= \sum_{n=1}^N \frac{\pi_k}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\frac{\partial}{\partial \mu_k}\mathcal{N}(x_n\mid\mu_k,\Sigma_k)\\
+&= \sum_{n=1}^{N} \underbrace{\frac{\pi_k \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}}_{\gamma(z_{nk})} \Sigma^{-1}_k(x_n-\mu_k) 
 \end{split}$$
 
-
+其中 $ \mathcal{N}(x_n\mid \mu_k,\Sigma_k) $ 含有指数项，求导等于它本身乘以指数项内部求导
+$$ \begin{split}
+\frac{\partial \mathcal{N}(x_n\mid \mu_k,\Sigma_k)}{\partial \mu_k} &= \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \frac{\partial\{\frac{1}{2}(x_n-\mu_k)^T\Sigma_k^{-1}(x_n-\mu_k) \}}{\partial \mu_k}\\
+&=\mathcal{N}(x_n\mid\mu_k,\Sigma_k)(-1)\Sigma_k^{-1}(x_n-\mu_k)
+\end{split}$$
 
 后验概率 $\gamma(z_{nk})$（或者称为“责任”）很⾃然地出现在了等式右侧。两侧同时乘以 $\Sigma_k$ （假设矩阵是⾮奇异的），整理可得
 
@@ -279,11 +282,50 @@ $$
 \mu_k = \frac{1}{N_k} \sum_{n=1}^N \gamma(z_{nk}) x_n 
 $$
 
-其中定义了 $N_k = \sum_{n=1}^N \gamma(z_{nk})$，可以将其看做分配到聚类 k 的数据点的**有效样本数量**。
+其中定义了 $N_k = \sum_{n=1}^N \gamma(z_{nk})$，可以将其看做分配到聚类 k 的数据点的**有效样本数量**。可以验证所有 $N_k$ 求和等于样本总数量 $N$
+
+$$\begin{split}
+\sum_k N_k &= \sum_k\sum_n \gamma(z_{nk})\\
+&=\sum_{n=1}^{N} \frac{\sum_k\pi_k\mathcal{N}(x_n\mid\mu_k,\Sigma_k)}{\sum_l \pi_l\mathcal{N}(x_n\mid\mu_l,\Sigma_l)}\\
+&=\sum_{n=1}^N 1 = N
+\end{split}$$
+
 
 这个解的形式为对数据集内所有的数据点加权平均得到“第 k 个高斯分量的均值 $\mu_k$” ，权重为后验概率 $\gamma(z_{nk})$ 给出。 $\gamma_(z_{nk})$ 表示分量 k 对生成 $x_n$ 的责任。 
 
-类似地，令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\Sigma_k$ 的导数等于0，推导得到
+类似地，令似然函数 $\ln p(\mathbf{X}\mid\mathbf{\pi},\mathbf{\mu},\mathbf{\Sigma})$ 关于 $\Sigma_k^{-1}$ 的导数等于0
+
+$$\begin{split}
+0&=\frac{\partial \ln p(X\mid\pi,\mu,\Sigma)}{\partial \Sigma_k^{-1}} \\
+&= \sum_{n=1}^N \frac{\pi_k}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}\frac{\partial}{\partial \Sigma_k^{-1}}\mathcal{N}(x_n\mid\mu_k,\Sigma_k)\\
+&= \sum_{n=1}^N \frac{\pi_k}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}( \frac{1}{\sqrt{2\pi}} \cdot \frac{\partial \frac{1}{\sqrt{\Sigma_k^{-1}}}}{\partial \Sigma_k^{-1}}\exp \left\{\frac{1}{2} (x_n-\mu_k) \Sigma_k^{-1}(x_n-\mu_k)^{-1}\right\} \\
+&\ \ \ \ \ \ + \mathcal{N}(x_n\mid\mu_k,\Sigma_k) \frac{\partial\{-\frac{1}{2}(x_n-\mu_k)^T\Sigma_k^{-1}(x_n-\mu_k)\}}{\partial \Sigma_k^{-1}} )
+\end{split}$$
+
+这里用到了两个公式
+
+$$
+\frac{\partial\mid X^k \mid}{\partial X}=k\mid X^k\mid X^{-T},\quad \frac{\partial a^TXb}{\partial X} = ab^T
+$$
+
+所以原式中比较复杂的两项微分为
+
+$$
+\frac{\partial \frac{1}{\sqrt{\Sigma_k^{-1}}}}{\partial \Sigma_k^{-1}} = \frac{\partial \mid (\Sigma_k^{-1})^{\frac{1}{2}}\mid}{\Sigma_k^{-1}} = \frac{1}{2} \mid \Sigma_k^{-\frac{1}{2}}\mid\Sigma_k
+$$
+
+$$
+\frac{\partial\{-\frac{1}{2}(x_n-\mu_k)^T\Sigma_k^{-1}(x_n-\mu_k)\}}{\partial \Sigma_k^{-1}} =-\frac{1}{2}(x_n-\mu_k)(x_n-\mu_k)^T
+$$
+
+于是
+
+$$\begin{split}
+0 &= \sum_{n=1}^N \frac{\pi_k}{\sum_j \pi_j \mathcal{N}(x_n \mid \mu_j,\Sigma_j)}(\frac{1}{2} \mathcal{N}(x_n\mid\mu_k,\Sigma_k)\Sigma_k\\ &\ \ \ \ \ \  - \frac{1}{2}\mathcal{N}(x_n\mid\mu_k,\Sigma_k)(x_n-\mu_k)(x_n-\mu_k)^T)\\
+&= \frac{1}{2}\sum_{n=1}^{N}\gamma(z_{nk})(\Sigma_k-(x_n-\mu_k)(x_n-\mu_k)^T)
+\end{split}$$
+
+整理得到
 
 $$
 \Sigma_{k} = \frac{1}{N_k} \sum_{n=1}^{N} \gamma(z_{nk}) (x_n-\mu_k)(x_n-\mu_k)^T
