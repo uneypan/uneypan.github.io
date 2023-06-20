@@ -5,7 +5,7 @@ mathjax: true
 mermaid: false
 ---
 
-## 概率分布总览
+## 各种概率分布之间的关系
 
 ![](https://github.com/uneypan/distribution-is-all-you-need/raw/master/overview.png)
 
@@ -13,7 +13,7 @@ mermaid: false
 
   > 在 [贝叶斯概率论](https://en.wikipedia.org/wiki/Bayesian_probability) 中，如果 [后验分布](https://en.wikipedia.org/wiki/Posterior_probability) $p(\theta\mid x)$ 和[先验分布](https://en.wikipedia.org/wiki/Prior_probability_distribution) $p(\theta)$在同一 [概率分布族](https://en.wikipedia.org/wiki/List_of_probability_distributions) 中，那么先验和后验分布称为**共轭分布**，先验分布被称为 [似然函数](https://en.wikipedia.org/wiki/Likelihood_function) 的 [共轭先验](https://en.wikipedia.org/wiki/Conjugate_prior)。
   
-- `Multi-Class` 表示随机变量大于2。
+- `Multi-Class` 表示随机变量的数量大于2。
 
 - `N Times` 表示我们还考虑先验概率P(X)。
 
@@ -69,7 +69,7 @@ $7$. **狄利克雷分布（连续）**   [Python Code](https://github.com/uneyp
 
 $8$. **Gamma分布（连续）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/gamma.py)
    - $\displaystyle\text{Gam}(\lambda\mid a,b)=\frac{1}{\Gamma(a)}b^a\lambda^{a-1}\exp\{-b\lambda\}$
-   - $\text{Gam}(a,1) / \text{Gam}(a,1) + \text{Gam}(b,1)$转化为 $\text{Beta}(a,b)$.
+   - $\displaystyle \frac{\text{Gam}(a,1)}{\text{Gam}(a,1) + \text{Gam}(b,1)}$ 转化为 $\text{Beta}(a,b)$.
    - 指数分布和卡方分布是Gamma分布的特例。
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/gamma.png" /></p>
 
@@ -99,11 +99,16 @@ $12$. **卡方分布（连续）**   [Python Code](https://github.com/uneypan/di
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/chi-squared.png" /></p>
 
 $13$. **学生-t分布（连续）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/student-t.py)
-   - $\displaystyle \text{St}(x\mid\mu,\lambda,\nu) = \frac{\Gamma(\frac{\nu}{2}+\frac{1}{2})}{\Gamma(\frac{\nu}{2})}\left(\frac{\lambda}{\pi\nu}\right)^{\frac{1}{2}}\left[ 1+ \frac{\lambda(x-\mu)^2}{\nu}\right]^{-\frac{\nu}{2}-\frac{1}{2}}$
-   - 与高斯分布一样，t分布是对称的钟形分布，但尾部较重，这意味着它更容易产生远低于平均值的值。
-   - 学⽣t分布提供了对⾼斯分布 泛化的⼀种形式，这种分布的最⼤似然参数值对离群点⽐较鲁棒。
-   - 对于ν = 1的情况，t分布变为了柯西分布（Cauchy distribution）， ⽽在极限 $\nu \rightarrow\infty $的情况下，t分布 $\text{St}(x\mid\mu,\lambda,\nu)$ 变成了⾼斯分布  $\mathcal{N}(x\mid\mu,\lambda-1)$。
-   - 在⼀元变量的形式下，学⽣t分布可以通过下列⽅式获得：拿出⼀元⾼斯分布的精度的共轭先验，然后把精度变量积分出来。因此这个分布可以看成⽆限多个有着相同均值不同⽅差的⾼斯分布的混合。
+   - 在⼀元变量的形式下，学⽣t分布可以通过下列⽅式获得：拿出⼀元⾼斯分布的精度的共轭先验，然后把精度变量积分出来。因此这个分布可以看成⽆限多个有着相同 $\mu$ 不同 $\sigma^2$ 的⾼斯分布的混合。     
+   $$\displaystyle \text{St}(x\mid\mu,\lambda,\nu) = \frac{\Gamma(\frac{\nu}{2}+\frac{1}{2})}{\Gamma(\frac{\nu}{2})}\left(\frac{\lambda}{\pi\nu}\right)^{\frac{1}{2}}\left[ 1+ \frac{\lambda(x-\mu)^2}{\nu}\right]^{-\frac{\nu}{2}-\frac{1}{2}}$$
+   - 在D维变量的形式下，学⽣t分布是将多元⾼斯的精度矩阵关于共轭 Wishart 先验积分的结果，形式为   
+   $$\text{St}(\boldsymbol{x}\mid\boldsymbol{\mu},\boldsymbol{\Lambda},\nu) = \frac{\Gamma(\frac{\nu}{2}+\frac{1}{2})}{\Gamma(\frac{\nu}{2})}\frac{\mid\boldsymbol{\Lambda}\mid^{\frac{1}{2}}}{(\pi\nu)^{\frac{D}{2}}}\left[ 1+ \frac{(\boldsymbol{x}-\boldsymbol{\mu})\boldsymbol{\Lambda}(\boldsymbol{x}-\boldsymbol{\mu})}{\nu}\right]^{-\frac{\nu}{2}-\frac{D}{2}}$$
+   - 与高斯分布一样，t分布是对称的钟形分布，但底部较重，这意味着它更容易产生远低于平均值的值。
+   - 学⽣t分布提供了对⾼斯分布泛化的⼀种形式，这种分布的最⼤似然参数值对离群点⽐较鲁棒。
+   - $\nu > 0$ 被称为分布的⾃由度数量。
+   - 对于 $\nu = 1$ 的情况，t分布变为了柯西分布（Cauchy distribution）。
+   - 在极限 $\nu \rightarrow\infty $的情况下，t分布 $\text{St}(x\mid\mu,\lambda,\nu)$ 变成了⾼斯分布  $\mathcal{N}(x\mid\mu,\lambda-1)$。
+   
 
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/student_t.png" /></p>
 
@@ -113,8 +118,6 @@ $14$. **Wishart 分布（连续）**
 
 ## Reference
 
-[1] [Tae Hwan Jung - Distribution is All You Need](https://github.com/graykode/distribution-is-all-you-need)
-
-[2] [Wikipedia - Relationships among Probability Distributions](https://en.wikipedia.org/wiki/Relationships_among_probability_distributions)
-
-[3] [Bishop - Pattern Recognition and Machine Learning, 2006](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
+1. [Tae Hwan Jung - Distribution is All You Need](https://github.com/graykode/distribution-is-all-you-need)  
+2. [Wikipedia - Relationships among Probability Distributions](https://en.wikipedia.org/wiki/Relationships_among_probability_distributions)  
+3. [Bishop - Pattern Recognition and Machine Learning, 2006](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
