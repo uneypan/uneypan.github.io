@@ -494,6 +494,3 @@ $$ \mathbb{E}_Z[\ln p(X,Z\mid \mu,\Sigma,\pi)] = \sum\limits_{n=1}^N\sum\limits_
 
 我们现在可以按照下面的方式进行处理。首先，我们为参数$ \mu^{old}, \Sigma^{old}, \pi^{old} $选择某个初始值，使用这些初始值计算“责任”(E步骤)。然后我们保持“责任”固定，关于$ \mu_k,\Sigma_k, \pi_k $最大化对数似然函数的期望（M步骤）。同样的，这会得到$ \mu^{new}, \Sigma^{new}, \pi^{new} $的解析解。这与之前推导的高斯混合模型的EM算法完全相同。
 
-
-
-https://soptq.me/2020/06/19/matrix-derivation/
