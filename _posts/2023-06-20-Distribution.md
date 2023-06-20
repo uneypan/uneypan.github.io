@@ -5,7 +5,6 @@ mathjax: true
 mermaid: false
 ---
 
-
 ## 概率分布总览
 
 ![](https://github.com/uneypan/distribution-is-all-you-need/raw/master/overview.png)
