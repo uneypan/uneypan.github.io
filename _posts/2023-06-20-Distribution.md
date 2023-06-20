@@ -46,9 +46,9 @@ mermaid: false
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/categorical.png" /></p>
 
 ### $5$. **多项式分布（离散）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/multinomial.py)
+   - 多项式分布是⼆项分布对于多元变量的推⼴， 给出了⼀个具有 $K$ 个状态的离散变量在总计 $N$ 次观测中处于状态 $k$ 的次数 $m_k$ 的分布。
    - $\displaystyle\mathrm{Mult}(m_1,m_2,\dots,m_K \mid \boldsymbol{\mu},N)= \binom{N}{m_1m_2\dots m_K}\prod_{k=1}^{K} \mu_k^{m_k}$.
    - 其中，$\displaystyle\binom{N}{m_1m_2\dots m_K} = \frac{N!}{m_1!m_2!\dots m_K!}$，指 $N$ 个相同的物体中的 $m_k$ 个放到箱⼦ $k$ 中的⽅案总数。
-   - 多项式分布是⼆项分布对于多元变量的推⼴， 给出了⼀个具有 $K$ 个状态的离散变量在总计 $N$ 次观测中处于状态 $k$ 的次数 $m_k$ 的分布。
    - 参数 $\{\mu_k\}$ 的共轭先验是狄利克雷分布。
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/multinomial.png" /></p>
 
