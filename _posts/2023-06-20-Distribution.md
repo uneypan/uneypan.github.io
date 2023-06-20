@@ -85,7 +85,7 @@ mermaid: false
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/normal.png" /></p>
 
 12. **卡方分布（连续）**, [code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/chi-squared.py)
-    - $\displaystyle  \chi^2(x\mid k)={\frac{1}{2^{\frac{k}{2}}\Gamma ({\frac{k}{2}})}}x^{\frac{k}{2}-1}e^{\frac{-x}{2}}$.
+    <!-- - $\displaystyle  \chi^2(x\mid k)={\frac{1}{2^{\frac{k}{2}}\Gamma({\frac{k}{2}})}}x^{\frac{k}{2}-1}e^{\frac{-x}{2}}$. -->
     - 具有k个自由度的卡方分布是k个独立标准正态随机变量的平方和的分布。
     - 卡方分布是Beta分布的特例。
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/chi-squared.png" /></p>
