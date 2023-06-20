@@ -26,8 +26,8 @@ mermaid: false
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/uniform.png" /></p>
 
 2. **伯努利分布（离散）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/bernoulli.py)
-   - $\text{Bern}(x\mu)=\mu^x(1-\mu)^{1-x}$.
-   - 伯努利分布不考虑先验概率 P(X)，因此，使用最大似然将容易受到过拟合的影响。
+   - $\text{Bern}(x\mid\mu)=\mu^x(1-\mu)^{1-x}$.
+   - 伯努利分布不考虑先验概率 $P(X)$，因此，使用最大似然将容易受到过拟合的影响。
    - 我们使用**二进制交叉熵**对二进制分类进行分类。它的形式和取伯努利分布的负对数是一样的。
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/bernoulli.png" /></p>
 
@@ -74,15 +74,15 @@ mermaid: false
 
 10. **高斯分布（连续）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/gaussian.py)
     - 一元高斯分布  
-    $\displaystyle \mathcal{N}(x\mid\mu,\sigma^2)=\frac{1}{(2\pi\sigma)^{1/2}}\exp \left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\}$
+    $$\displaystyle \mathcal{N}(x\mid\mu,\sigma^2)=\frac{1}{(2\pi\sigma)^{1/2}}\exp \left\{-\frac{1}{2\sigma^2}(x-\mu)^2\right\}$$
     - 多元高斯分布（$D$维）   
-    $\displaystyle\mathcal{N}(\boldsymbol{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})=\frac{1}{(2 \pi)^{\frac{D}{2}}} \frac{1}{\mid \boldsymbol{\Sigma}\mid ^{\frac{1}{2}}} \exp \left\{-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{T} \boldsymbol{\Sigma}^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\right\} $.
+    $$\displaystyle\mathcal{N}(\boldsymbol{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})=\frac{1}{(2 \pi)^{\frac{D}{2}}} \frac{1}{\mid \boldsymbol{\Sigma}\mid ^{\frac{1}{2}}} \exp \left\{-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{T} \boldsymbol{\Sigma}^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\right\} $$
     - 一元⾼斯分布的均值$\mu$的共轭先验是⾼斯分布，精度$\sigma^{-1}$的共轭先验是Gamma分布.
-    - 多元⾼斯分布 $\boldsymbol{\mu}$ 的共轭先验仍然是⾼斯分布，精度 $\boldsymbol{\Lambda}$ 的共轭先验是⼀个Wishart分布，$(\boldsymbol{\mu},\boldsymbol{\Lambda})$ 的共轭先验是⾼斯-Wishart分布 $p(\mu,\Lambda\mid \mu_0,\beta,W,\nu) = \mathcal{N}(\mu\mid \mu_0,(\beta\Lambda)^{-1})\mathcal{W}(\Lambda\mid W,\nu)$。
+    - 多元⾼斯分布 $\boldsymbol{\mu}$ 的共轭先验仍然是⾼斯分布，精度 $\boldsymbol{\Lambda}$ 的共轭先验是⼀个Wishart分布，$(\boldsymbol{\mu},\boldsymbol{\Lambda})$ 的共轭先验是⾼斯-Wishart分布 $$p(\mu,\Lambda\mid \mu_0,\beta,W,\nu) = \mathcal{N}(\mu\mid \mu_0,(\beta\Lambda)^{-1})\mathcal{W}(\Lambda\mid W,\nu)$$
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/gaussian.png" /></p>
 
 11. **正态分布（连续）**   [Python Code](https://github.com/uneypan/distribution-is-all-you-need/blob/master/normal.py)
-    - $\displaystyle \mathcal{N}(x)=\frac{1}{(2\pi)^{1/2}}\exp \left(-\frac{x^2}{2}\right)$.
+    - $\displaystyle \mathcal{N}(x)=\frac{1}{(2\pi)^{1/2}}\exp \left(-\frac{x^2}{2}\right)$
     - 正态分布是标准化的高斯分布，平均值为0，标准值为1。
 <p align="center"><img width="400" src="https://github.com/uneypan/distribution-is-all-you-need/raw/master/graph/normal.png" /></p>
 
