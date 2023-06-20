@@ -9,7 +9,7 @@
 
 网站设置
 ```yml
-title   : 我的的个人博客
+title   : 我的个人博客
 description: > # this means to ignore newlines until "Language & timezone"
   学习笔记 & 存档 & 想法
 ```
