@@ -5,7 +5,6 @@ mathjax: true
 mathjax_autoNumber: true
 ---
 
-![](https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj)
 
 ## 节拍跟踪器的动力学方程描述
 
