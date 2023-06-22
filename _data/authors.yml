@@ -1,9 +1,9 @@
 Zhihan:
   name      : Zhihan
   url       : 
-  avatar    : https://static.wikia.nocookie.net/to-aru-majutsu-no-index/images/1/19/Misaka.png
-  bio       : 
-  email     : 
+  avatar    : /pictures/avatar_misaka.png
+  bio       : SCUT, Automation Science and Engineering college, Undergraduate
+  email     : zhihan.scut@gmail.com
   facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
   twitter   : # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
   weibo     : # "user_id"   the last part of your profile url, e.g. https://www.weibo.com/user_id/profile?...
@@ -13,5 +13,5 @@ Zhihan:
   zhihu     : # "user_name" the last part of your profile url, e.g. https://www.zhihu.com/people/user_name
   douban    : # "user_name" the last part of your profile url, e.g. https://www.douban.com/people/user_name
   linkedin  : # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
-  github    : # "user_name" the last part of your profile url, e.g. https://github.com/user_name
+  github    : uneypan # "user_name" the last part of your profile url, e.g. https://github.com/user_name
   npm       : # "user_name" the last part of your profile url, e.g. https://www.npmjs.com/~user_name
