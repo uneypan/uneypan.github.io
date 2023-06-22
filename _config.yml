@@ -21,13 +21,13 @@ highlight_theme: default # "default" (default), "tomorrow", "tomorrow-night", "t
 url     : # the base hostname & protocol for your site e.g. https://www.someone.com
 baseurl : # does not include hostname
 title   : Zhihan's Blogs
-description: > # this means to ignore newlines until "Language & timezone"
-  学习笔记 & 存档 & 想法
+description: 学习笔记 & 存档 & 想法 # this means to ignore newlines until "Language & timezone"
+  
 
 
 ## => Language and Timezone
 ##############################
-lang: # the language of your site, default as "en"
+lang: zh # the language of your site, default as "en"
 timezone: # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the available values
 
 
@@ -38,7 +38,7 @@ author:
   name      : Zhihan
   url       :
   avatar    : /picture/avatar_misaka.png # path or url of avatar image (square)
-  bio       : 
+  bio       : SCUT, Automation Science and Engineering college, Undergraduate
   email     : zhihan.scut@gmail.com
   facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
   twitter   : # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name
