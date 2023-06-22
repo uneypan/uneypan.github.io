@@ -5,7 +5,9 @@
 
 这个仓库的名字 [github_user].github.io 就是访问网站的网址。
 
-## 修改配置文件 _config.yml
+## 网站配置 
+
+修改配置文件 *_config.yml*
 
 网站设置
 ```yml
@@ -34,10 +36,11 @@ author:
 ```
 
 Markdown Enhancements 全局设置：
-- 用于渲染$\LaTeX$ 公式的 mathjax 渲染器
+- 用于渲染 $\LaTeX$ 公式的 mathjax 渲染器
 - mathjax_autoNumber 公式自动编号
 - Mermaid 流程图
 - Chart 交互表格
+
 ```yml
 ## => Markdown Enhancements
 ##############################
@@ -51,12 +54,53 @@ mermaid: # false (default), true
 ## Chart
 chart: # true false (default), true
 ```
+## Logo 和 Favicon
+
+替换 *_includes/svg/logo.svg* 来设置你的 Logo。
+
+推荐使用 [RealFaviconGenerator](https://realfavicongenerator.net/) 来生成 Favicon。
+
+下载生成的压缩包，用其中的文件
+
+```
+./
+├── android-chrome-192x192.png
+├── android-chrome-256x256.png
+├── apple-touch-icon.png
+├── browserconfig.xml
+├── favicon-16x16.png
+├── favicon-32x32.png
+├── favicon.ico
+├── mstile-150x150.png
+├── safari-pinned-tab.svg
+└── site.webmanifest
+```
+
+替换 */assets* 文件夹内所有同名文件，并且替换 *favicon.ico*。
+
+## 设置作者卡片
+
+设置 *_data/variables.yml*
+```yml
+show_author_profile: ture
+```
+并修改 avatar
+
+```yml
+## => Author and Social
+##############################
+author:
+  type      : # "person" (default), "organization"
+  name      : 我的名字
+  url       : 
+  avatar    : '/pictures/avatar.png'
+```
 
 ## 撰写博客
 
-将 markdown 文档放置在 `_posts/` 文件夹，按照 `year-month-date-Tilte.md` 的格式命名，例如：
+将 markdown 文档放置在 *_posts/* 文件夹，按照 *year-month-date-Tilte* 的格式命名，例如：
 
-`/_posts/2023-05-10-Beat-Track-Algorithm.md`
+> /_posts/2023-05-10-Beat-Track-Algorithm.md
 
 并且在文档开头做以下声明 layout 和 title 
 ```markdown
@@ -76,6 +120,21 @@ mathjax_autoNumber: true
 ---
 ```
 
+设置封面
+
+```markdown
+---
+layout: article
+title: 节拍跟踪算法概述
+mathjax: true
+article_header:
+  type: overlay
+  theme: dark
+  background_color: '#203028'
+  background_image:
+    src: /pictures/cover/IMG_1094.jpg
+---
+```
 ## 插入图片
 
 用户图片存放在 `pictures/` 文件夹
@@ -110,6 +169,7 @@ https://drive.google.com/uc?export=download&id=[CODE]
 ```
 
 可以作为图片插入文档
+
 
 
 
