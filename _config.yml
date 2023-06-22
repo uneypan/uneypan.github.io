@@ -34,9 +34,9 @@ timezone: # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for
 ## => Author and Social
 ##############################
 author:
-  type      : # "person" (default), "organization"
+  type      : person # "person" (default), "organization"
   name      : Zhihan
-  url       :
+  url       : https://uneypan.github.io/
   avatar    : '/pictures/avatar_misaka.png' # path or url of avatar image (square)
   bio       : SCUT, Automation Science and Engineering college, Undergraduate
   email     : zhihan.scut@gmail.com
