@@ -8,9 +8,8 @@ header:
 article_header:
   type: cover
   image:
-    src: /pictures/prml/图13.6.png
+    src: https://www.nasachina.cn/wp-content/uploads/2022/09/CarinaCliffs_Webb_2000.jpg
 ---
-
 
 <!-- ![](https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj) -->
 

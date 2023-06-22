@@ -2,10 +2,14 @@
 layout: article
 title: EM算法
 mathjax: true
-mermaid: false
+mode: immersive
+header:
+  theme: dark
+article_header:
+  type: cover
+  image:
+    src: https://www.nasachina.cn/wp-content/uploads/2023/01/C2022E3ZTF_2023_01_23_054036PST_DEBartlett.jpg
 ---
- 
-![](https://drive.google.com/uc?export=view&id=16iJKS1msIMz7Nio-ES4nK1wdUlPX3zt0) 
 
 
 如果我们定义观测变量和潜在变量的⼀个联合概率分布，那么对应的观测变量本⾝的概率分布可以通过求边缘概率的⽅法得到。**EM算法用于解决具有隐变量的混合模型的极大似然估计问题**。
