@@ -10,6 +10,8 @@ article_header:
     src: /pictures/cover/IMG_1094.jpg
 ---
 
+<!--more-->
+
 ## 各种概率分布之间的关系
 
 ![](https://github.com/uneypan/distribution-is-all-you-need/raw/master/overview.png)
