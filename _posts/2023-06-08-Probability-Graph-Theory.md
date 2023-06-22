@@ -7,7 +7,7 @@ article_header:
   theme: dark
   background_color: '#203028'
   background_image:
-    gradient: 'linear-gradient(0deg, rgba(255, 255, 255 , .4), rgba(0, 0, 0, .4))'
+    gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .0),  rgba(255, 255, 255 , .5))'
     src: /pictures/cover/CarinaNebula.jpg
 ---
 
