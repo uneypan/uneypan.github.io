@@ -2,14 +2,15 @@
 layout: article
 title: 顺序数据
 mathjax: true
-mode: immersive
-header:
-  theme: dark
 article_header:
-  type: cover
-  image:
+  type: overlay
+  theme: dark
+  background_color: '#203028'
+  background_image:
+    gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
     src: https://www.nasachina.cn/wp-content/uploads/2022/09/CarinaCliffs_Webb_2000.jpg
 ---
+
 
 <!-- ![](https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj) -->
 
