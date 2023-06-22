@@ -7,8 +7,12 @@ article_header:
   theme: dark
   background_color: '#203028'
   background_image:
-    src: /pictures/cover/IMG_1094.jpg
+      gradient: 'linear-gradient(0deg, rgba(255, 255, 255 , .4), rgba(0, 0, 0, .4))'
+      src: /pictures/cover/IMG_1094.jpg
 ---
+
+在机器学习中，常见的概率分布有：均匀分布，伯努利分布，二项式分布，分类分布，多项式分布，Beta分布，狄利克雷分布，Gamma分布，指数分布，高斯分布，正态分布，卡方分布，学生-t分布，Wishart 分布等。本文介绍概率分布及其特点，以及它们之间的关系。
+
 
 <!--more-->
 

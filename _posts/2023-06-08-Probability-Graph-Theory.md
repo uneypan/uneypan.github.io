@@ -1,15 +1,20 @@
 ---
 layout: article
-title: 概率图
+title: 概率图模型
 mathjax: true
 article_header:
   type: overlay
   theme: dark
   background_color: '#203028'
   background_image:
+    gradient: 'linear-gradient(0deg, rgba(255, 255, 255 , .4), rgba(0, 0, 0, .4))'
     src: /pictures/cover/CarinaNebula.jpg
 ---
 
+概率分布的图形表⽰被称为概率图模型（Probabilistic Graphical Models）。这些模型提供了⼏个有⽤的性质：   
+1. 它们提供了⼀种简单的⽅式将概率模型的结构可视化，可以⽤于设计新的模型。
+2. 通过观察图形，我们可以更深刻地认识模型的性质，包括条件独⽴性质。
+3. ⾼级模型的推断和学习过程中的复杂计算可以根据图计算表达，图隐式地承载了背后的数学表达式。
 
 <!--more-->
 

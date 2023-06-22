@@ -3,8 +3,8 @@ layout: article
 title: NAO & Pepper 折腾笔记
 mathjax: true
 ---
-<!-- # nao&pepper折腾笔记 -->
 
+<!--more-->
 
 ## 官方文档
 http://doc.aldebaran.com/index.html  
