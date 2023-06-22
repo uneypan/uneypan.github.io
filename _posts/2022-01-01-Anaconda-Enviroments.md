@@ -1,14 +1,13 @@
 ---
 layout: article
-title: 安装Anaconda之后的环境变量设置
-mathjax: false
+title: 安装Anaconda之后的环境变量和VScode设置
 ---
 
-## 2023.06 更新
 
-根据官方提示，如果不是必须在 cmd 里面调用 conda，请在安装 anacoda 或 minicoda 之后，**直接在 Anaconda Prompt 中完成操作即可，例如 conda create，pip install 等，添加环境变量不是必要的。**
+## 安装Anaconda之后的环境变量设置
 
-## 原文
+> 2023.06 更新:根据官方提示，如果不是必须在 cmd 里面调用 conda，请在安装 anacoda 或 minicoda 之后，**直接在 Anaconda Prompt 中完成操作即可，例如 conda create，pip install 等，添加环境变量不是必要的。**
+
 Python 报错：
 
 ```
@@ -65,4 +64,34 @@ anaconda                  2021.05                  py38_0
 anaconda-client           1.7.2                    py38_0
 anaconda-navigator        2.1.0            py38haa95532_0
 ...
+```
+
+
+## 解决VScode终端“无法加载文件 ***\WindowsPowerShell\profile.ps1，因为在此系统上禁止运行脚本”
+在VScode使用anaconda时，提示
+
+> . : 无法加载文件 C:\Users\47370\Documents\WindowsPowerShell\profile.ps1，因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:/go.microsoft.com/fwlink/?LinkID=135170 中的 about_Execution_Policies。
+
+想了解计算机上的现用执行策略，打开 PowerShell 然后输入：
+
+```
+>> get-executionpolicy
+Restricted
+```
+
+
+更改执行策略，以管理员身份打开 PowerShell 输入：
+
+```
+>> set-executionpolicy remotesigned
+```
+
+![](https://pic4.zhimg.com/v2-e78d392728b08fa3eed95a99b68c2a43_r.jpg)
+
+选择“是”，即可。
+
+如果要更改回Windows 客户端计算机的默认执行策略，则设置为restricted：
+
+```
+set-executionpolicy restricted
 ```
