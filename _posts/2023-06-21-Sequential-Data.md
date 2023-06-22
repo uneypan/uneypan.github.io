@@ -8,7 +8,7 @@ header:
 article_header:
   type: cover
   image:
-    src: https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj
+    src: /pictures/prml/图13.6.png
 ---
 
 
