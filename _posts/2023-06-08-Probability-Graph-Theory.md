@@ -1,10 +1,16 @@
 ---
 layout: article
-title: 概率图理论
+title: 概率图
 mathjax: true
+article_header:
+  type: overlay
+  theme: dark
+  background_color: '#203028'
+  background_image:
+    gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
+    src: /pictures/cover/CarinaNebula.jpg
 ---
 
-![](https://drive.google.com/uc?export=view&id=1zZJDtkVocwfFS4AgtP5cMDehHJuwGyJt) 
 
 
 <!-- # 概率图模型 PGM -->

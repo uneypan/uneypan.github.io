@@ -2,13 +2,13 @@
 layout: article
 title: EM算法
 mathjax: true
-mode: immersive
-header:
-  theme: dark
 article_header:
-  type: cover
-  image:
-    src: https://www.nasachina.cn/wp-content/uploads/2023/01/C2022E3ZTF_2023_01_23_054036PST_DEBartlett.jpg
+  type: overlay
+  theme: dark
+  background_color: '#203028'
+  background_image:
+    gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
+    src: /pictures/cover/IMG_1095.jpg
 ---
 
 

@@ -8,11 +8,10 @@ article_header:
   background_color: '#203028'
   background_image:
     gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
-    src: https://www.nasachina.cn/wp-content/uploads/2022/09/CarinaCliffs_Webb_2000.jpg
+    src:  /pictures/cover/IMG_1195.jpg
 ---
 
 
-<!-- ![](https://drive.google.com/uc?export=view&id=1_NR85DqE2QSpe2_9sBemMXGE1dVDKWGj) -->
 
 对于许多应用来说，数据集里的数据点独立同分布的假设不成立。顺序数据的数据集通常产⽣于沿着时间序列进⾏的测量，例如某个特定位置的连续若⼲天的降⽔量测量，或者每天汇率的值，或者对于语⾳识别任务，在连续的时间框架下的声学特征。
 

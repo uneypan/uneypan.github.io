@@ -2,13 +2,13 @@
 layout: article
 title: 机器学习中的常见概率分布
 mathjax: true
-mode: immersive
-header:
-  theme: dark
 article_header:
-  type: cover
-  image:
-    src: https://www.nasachina.cn/wp-content/uploads/2019/10/MilkyWaySaltFlat_Huerta_2048.jpg
+  type: overlay
+  theme: dark
+  background_color: '#203028'
+  background_image:
+    gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
+    src: /pictures/cover/IMG_1094.jpg
 ---
 
 ## 各种概率分布之间的关系
