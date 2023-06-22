@@ -7,7 +7,7 @@ article_header:
   theme: dark
   background_color: '#203028'
   background_image:
-    gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .0),  rgba(255, 255, 255 , .5))'
+    gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .5),  rgba(255, 255, 255 , .0))'
     src:  /pictures/cover/IMG_1195.jpg
 ---
 
