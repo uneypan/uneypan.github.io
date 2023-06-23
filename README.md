@@ -185,5 +185,11 @@ Push 到 [github_user].github.io 仓库
 
 等待几分钟 Github 自动编译即可。
 
+## 本地预览
+
+Jekyll 集成了一个开发用的服务器，可以让你使用浏览器在本地进行预览。
+
+通过 `bundle exec jekyll serve` 命令启动开发服务器，然后你就可以访问 http://localhost:4000/ 预览你的网站了。
+
 ## License
 基于 [TeXt Theme](https://github.com/kitian616/jekyll-TeXt-theme) (MIT License)
