@@ -1146,15 +1146,6 @@ void ALSoundProcessing::process(const int & nbOfChannels,
 
 可以在音频示例目录中找到这些文件对应的工程（可以轻松编译）。
 
-http://doc.aldebaran.com/2-1/dev/cpp/tutos/create_module.html
-
-
----
-layout: article
-title: 编译 NAO 机器人 C++ 例程 soundprocessing 模块遇到的问题
-mathjax: true
----
-
 
 ## 编译 NAO 机器人 C++ 例程 soundprocessing 模块遇到的问题
 
@@ -1170,7 +1161,7 @@ NAO 机器人已经正常开机，处于自主生活模式，和计算机处于�
 
 http://doc.aldebaran.com/2-8/dev/cpp/install_guide.html
 
-C++ SDK 和 Python SDK 都配置完全且可以使用，检验的方法是在本机编译了资料光盘的实例代码，/设备随装资料-23.3/3-NAO机器人/3-技术资料/示例代码/C++/sayhelloworld.zip，它调用了机器人自带的模块。
+C++ SDK 和 Python SDK 都配置完全且可以使用，检验的方法是在本机编译了 http://doc.aldebaran.com/2-8/dev/cpp/examples/core/sayhelloworld/sayhelloworld.html ，它调用了机器人自带的模块。
 
 编译成功后，在终端执行
 ```bash
@@ -1181,7 +1172,8 @@ cd /build-sys-linux_x86_64/sdk/bin
 
 
 ### 2.soundprocessing 模块编译过程：
-源代码来自提供的资料光盘：/设备随装资料-23.3/3-NAO机器人/3-技术资料/示例代码/C++/soundprocessing.zip 。在线手册说明了，这是一个远程/本地模块。
+源代码来自 http://doc.aldebaran.com/2-8/dev/cpp/examples/audio/soundprocessing/soundprocessing.html#cpp-examples-sound-processing
+。在线手册说明了，这是一个远程/本地模块。
 解压压缩包之后，在 soundprocessing 目录中执行配置：
 ```bash
 $ qibuild configure
@@ -1337,5 +1329,21 @@ RuntimeError: 	ALProxy::ALProxy
 ```bash
 sudo reboot
 ```
-之后同样报错。
+之后报错相同。
 
+## Choregraphe编程基础
+
+Choregraphe中的指令盒有四种类型
+1. **Python语言指令盒**：使用Python语言编写，可以自定义构造方法、装载方法、缷载方法、输入和输出事件，Choregraphe提供的基本指令盒大部分属于Python语言指令盒，如“Stand up”、“Sit Down”等动作指令盒。
+2. **流程图指令盒**：指令盒的数量比较多时，可以使用流程图指令盒将若干相互连接的指令盒合并到同一个指令盒中，获得一个可读性更强的流程图，简化程序。
+3. **时间轴指令盒**：包含一个时间轴，在这个时间轴上可以储存关节值，以关键帧的形式定义和编写各种动作。
+4. **对话指令盒**：使机器人完成一些预定义的简单对话，支持中英文等多种语言。
+
+指令盒所建立的类MyClass父类为GeneratedClass，在类的构造方法中调用父类的构造方法`GeneratedClass.__init__(self)`。除了构造方法外，MyClass类中也定义了一些其他方法，这些方法所对应的事件产生的前后次序为：
+
+①`__init__(self)`：指令盒构造方法，创建指令盒对象时调用。
+②`onLoad(self)`：指令盒对象载入方法。
+③`onInput_onStart(self)`：指令盒处理外部输入方法，收到外部输入信号时调用。
+④`onUnload(self)`：指令盒对象卸载方法，在销毁指令盒对象时调用。
+
+输入点和输出点对应的方法命名具有一定规则，如名称为onStart的输入点对应的方法是onInput_onStart。在开始信号（激活信号）输入到onStart输入点时，将调用onInput_onStart方法。onStopped输出点调用的方法为onStopped()，激活指令盒输出。
