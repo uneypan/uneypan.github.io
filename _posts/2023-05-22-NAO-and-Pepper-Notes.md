@@ -4,19 +4,17 @@ title: NAO & Pepper 折腾笔记
 mathjax: true
 ---
 
-<!--more-->
-
 ## 官方文档
-http://doc.aldebaran.com/index.html  
+[http://doc.aldebaran.com/index.html](http://doc.aldebaran.com/index.html)
 
-| 工具箱 | 适用对象 |
-| --- | --- |
-| NAOqi 1.14 | NAO V4 & V3 |
-| NAOqi 2.1  | NAO V5 & V4 |
-| NAOqi 2.8  | NAO V6 |
-| NAOqi 2.4 & 2.5  | Pepper |
-| QiSDK  | Pepper SDK for Android |
-| QiBuild  | For C++ developers| 
+| 工具箱          | 适用对象               |
+|-----------------|------------------------|
+| NAOqi 1.14      | NAO V4 & V3            |
+| NAOqi 2.1       | NAO V5 & V4            |
+| NAOqi 2.8       | NAO V6                 |
+| NAOqi 2.4 & 2.5 | Pepper                 |
+| QiSDK           | Pepper SDK for Android |
+| QiBuild         | For C++ developers     |
 
 
 ## 开箱
@@ -38,7 +36,7 @@ NAO的安全休息状态是跪姿，充电接口在背部，网络接口在后�
 	打开网页浏览器。如果您知道NAO的主机名：在地址栏中键入：[naoHostName].local。默认情况下，它是：nao.local。 如果您不知道NAO的主机名：单击Bonjour图标。双击NAO的名字。
 
 
-## 开发环境安装与配置
+## Windows 开发环境安装与配置
 
 1.安装Python2.7。按安装向导提示安装python-2.7.x.xxx.msi，将python安装在C盘根目录下，从而保证在之后的qibuild的安装过程中能够找到指定目录。同时在系统和用户的PATH环境变量中添加相应的文件路径 C:\Python27 和 C:\Python27\Scripts ，如果还安装了其他版本的Python，确保2.7版本的顺序在其他版本之前。测试Python正常的方法是打开cmd，输入 `python --version` 显示版本号是2.7.x。    
  
@@ -93,6 +91,24 @@ pip  install  包名
 ```
 4.在虚拟机中编译程序  
 由于NAO的存储空间有限，NAO机器人系统中并不包含gcc一类编译程序。NAO在虚拟机系统中提供了编译环境，对于需要经过编译后才能进行安装的程序，可以先在虚拟机中编译，再安装到实际系统中。
+
+## Choregraphe编程基础
+
+Choregraphe中的指令盒有四种类型
+1. **Python语言指令盒**：使用Python语言编写，可以自定义构造方法、装载方法、缷载方法、输入和输出事件，Choregraphe提供的基本指令盒大部分属于Python语言指令盒，如“Stand up”、“Sit Down”等动作指令盒。
+2. **流程图指令盒**：指令盒的数量比较多时，可以使用流程图指令盒将若干相互连接的指令盒合并到同一个指令盒中，获得一个可读性更强的流程图，简化程序。
+3. **时间轴指令盒**：包含一个时间轴，在这个时间轴上可以储存关节值，以关键帧的形式定义和编写各种动作。
+4. **对话指令盒**：使机器人完成一些预定义的简单对话，支持中英文等多种语言。
+
+指令盒所建立的类MyClass父类为GeneratedClass，在类的构造方法中调用父类的构造方法`GeneratedClass.__init__(self)`。除了构造方法外，MyClass类中也定义了一些其他方法，这些方法所对应的事件产生的前后次序为：
+
+①`__init__(self)`：指令盒构造方法，创建指令盒对象时调用。
+②`onLoad(self)`：指令盒对象载入方法。
+③`onInput_onStart(self)`：指令盒处理外部输入方法，收到外部输入信号时调用。
+④`onUnload(self)`：指令盒对象卸载方法，在销毁指令盒对象时调用。
+
+输入点和输出点对应的方法命名具有一定规则，如名称为onStart的输入点对应的方法是onInput_onStart。在开始信号（激活信号）输入到onStart输入点时，将调用onInput_onStart方法。onStopped输出点调用的方法为onStopped()，激活指令盒输出。
+
 
 
 ## NAO编程基础
@@ -361,7 +377,9 @@ class  MyClass(GeneratedClass):
 ③重新启动机器人，将自动运行 `mymodule.py`。
 
 
-## C++ SDK - Linux 安装指南
+## Linux C++ SDK 安装指南
+
+> http://doc.aldebaran.com/2-8/dev/cpp/install_guide.html
 
 支持的操作系统: Linux	Ubuntu 16.04 Xenial Xerus - 64bits 
 
@@ -515,7 +533,7 @@ Answer 'no' if you installed qtcreator from Nokia's installer (Y/n)
   $ qibuild add-config sys-linux_x86_64 -t linux --default
   ```
 
-## C++ SDK - Hello world (auto-generated)
+### C++ SDK - Hello world (auto-generated)
 
 1.在你的工作树里输入：
 ```bash
@@ -547,7 +565,7 @@ cd build-<myconfig>/sdk/bin
 ./my_first_example
 ```
 
-## C++ SDK - Hello world (step by step)
+### C++ SDK - Hello world (step by step)
 
 http://doc.aldebaran.com/2-8/dev/cpp/helloworld_detailed.html
 
@@ -633,6 +651,189 @@ sayhelloworld  192.168.1.170
 机器人将输出语音hello world。其中192.168.1.170为机器人的IP地址，作为main函数的参数直接用于生成ALTextToSpeech模块代理的IP参数。
 
 使用Visual Studio高版本时，如果编译时出错，可以在项目属性窗口设置中将 常规 - 平台工具集 设置为Visual Studio 2010，如图所示。Visual Studio 2010平台工具集选项如果不存在，可以同时安装VS2010和高版本VS。
+
+## 在qibuild项目中使用Python
+
+> http://doc.aldebaran.com/qibuild/beginner/qipy/tutorial.html
+
+假设您有一个名为foo的C++库，位于qibuild项目中。
+```
+<worktree>
+|__ foo
+    |__ qiproject.xml
+    |__ CMakeLists.txt
+    |__ foo.cpp
+    |__ foo.hpp
+
+```
+
+在<worktree>/foo/CMakeLists.txt
+```
+project(foo)
+find_package(qibuild)
+
+qi_create_lib(SHARED foo foo.hpp foo.cpp)
+
+```
+
+在<worktree>/foo/qiproject.xml
+```
+<project version="3">
+  <qibuild name="foo" />
+</project>
+```
+
+您希望编写一个C++ Python扩展，用于包装foo库，并使用qibuild构建系统。假设您使用swig来实现这一点。
+
+您有一个用于swig的接口文件pyfoo.i，将生成一个名为_pyfoo.so的Python扩展，以及一个foo.py用于包装C++扩展。
+
+```
+<worktree>
+|__ foo
+    |__ qiproject.xml
+    |__ CMakeLists.txt
+    |__ foo.cpp
+    |__ foo.hpp
+|__ pyfoo
+    |__ qiproject.xml
+    |__ CMakeLists.txt
+    |__ pyfoo.i
+    |__ foo.py
+    |__ foo_script.py
+```
+
+在pyfoo/qiproject.xml
+```
+<project version="3">
+  <qibuild name="pyfoo">
+    <depends runtime="true" buildtime="true" names="foo" />
+  </qibuild>
+  <qipython name="pyfoo">
+    <setup with_distutils="true" />
+  </qipython>
+</project>
+```
+
+在<worktree>/foo-py/CMakeLists.txt
+```
+project(pyfoo)
+
+qi_swig_python(_pyfoo pyfoo.i DEPENDS FOO)
+```
+
+在pyfoo.i
+```
+%module _pyfoo
+
+%{
+include "foo.hpp"
+%}
+
+%include "foo.hpp"
+
+```
+在foo.py
+```
+import _pyfoo
+
+...
+
+```
+在foo_script.py
+```
+import foo
+
+...
+
+def main():
+    ....
+
+if __name__ == "__main__":
+    main()
+```
+
+您希望能够构建pyfoo扩展，并直接使用foo-script.py，而无需设置PYTHONPATH为<worktree>/pyfoo/build-linux64/sdk/lib之类的内容。
+
+为了实现这一点，您可以为Python项目（pyfoo）编写一个setup.py，并使用qipy来运行脚本。
+
+在底层，所有操作都将使用virtualenv和distutils完成。
+
+一些有用的链接：
+
+- [Swig](https://www.swig.org/)
+- [virtualenv](https://virtualenv.pypa.io/)
+- [编写setup.py文件](https://docs.python.org/3/distutils/setupscript.html)
+
+步骤一：基本检查
+
+确保在运行`qipy list`时，您的项目出现在列表中，并且扩展已构建：
+
+```bash
+qibuild configure pyfoo
+qibuild make pyfoo
+```
+
+步骤二：编写setup.py文件（可选）
+
+为您的Python项目（pyfoo）编写`setup.py`文件，以管理安装和分发：
+
+
+在pyfoo/setup.py
+```python
+import os
+from setuptools import setup
+
+setup(
+    name="mymodule",
+    version="0.1",
+    py_modules=['foo'],
+    entry_points={
+        "console_scripts": [
+            "pyfoo = foo_script:main"
+        ]
+    }
+)
+```
+
+步骤三：使用qipy bootstrap
+
+使用`qipy bootstrap`在工作树中初始化一个virtualenv。这一步应在更改或添加新的Python项目时运行。
+
+```bash
+qipy bootstrap
+```
+
+步骤四：使用virtualenv
+
+使用`qipy run`代替`python`来执行您的Python脚本。这将激活virtualenv，并以适当的环境运行Python脚本。
+
+```bash
+qipy run [-c config] foo_script.py
+```
+
+如果您有多个命令要运行，您可以使用以下命令在当前会话中激活virtualenv：
+
+```bash
+source $(qipy sourceme -q)
+```
+
+步骤五：添加Python测试（可选）
+
+建议使用pytest来运行您的测试。您可以使用以下命令运行pytest：
+
+```bash
+cd /path/to/project
+qipy run -- py.test -- [OTHER py.test args]
+```
+
+如果在运行测试时遇到段错误（在编写C++ Python扩展时可能发生），可以在gdb中运行pytest：
+
+```bash
+source $(qipy sourceme -q)
+gdb /path/to/worktree/.qi/venv/py-<config>/bin/python
+run -m pytest
+```
+
 
 ## 扩展NAO API
 
@@ -737,9 +938,8 @@ qi_use_lib(mybroker ALCOMMON ALPROXIES)
 ALAudioDevice管理音频的输入和输出，提供了一组操作音频输入设备(麦克风)和输出设备(扬声器)的API。其他的音频模块(ALAudioPlayer除外)做输入和输出时都使用ALAudioDevice提供的API。    
 ALAudioDevice基于标准的Linux ALSA(Linux声音库)库，通过声音驱动程序，与麦克风和扬声器通信。
 
-
 ![](/pictures/ALAudioDevice与其他模块关系.jpg)
-## 输出
+### 输出
 **1.数据格式 ** 
 ALAudioDevice可以通过以下帧速率之一将数据发送到扬声器：  
 两声道，交错数据(声道1数据，声道2数据，声道1数据，…)，16000Hz（设置亚洲语言时默认）；  
@@ -843,7 +1043,7 @@ class  MyClass(GeneratedClass):
 ```
 
 
-## 输入
+### 输入
 **1.订阅ALAudioDevice模块**  
 由于音频数据量非常大，其它的NAOqi模块只有在订阅ALAudioDevice模块时才能够读取麦克风输入的数据，而不会象取传感器值那样随时可以从内存中读到。
 请求音频数据的模块首先使用subcribe方法订阅ALAudioDevice模块，并指定其所需数据的格式(通道数，采样率等)。ALAudioDevice模块按照采样参数采样麦克风输入数据，将数据存储在缓冲区中，缓冲区满后通知请求模块读取数据。  
@@ -869,7 +1069,7 @@ ALAudioDevice提供下述几种方式的音频数据：
 
 
 
-## 音频处理自定义模块
+### 音频处理自定义模块
 
 ```python
 #coding=utf-8
@@ -957,7 +1157,7 @@ class  MyClass(GeneratedClass):
 ```
 
 
-## ALAudioDevice方法
+### ALAudioDevice方法
 
 作用  
 ALAudioDevice为其他 NAOqi 模块提供访问 NAO 音频输入（麦克风）和输出（扬声器）的权限。
@@ -1331,19 +1531,4 @@ sudo reboot
 ```
 之后报错相同。
 
-## Choregraphe编程基础
 
-Choregraphe中的指令盒有四种类型
-1. **Python语言指令盒**：使用Python语言编写，可以自定义构造方法、装载方法、缷载方法、输入和输出事件，Choregraphe提供的基本指令盒大部分属于Python语言指令盒，如“Stand up”、“Sit Down”等动作指令盒。
-2. **流程图指令盒**：指令盒的数量比较多时，可以使用流程图指令盒将若干相互连接的指令盒合并到同一个指令盒中，获得一个可读性更强的流程图，简化程序。
-3. **时间轴指令盒**：包含一个时间轴，在这个时间轴上可以储存关节值，以关键帧的形式定义和编写各种动作。
-4. **对话指令盒**：使机器人完成一些预定义的简单对话，支持中英文等多种语言。
-
-指令盒所建立的类MyClass父类为GeneratedClass，在类的构造方法中调用父类的构造方法`GeneratedClass.__init__(self)`。除了构造方法外，MyClass类中也定义了一些其他方法，这些方法所对应的事件产生的前后次序为：
-
-①`__init__(self)`：指令盒构造方法，创建指令盒对象时调用。
-②`onLoad(self)`：指令盒对象载入方法。
-③`onInput_onStart(self)`：指令盒处理外部输入方法，收到外部输入信号时调用。
-④`onUnload(self)`：指令盒对象卸载方法，在销毁指令盒对象时调用。
-
-输入点和输出点对应的方法命名具有一定规则，如名称为onStart的输入点对应的方法是onInput_onStart。在开始信号（激活信号）输入到onStart输入点时，将调用onInput_onStart方法。onStopped输出点调用的方法为onStopped()，激活指令盒输出。
