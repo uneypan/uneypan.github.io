@@ -656,6 +656,9 @@ sayhelloworld  192.168.1.170
 
 > http://doc.aldebaran.com/qibuild/beginner/qipy/tutorial.html
 
+*注意：这篇文章主要介绍了 Swig 包装 C++ 库，使用 qibuild 构建 Python 扩展，使用qipython 运行脚本的方法。但是 qibuild(v3.18) 似乎没有 qi_swig_python 这个 api，所以没有测试成功。—— 2023.06*
+
+### 项目结构
 假设您有一个名为foo的C++库，位于qibuild项目中。
 ```
 <worktree>
@@ -664,19 +667,19 @@ sayhelloworld  192.168.1.170
     |__ CMakeLists.txt
     |__ foo.cpp
     |__ foo.hpp
-
 ```
+代码在 [foo.zip](assets/foo.zip) 中，包含以下内容：
 
-在<worktree>/foo/CMakeLists.txt
+\<worktree\>/foo/CMakeLists.txt
 ```
+cmake_minimum_required(VERSION 2.8)
 project(foo)
 find_package(qibuild)
 
 qi_create_lib(SHARED foo foo.hpp foo.cpp)
-
 ```
 
-在<worktree>/foo/qiproject.xml
+\<worktree\>/foo/qiproject.xml
 ```
 <project version="3">
   <qibuild name="foo" />
@@ -687,6 +690,7 @@ qi_create_lib(SHARED foo foo.hpp foo.cpp)
 
 您有一个用于swig的接口文件pyfoo.i，将生成一个名为_pyfoo.so的Python扩展，以及一个foo.py用于包装C++扩展。
 
+新建文件夹pyfoo，内部文件结构如下：
 ```
 <worktree>
 |__ foo
@@ -701,8 +705,8 @@ qi_create_lib(SHARED foo foo.hpp foo.cpp)
     |__ foo.py
     |__ foo_script.py
 ```
-
-在pyfoo/qiproject.xml
+代码在 [pyfoo.zip](assets/pyfoo.zip) 中，包含以下内容
+qiproject.xml
 ```
 <project version="3">
   <qibuild name="pyfoo">
@@ -714,14 +718,15 @@ qi_create_lib(SHARED foo foo.hpp foo.cpp)
 </project>
 ```
 
-在<worktree>/foo-py/CMakeLists.txt
+CMakeLists.txt
 ```
+cmake_minimum_required(VERSION 2.8)
 project(pyfoo)
 
 qi_swig_python(_pyfoo pyfoo.i DEPENDS FOO)
 ```
 
-在pyfoo.i
+pyfoo.i
 ```
 %module _pyfoo
 
@@ -730,19 +735,19 @@ include "foo.hpp"
 %}
 
 %include "foo.hpp"
-
 ```
-在foo.py
+
+
+foo.py
 ```
 import _pyfoo
-
 ...
-
 ```
-在foo_script.py
+
+
+foo_script.py
 ```
 import foo
-
 ...
 
 def main():
@@ -752,7 +757,7 @@ if __name__ == "__main__":
     main()
 ```
 
-您希望能够构建pyfoo扩展，并直接使用foo-script.py，而无需设置PYTHONPATH为<worktree>/pyfoo/build-linux64/sdk/lib之类的内容。
+您希望能够构建pyfoo扩展，并直接使用 foo-script.py，而无需设置PYTHONPATH为\<worktree\>/pyfoo/build-linux64/sdk/lib之类的内容。
 
 为了实现这一点，您可以为Python项目（pyfoo）编写一个setup.py，并使用qipy来运行脚本。
 
@@ -764,7 +769,7 @@ if __name__ == "__main__":
 - [virtualenv](https://virtualenv.pypa.io/)
 - [编写setup.py文件](https://docs.python.org/3/distutils/setupscript.html)
 
-步骤一：基本检查
+### 步骤一：基本检查
 
 确保在运行`qipy list`时，您的项目出现在列表中，并且扩展已构建：
 
@@ -773,7 +778,7 @@ qibuild configure pyfoo
 qibuild make pyfoo
 ```
 
-步骤二：编写setup.py文件（可选）
+### 步骤二：编写setup.py文件（可选）
 
 为您的Python项目（pyfoo）编写`setup.py`文件，以管理安装和分发：
 
@@ -795,7 +800,7 @@ setup(
 )
 ```
 
-步骤三：使用qipy bootstrap
+### 步骤三：使用qipy bootstrap
 
 使用`qipy bootstrap`在工作树中初始化一个virtualenv。这一步应在更改或添加新的Python项目时运行。
 
@@ -803,7 +808,7 @@ setup(
 qipy bootstrap
 ```
 
-步骤四：使用virtualenv
+### 步骤四：使用virtualenv
 
 使用`qipy run`代替`python`来执行您的Python脚本。这将激活virtualenv，并以适当的环境运行Python脚本。
 
@@ -817,7 +822,7 @@ qipy run [-c config] foo_script.py
 source $(qipy sourceme -q)
 ```
 
-步骤五：添加Python测试（可选）
+### 步骤五：添加Python测试（可选）
 
 建议使用pytest来运行您的测试。您可以使用以下命令运行pytest：
 
@@ -833,6 +838,51 @@ source $(qipy sourceme -q)
 gdb /path/to/worktree/.qi/venv/py-<config>/bin/python
 run -m pytest
 ```
+### 实际测试
+
+运行 `qibuild configure pyfoo`命令得到报错，
+
+CMakeLists.txt:5  `qi_swig_python(_pyfoo pyfoo.i DEPENDS FOO)`
+
+报错，提示：
+```cmake
+$ qibuild configure pyfoo
+
+...
+-- Detecting CXX compile features - done
+CMake Error at CMakeLists.txt:5 (qi_swig_python):
+  Unknown CMake command "qi_swig_python".
+
+
+-- Configuring incomplete, errors occurred!
+[ERROR]: ConfigureFailed Error occurred when configuring project pyfoo
+```
+
+查询 [QIBUILD 手册](http://doc.aldebaran.com/qibuild/index.html) 发现确实没有 `qi_swig_python` 这个命令，但是有 `qi_swig_wrap_python` 这个命令，描述为
+```
+qi_swig_wrap_python(module_name interface_file [SRC <src> ...]
+    [DEPENDS <depends> ...]
+    [SUBFOLDER <subfolder> ...]
+)
+```
+创建C/C++库的python包装。
+参数：
+- module_name – 目标名称
+- interface_file – swig接口文件（扩展名为.i）
+- SRC – 源文件列表
+- DEPENDS – 依赖项列表
+- SUBFOLDER – 将构建模块的子文件夹。用于将包装添加到现有包中。
+
+怀疑是 `qi_swig_python` 命令被更名了，于是将 `CMakeLists.txt` 中的 `qi_swig_python` 改为 `qi_swig_wrap_python`，再次运行 `qibuild configure pyfoo`，报错如下：
+```cmake
+CMake Error at CMakeLists.txt:5 (qi_swig_wrap_python):
+  Unknown CMake command "qi_swig_wrap_python".
+```
+再一次报错，提示 `qi_swig_wrap_python` 命令不存在。
+
+切换 qibuild_v3.13（Python3支持的最低版本）重新测试，报错类似。
+
+因此，目前尚无解决方案。
 
 
 ## 扩展NAO API
