@@ -668,7 +668,7 @@ sayhelloworld  192.168.1.170
     |__ foo.cpp
     |__ foo.hpp
 ```
-代码在 [foo.zip](assets/foo.zip) 中，包含以下内容：
+代码在 [foo.zip](/assets/foo.zip) 中，包含以下内容：
 
 \<worktree\>/foo/CMakeLists.txt
 ```
@@ -705,7 +705,7 @@ qi_create_lib(SHARED foo foo.hpp foo.cpp)
     |__ foo.py
     |__ foo_script.py
 ```
-代码在 [pyfoo.zip](assets/pyfoo.zip) 中，包含以下内容
+代码在 [pyfoo.zip](/assets/pyfoo.zip) 中，包含以下内容
 qiproject.xml
 ```
 <project version="3">
@@ -880,7 +880,7 @@ CMake Error at CMakeLists.txt:5 (qi_swig_wrap_python):
 ```
 再一次报错，提示 `qi_swig_wrap_python` 命令不存在。
 
-切换 qibuild_v3.13（Python3支持的最低版本）重新测试，报错类似。
+切换 qibuild==3.13（Python3支持的最低版本）重新测试，报错类似。
 
 因此，目前尚无解决方案。
 
