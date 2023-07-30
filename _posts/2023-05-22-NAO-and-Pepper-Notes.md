@@ -24,7 +24,7 @@ NAO的安全休息状态是跪姿，充电接口在背部，网络接口在后�
 **注意：不要改动账号密码，否则需要售后**。
 ![](/pictures/nao说明书.jpg)
 
-## 网络配置：
+## 网络配置
 
 1.使用有线或WiFi连接将NAO连接到计算机：
 	初始设置则必须用有线连接，即用网线连接到路由或者计算机，在同一局域网下获取机器人的IP地址，然后进入网页配置。
@@ -114,7 +114,7 @@ Choregraphe中的指令盒有四种类型
 ## NAO编程基础
 
 
-NAOqi操作系统
+### NAOqi操作系统
 
 NAO机器人使用NAOqi系统，它是一个专为满足 Aldebaran 机器人需求而开发的嵌入式基于Gentoo的 GNU/Linux 发行版。NAOqi为操作NAO机器人提供了一组应用程序接口(API)。使用Python或C++可以调用API。 
 
@@ -125,8 +125,8 @@ NAOqi是跨平台的，支持在Linux、Windows和MacOS平台上使用Python、C
 
 **大部分情况下，熟悉C++的开发者应该用C++写模块，用Python写行为控制**。
 
-1.NAOqi进程  
-在NAO上执行NAOqi是通过一个**代理程序Broker**完成的。启动机器人时，代理程序会自动加载/etc/naoqi/ autoload.ini文件， autoload.ini文件中指定了需要加载NAOqi的哪些库，这些库文件位于/usr/lib/naoqi目录下。
+### NAOqi进程  
+在NAO上执行NAOqi是通过一个**代理程序Broker**完成的。启动机器人时，代理程序会自动加载/etc/naoqi/ autoload.ini文件，autoload.ini文件中指定了需要加载NAOqi的哪些库，这些库文件位于/usr/lib/naoqi目录下。
 
 ![](/pictures/NAOqi进程.jpg)
 
@@ -141,7 +141,7 @@ Broker主要有两个作用：
 (2)网络访问，从Broker进程外部调用模块方法。Broker既是一个可执行程序，也是一个服务器，可以对指定的IP和端口监听远程命令。远程计算机、其它机器人、机器人自身的程序(Broker的外部进程)都可以使用IP地址和端口，调用模块及方法。也就是说，**通过IP和端口调用NAOqi模块的程序，既可以在机器人上运行，也可以在远程计算机上直接运行**。  
 Broker是透明的。大部分情况下，编程时可以不考虑Broker，调用本地模块的代码与调用远程模块的代码是一样的。  
 
-## 使用模块
+### NAOqi模块
 
 NAOqi模块可以在同一进程(NAOqi进程)内部调用，也可以通过网络调用，为使编程模式统一，**NAO使用代理(Proxy)方式调用NAOqi模块**。  为一个模块创建Proxy对象后，Proxy对象就代表了这个模块。
 
@@ -172,7 +172,7 @@ ALProxy类创建代理对象有两种方法：
 
 方法2中只使用模块的名称。在这种情况下，正在运行的代码和要连接的模块必须位于同一代理(Broker)中。**在使用Choregraphe编程时，由于Choregraphe会将所写程序上传到机器人并做相应设置，使其能直接调用NAOqi模块，所以创建模块代理时使用的是方法2**。
 
-## 阻塞和非阻塞调用
+### 阻塞和非阻塞调用
 NAOqi的方法从调用时间上看大体上可以分为两类，如读传感器状态getData()方法(属于ALMemory模块)可以很快完成；让机器人移动到某个位置的move()方法(属于ALMotion模块)要执行很长时间。  
 在move()方法调用过程中，机器人可能还需要做其它的事，如用“眼睛”看，或者“说话”，因此，在调用move()方法时，还需要同时调用其它方法。  
 
@@ -205,7 +205,7 @@ tts.say("I'm  walking")
 - moveTo()为阻塞调用方法，使用post对象调用moveTo()方法，将创建新的并行线程，在新线程中调用moveTo()方法，原线程继续调用后面的say方法。
 程序执行结果：机器人一边向前走，一边说I'm  walking，在0.5米处停止。   
 
-## 内存管理
+### NAOqi内存管理
 
 NAOqi各个模块间是通过内存交换数据的。管理内存的是ALMemory模块。
 
@@ -241,7 +241,7 @@ Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value表示X轴加速�
 
 订阅数据也通过键从内存中读取，各订阅模块产生的数据通常使用列表表示，列表元素是其他类型或列表。
 
-## 自定义模块
+### 自定义Python模块
 NAOqi模块都是库中的类。从autoload.ini加载库时，这些模块类将自动实例化。
 除了使用NAOqi模块外，也可以自定义模块。自定义模块类的基础类是ALModule。从ALModule派生的类，可以“绑定”方法。模块名称和方法将被通告给代理，这样其他模块就可以使用自定义模块了。
 
@@ -983,37 +983,55 @@ qi_use_lib(mybroker ALCOMMON ALPROXIES)
 在main.cpp中，创建一个broker，将新broker添加到NAOqi的broker中。然后，可以创建自定义模块并将其与刚刚创建的新broker链接。
 
 
-## 音频处理
+## 音频处理 ALAudioDevice
 
 ALAudioDevice管理音频的输入和输出，提供了一组操作音频输入设备(麦克风)和输出设备(扬声器)的API。其他的音频模块(ALAudioPlayer除外)做输入和输出时都使用ALAudioDevice提供的API。    
+
 ALAudioDevice基于标准的Linux ALSA(Linux声音库)库，通过声音驱动程序，与麦克风和扬声器通信。
 
 ![](/pictures/ALAudioDevice与其他模块关系.jpg)
+
+
+ALAudioDevice API
+方法名                              | 说明
+------------------------------------|---------------------------------------------------------------------------------------------
+enableEnergyComputation()           | 允许每个声道计算能量。缺省不计算。
+disableEnergyComputation()          | 不计算每个声道的能量。
+getFrontMicEnergy()                 | 在允许计算每个声道能量时，返回声道在170ms时间内的平均能量。能量为信号的平方和。
+getRearMicEnergy()                  | 同上
+getLeftMicEnergy()                  | 同上
+getRightMicEnergy()                 | 同上
+getParameter(parameter)             | 获取参数值，parameter取值为"outputSampleRate"。
+getOutputVolume()                   | 获取系统音量，[0,100]。
+muteAudioOut(mute)                  | mute为True，静音，为False，解除静音
+setFileAsInput(fileName)            | 通知ALAudioDevice模块，声音输入为从文件读取内容。文件必须为48000Hz、16位、4声道交错数据的WAV文件，fileName为文件的绝对路径名。
+startMicrophonesRecording(fileName) | 录音。fileName为文件的绝对路径名，扩展名为wav时，数据存储为16位、48000Hz, 4声道wav文件，扩展名为ogg时，数据存储为16位、16000Hz,1声道ogg文件。
+stopMicrophonesRecording()          | 停止录音。与startMicrophonesRecording()对应。
+
+
 ### 输出
-**1.数据格式 ** 
+
+**1.数据格式** 
 ALAudioDevice可以通过以下帧速率之一将数据发送到扬声器：  
-两声道，交错数据(声道1数据，声道2数据，声道1数据，…)，16000Hz（设置亚洲语言时默认）；  
-两声道，交错数据，22050Hz（默认设置非亚洲语言时）；  
-两声道，交错数据，44100Hz；  
-两声道，交错数据，48000Hz。  
+- 两声道，交错数据(声道1数据，声道2数据，声道1数据，…)，16000Hz（设置亚洲语言时默认）；  
+- 两声道，交错数据，22050Hz（默认设置非亚洲语言时）；  
+- 两声道，交错数据，44100Hz；  
+- 两声道，交错数据，48000Hz。  
 
 **2.输出方法**  
-(1)sendLocalBufferToOutput(nbOfFrames, buffer)  
+1. sendLocalBufferToOutput(nbOfFrames, buffer)  
 本地模块 (运行在机器人上的模块)将存放在数据缓冲区声音数据发送到扬声器。 数据格式为16位两声道交错数据，缓冲区长度不能超过16384字节。  
 其中，nbOfFrames 为缓冲区中包括的两声道声音数据帧数。在两声道交错数据格式中，1帧长度为两声道的数据长度，4字节；buffer 为发送缓冲区内存地址。  
 发送成功方法返回值为真，否则返回值为假。  
-(2)sendRemoteBufferToOutput(nbOfFrames, buffer)  
+2. sendRemoteBufferToOutput(nbOfFrames, buffer)  
 远程模块 (运行在机器人之外的模块)将存放在数据缓冲区声音数据发送到扬声器。  
 任何NAOqi模块都可以在需要时调用适当的方法向NAO的扬声器发送数据。如果数据格式正确，不必做其他配置就可以调用。  
 
 **3.输出相关方法**   
-(1)setParameter(parameter,value)设置输出采样率  
-其中，parameter只能设置为"outputSampleRate"，value为设置的输出采样率，可以设置为16000, 22050, 44100 或 48000。  
-(2)setOutputVolume(volume)设置系统的输出音量  
-其中，volume取值为[0,100]。  
-系统音量可以由getOutputVolume()方法获取。  
+1. setParameter(parameter,value)设置输出采样率。其中，parameter只能设置为"outputSampleRate"，value为设置的输出采样率，可以设置为16000, 22050, 44100 或 48000。  
+2. setOutputVolume(volume)设置系统的输出音量。其中，volume取值为[0,100]。系统音量可以由getOutputVolume()方法获取。  
 
-**4.实例**
+**4.Choregraphe 实例**
 ```python
 # 播放WAV文件 (文件内容发送给扬声器)
 import  math
@@ -1094,6 +1112,7 @@ class  MyClass(GeneratedClass):
 
 
 ### 输入
+
 **1.订阅ALAudioDevice模块**  
 由于音频数据量非常大，其它的NAOqi模块只有在订阅ALAudioDevice模块时才能够读取麦克风输入的数据，而不会象取传感器值那样随时可以从内存中读到。
 请求音频数据的模块首先使用subcribe方法订阅ALAudioDevice模块，并指定其所需数据的格式(通道数，采样率等)。ALAudioDevice模块按照采样参数采样麦克风输入数据，将数据存储在缓冲区中，缓冲区满后通知请求模块读取数据。  
@@ -1117,9 +1136,26 @@ ALAudioDevice提供下述几种方式的音频数据：
 **2.自定义模块处理音频数据**  
 订阅ALAudioDevice模块后，缓冲区满将作为事件与请求模块方法相关联。与前面的处理方式类似，需要将数据处理与指定方法绑定。  
 
+**3.Choregraphe 测试**  
+同时运行Choregraphe播放正弦波声音和音频处理自定义模块，播放正弦波声音，并通过麦克风输入读取。
+```python
+class  MyClass(GeneratedClass):
+    def  __init__(self):
+        GeneratedClass.__init__(self)
+        self.aad=ALProxy("ALAudioDevice")
+    def  onLoad(self):
+        pass
+    def  onUnload(self):
+        pass
+    def  onInput_onStart(self):
+        self.aad.playSine(4000,100,1,10)
+        pass
+    def  onInput_onStop(self):
+        self.onUnload()
+        self.onStopped()
+```
 
-
-### 音频处理自定义模块
+### 自定义音频处理Python模块
 
 ```python
 #coding=utf-8
@@ -1172,232 +1208,26 @@ if  __name__ == '__main__':
 
 ```
 程序说明：  
-1.模块执行时通过Broker通告模块及其方法，启动方法startProcessing()完成由self.nbOfFramesToProcess设定数量的帧处理。本例为绘制声音频率曲线，使用了matplotlib库，绘图代码与声音处理无关。由于绘图过程慢，处理帧设置为1。  
-2.使用ALModule基类的BIND_PYTHON方法将模块处理方法指定为processRemote方法。  
-3.启动订阅后，每采集一帧数据，调用processRemote方法进行数据处理，处理数据放置在inputBuffer中。当前设置inputBuffer长度是2700字节。  
-4.声音信号的能量定义为信号的平方和，均方根rms反映了信号能量的大小。  
-5.FFT变换后结果为复数形式，对应傅立叶级数公式中的两个系数，对其求绝对值结果是实部与虚部的平方根。  
-6.声音处理过程中的参数：
+1. 模块执行时通过Broker通告模块及其方法，启动方法startProcessing()完成由self.nbOfFramesToProcess设定数量的帧处理。本例为绘制声音频率曲线，使用了matplotlib库，绘图代码与声音处理无关。由于绘图过程慢，处理帧设置为1。  
+2. 使用ALModule基类的BIND_PYTHON方法将模块处理方法指定为processRemote方法。  
+3. 启动订阅后，每采集一帧数据，调用processRemote方法进行数据处理，处理数据放置在inputBuffer中。当前设置inputBuffer长度是2700字节。  
+4. 声音信号的能量定义为信号的平方和，均方根rms反映了信号能量的大小。  
+5. FFT变换后结果为复数形式，对应傅立叶级数公式中的两个系数，对其求绝对值结果是实部与虚部的平方根。  
+6. 声音处理过程中的参数：
 setClientPreferences方法设置的采样方式为单通道、采样率为16000；  
 最高频率为16000/2=8000Hz(采样定理)；
 一帧实际数据为2700字节，为1365次采样，一帧对应1365/16000=8.53ms数据；  
 一帧信号基频为16000/1365=11.72Hz，也就是一次谐波的频率为11.72Hz，二次谐波频率为23.44Hz；  
 FFT变换结果为对称的，即1365个采样数据，经过变换后得到1365个FFT复数数据，实际只有682个有效数据；每个数据之间的频率差仍为11.72Hz。  
 
-3.测试  
-同时运行播放正弦波声音和音频处理自定义模块，播放正弦波声音，并通过麦克风输入读取，结果如图所示。  
-playSine(frequence,gain,pan,duration)
-播放正弦波声音。其中frequence为频率(Hz)；gain为音量大小，取值范围为[0,100]；pan为左右声道占比，取值为{-1,0,1}，取0表示左右声道同时发声；duration为持继时间(s)。
-
-```python
-class  MyClass(GeneratedClass):
-    def  __init__(self):
-        GeneratedClass.__init__(self)
-        self.aad=ALProxy("ALAudioDevice")
-    def  onLoad(self):
-        pass
-    def  onUnload(self):
-        pass
-    def  onInput_onStart(self):
-        self.aad.playSine(4000,100,1,10)
-        pass
-    def  onInput_onStop(self):
-        self.onUnload()
-        self.onStopped()
-```
 
 
-### ALAudioDevice方法
-
-作用  
-ALAudioDevice为其他 NAOqi 模块提供访问 NAO 音频输入（麦克风）和输出（扬声器）的权限。
-
-每个旨在处理来自 NAO 麦克风的信号或需要向 NAO 扬声器发送信号的 NAOqi 模块都应使用ALAudioDevice提供的 API 。  
-
-工作原理
-ALAudioDevice基于标准的 Linux ALSA（高级 Linux 声音库）库与 NAO 的声音驱动程序进行通信，随后与麦克风和扬声器进行通信。
-
-任何 NAOqi 模块都可以通过在需要时调用两个适当的 ALAudioDevice 方法之一来向 NAO 的扬声器发送数据。如果数据格式正确，则无需配置任何其他内容即可进行此类调用。
-
-要处理来自麦克风的数据，程序是不同的。实际上，愿意处理此类数据的 NAOqi 模块将首先“订阅”ALAudioDevice并指定其所需数据的格式（通道数、采样率等）。格式正确的数据将自动定期发送到请求模块，方法是使用其中一种方法作为回调。
+### 自定义音频处理C++模块
+要开始编写可处理 NAO 麦克风数据的 NAOqi 模块，请参考[C++示例](http://doc.aldebaran.com/2-8/dev/cpp/examples/audio/soundprocessing/soundprocessing.html?highlight=alsoundprocessing)。
 
 
 
-方法名|说明
----  | ---
-enableEnergyComputation()|允许每个声道计算能量。缺省不计算。
-disableEnergyComputation()|不计算每个声道的能量。
-getFrontMicEnergy()|在允许计算每个声道能量时，返回声道在170ms时间内的平均能量。能量为信号的平方和。
-getRearMicEnergy()|同上
-getLeftMicEnergy()|同上
-getRightMicEnergy()|同上
-getParameter(parameter)|获取参数值，parameter取值为"outputSampleRate"。
-getOutputVolume()|获取系统音量，[0,100]。
-muteAudioOut(mute)|mute为True，静音，为False，解除静音
-setFileAsInput(fileName)|通知ALAudioDevice模块，声音输入为从文件读取内容。文件必须为48000Hz、16位、4声道交错数据的WAV文件，fileName为文件的绝对路径名。
-startMicrophonesRecording(fileName)|录音。fileName为文件的绝对路径名，扩展名为wav时，数据存储为16位、48000Hz, 4声道wav文件，扩展名为ogg时，数据存储为16位、16000Hz,1声道ogg文件。
-stopMicrophonesRecording()|停止录音。与startMicrophonesRecording()对应。
-
-
-
-
-要开始编写可处理 NAO 麦克风数据的 NAOqi 模块，请参考以下示例，该示例可作为简述：
-
-alsoundprocessing.h
-
-```cpp
-// alsoundprocessing.h
-
-/**
-* @author Gwennael Gate
-* Copyright (c) Aldebaran Robotics 2010, 2011
-*/
-
-
-#ifndef SOUNDPROCESSING_H
-#define SOUNDPROCESSING_H
-#include <string>
-#include <rttools/rttime.h>
-
-#ifdef SOUNDPROCESSING_IS_REMOTE
-#include <qi/application.hpp>
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-#endif
-
-#include <boost/shared_ptr.hpp>
-#include <alvalue/alvalue.h>
-#include <alproxies/almemoryproxy.h>
-#include <alaudio/alsoundextractor.h>
-
-using namespace AL;
-
-class ALSoundProcessing : public ALSoundExtractor
-{
-
-public:
-
-  ALSoundProcessing(boost::shared_ptr<ALBroker> pBroker, std::string pName);
-  virtual ~ALSoundProcessing();
-
-  //method inherited from almodule that will be called after constructor
-  void init();
-
-public:
-  void process(const int & nbOfChannels,
-               const int & nbrOfSamplesByChannel,
-               const AL_SOUND_FORMAT * buffer,
-               const ALValue & timeStamp);
-
-private:
-  ALMemoryProxy fProxyToALMemory;
-  std::vector<std::string> fALMemoryKeys;
-};
-#endif
-
-
-```
-
-alsoundprocessing.cpp
-
-
-```cpp 
-// alsoundprocessing.cpp
-#include "alsoundprocessing.h"
-#include <alcommon/alproxy.h>
-#include <iostream>
-
-ALSoundProcessing::ALSoundProcessing(boost::shared_ptr<ALBroker> pBroker,
-                                     std::string pName)
-  : ALSoundExtractor(pBroker, pName)
-{
-  setModuleDescription("This module processes the data collected by the "
-                       "microphones and output in the ALMemory the RMS power "
-                       "of each of the four channels.");
-
-}
-
-void ALSoundProcessing::init()
-{
-  fALMemoryKeys.push_back("ALSoundProcessing/leftMicEnergy");
-  fALMemoryKeys.push_back("ALSoundProcessing/rightMicEnergy");
-  fALMemoryKeys.push_back("ALSoundProcessing/frontMicEnergy");
-  fALMemoryKeys.push_back("ALSoundProcessing/rearMicEnergy");
-
-  fProxyToALMemory.insertData(fALMemoryKeys[0],0.0f);
-  fProxyToALMemory.insertData(fALMemoryKeys[1],0.0f);
-  fProxyToALMemory.insertData(fALMemoryKeys[2],0.0f);
-  fProxyToALMemory.insertData(fALMemoryKeys[3],0.0f);
-
-
-  // Do not call the function setClientPreferences in your constructor!
-  // setClientPreferences : can be called after its construction!
-  audioDevice->callVoid("setClientPreferences",
-                        getName(),                //Name of this module
-                        48000,                    //48000 Hz requested
-                        (int)ALLCHANNELS,         //4 Channels requested
-                        1                         //Deinterleaving requested
-                        );
-#ifdef SOUNDPROCESSING_IS_REMOTE
-  qi::Application::atStop(boost::bind(&ALSoundProcessing::stopDetection, this));
-#endif
-  startDetection();
-}
-
-ALSoundProcessing::~ALSoundProcessing()
-{
-  stopDetection();
-}
-
-
-/// Description: The name of this method should not be modified as this
-/// method is automatically called by the AudioDevice Module.
-void ALSoundProcessing::process(const int & nbOfChannels,
-                                const int & nbOfSamplesByChannel,
-                                const AL_SOUND_FORMAT * buffer,
-                                const ALValue & timeStamp)
-{
-  /// Computation of the RMS power of the signal delivered by
-  /// each microphone on a 170ms buffer
-  /// init RMS power to 0
-  std::vector<float> fMicsEnergy;
-  for(int i=0 ; i<nbOfChannels ; i++)
-  {
-    fMicsEnergy.push_back(0.0f);
-  }
-
-  /// Calculation of the RMS power
-  for(int channelInd = 0 ; channelInd < nbOfChannels ; channelInd++)
-  {
-    for(int i = 0 ; i < nbOfSamplesByChannel ; i++)
-    {
-      fMicsEnergy[channelInd] += (float)buffer[nbOfSamplesByChannel*channelInd + i]
-                                 *(float)buffer[nbOfSamplesByChannel*channelInd + i];
-    }
-    fMicsEnergy[channelInd] /= (float)nbOfSamplesByChannel;
-    fMicsEnergy[channelInd] = sqrtf(fMicsEnergy[channelInd]);
-  }
-
-  /// Puts the result in ALMemory
-  /// (for example to be easily retrieved by another module)
-  for(int i=0 ; i<nbOfChannels ; i++)
-  {
-    fProxyToALMemory.insertData(fALMemoryKeys[i],fMicsEnergy[i]);
-  }
-
-  /// Displays the results on the Naoqi console
-  std::cout << "ALSoundProcessing Energy Left  = " <<  fMicsEnergy[0] << std::endl;
-  std::cout << "ALSoundProcessing Energy Right  = " << fMicsEnergy[1] << std::endl;
-  std::cout << "ALSoundProcessing Energy Front  = " << fMicsEnergy[2] << std::endl;
-  std::cout << "ALSoundProcessing Energy Rear  = " <<  fMicsEnergy[3] << std::endl;
-}
-```
-
-
-可以在音频示例目录中找到这些文件对应的工程（可以轻松编译）。
-
-
-## 编译 NAO 机器人 C++ 例程 soundprocessing 模块遇到的问题
+## 编译例程 soundprocessing 模块问题
 
 ### 1.准备工作
 
