@@ -12,16 +12,6 @@ article_header:
 ---
 
 
-
-> Bi T, Fankhauser P, Bellicoso D, etc. Real-Time Dance Generation to Music for a Legged Robot[C]. 2018 IEEE RSJ International Conference on Intelligent Robots and Systems (IROS). 2018: 1038-1044.
-
-
-<!-- <img src=/pictures/ANYmal.png width=400> -->
-
-<div>{%- include extensions/youtube.html id='kHBLaw5nfzk' -%}</div>
-
-YouTube: [https://www.youtube.com/watch?v=kHBLaw5nfzk](https://www.youtube.com/watch?v=kHBLaw5nfzk)
-
 <style>
     .mystyle {
         margin: 50px 0 0 0;
@@ -30,6 +20,17 @@ YouTube: [https://www.youtube.com/watch?v=kHBLaw5nfzk](https://www.youtube.com/w
         margin: 0 auto;
     }
 </style>
+
+
+
+<div>{%- include extensions/youtube.html id='kHBLaw5nfzk' -%}</div>
+
+YouTube: [https://www.youtube.com/watch?v=kHBLaw5nfzk](https://www.youtube.com/watch?v=kHBLaw5nfzk)
+
+
+> Bi T, Fankhauser P, Bellicoso D, etc. Real-Time Dance Generation to Music for a Legged Robot[C]. 2018 IEEE RSJ International Conference on Intelligent Robots and Systems (IROS). 2018: 1038-1044.
+
+
 
 
 
