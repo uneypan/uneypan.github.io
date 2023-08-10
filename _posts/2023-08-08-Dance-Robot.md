@@ -44,6 +44,7 @@ ANYmal用机载麦克风收听现场音乐，提取当前节拍，并用腿和�
 
 机载麦克风获取现场音乐之后，由 [madmom](https://github.com/CPJKU/madmom) 库提取音乐节拍 
 
+$$\tilde{b}_1,\tilde{b}_2,\dots,\tilde{b}_n$$
 
 并计算每个节拍之间的间隔 
 
