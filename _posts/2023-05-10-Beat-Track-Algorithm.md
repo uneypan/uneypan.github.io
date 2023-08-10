@@ -5,8 +5,9 @@ mathjax: true
 mathjax_autoNumber: true
 ---
 
+## 卡尔曼滤波
 
-## 节拍跟踪器的动力学方程描述
+### 节拍跟踪器的动力学方程描述
 
 这里讨论在一段较短的时间内，假设音乐中节拍进行的速度是恒定的。设 $t$ 是节拍时刻，$\Delta$ 是节拍周期。已知 $k-1$ 步的节拍时刻和周期，如果不考虑噪声，在 $k$ 时刻有
 
@@ -32,7 +33,7 @@ $$\mathrm{y}(k)=\mathrm{H}\mathrm{x}(k)+\mathrm{w},\quad \mathrm{H}=\begin{bmatr
 
 在这里，我们假设噪声是高斯的，且其分布不随时间变化。过程噪声 $\mathrm{v}$ 服从均值为零，协方差为 $\mathrm{Q}$ 的高斯分布。测量噪声 $\mathrm{w}$ 服从均值为零，方差为 $\mathrm{R}$ 的高斯分布。
 
-## 卡尔曼滤波
+### 最优估计
 
 1.预测步：先验状态估计、先验估计协方差、先验观测
 
@@ -70,6 +71,7 @@ $$
 $$
 
 ## 流式速度估计
+
 > Percival, Graham, and George Tzanetakis. "Streamlined tempo estimation based on autocorrelation and cross-correlation with pulses." IEEE/ACM Transactions on Audio, Speech, and Language Processing 22.12 (2014): 1765-1776.
 
 Percival 等人提出一种针对音频流的实时速度估计算法，算法利用速度谱图（Tempogram）和累加器分步估计速度，用“广义自相关”和快速傅里叶变换加快自相关运算，在计算量和精度上取得不错的平衡。
@@ -196,3 +198,43 @@ P^*(t) = \arg \max \left\{   \alpha F(t-\tau,\tau_p) + C^*(\tau)  \right\}
 $$
 
 找到最后一个极值点$t_N$之后，使用 $t_{N-1} = P^*(t_N)$ 回溯所有极值点。
+
+
+## 隐马尔可夫模型
+> A. Klapuri, A. Eronen, and J. Astola. Analysis of the meter of acoustic musical signals. IEEE Transactions on Audio, Speech, and Language Processing, 14(1):342–355, January 2006.
+N. Degara, E. Argones-R ́ ua, A. Pena, S. Torres-Guijarro, M. E. P. Davies, and M. D. Plumbley. Reliability-informed beat tracking of musical signals. IEEE Transactions on Audio, Speech and Language Processing, 20(1):290–301, January 2012.
+G. Peeters and H. Papadopoulos. Simultaneous beat and downbeat-tracking using a probabilistic framework: Theory and large-scale evaluation. IEEE Transactions on Audio, Speech, and Language Processing, 19(6):1754–1769, 2011. 
+
+## 粒子滤波
+> S. Hainsworth and M. Macleod. Particle filtering applied to musical tempo tracking. EURASIP J. Appl. Signal Process., 15:2385–2395, January 2004. 
+Heydari, Mojtaba & Cwitkowitz, Frank & Duan, Zhiyao. (2021). BeatNet: CRNN and Particle Filtering for Online Joint Beat Downbeat and Meter Tracking. 
+
+
+## 动态贝叶斯网络
+> A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
+F. Krebs, S. B ̈ ock, and G. Widmer. Rhythmic pattern modeling for beat and downbeat tracking in musical audio. In Proceedings of the 14th International Society for Music Information Retrieval Conference (ISMIR 2013), pages 227–232, Curitiba, Brazil, November 2013. 
+
+<!-- 然后，大多数系统从这些周期性中确定最主要的节奏，然后使用多种代理方法 [8,12]、动态规划 [6,10]、隐马尔可夫模型 (HMM) [7,16,18] 或循环神经网络（RNN）[2]。其他系统直接对输入特征进行操作，并使用动态贝叶斯网络（DBN）共同确定节拍的节奏和相位[3,14,17,21]。
+
+[1] MIREX 2013 beat tracking results. http://nema.lis. illinois.edu/nema_out/mirex2013/results/ abt/, 2013. 
+[2] S. B ̈ ock and M. Schedl. Enhanced Beat Tracking with Context-Aware Neural Networks. In Proceedings of the 14th International Conference on Digital Audio Effects (DAFx11), pages 135–139, Paris, France, September 2011. 
+[3] A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
+[4] N. Collins. Towards a style-specific basis for computational beat tracking. In Proceedings of the 9th International Conference on Music Perception and Cognition (ICMPC9), pages 461–467, Bologna, Italy, 2006. 
+[5] M. E. P. Davies, N. Degara, and M. D. Plumbley. Evaluation methods for musical audio beat tracking algorithms. Technical Report C4DM-TR-09-06, Centre for Digital Music, Queen Mary University of London, 2009. 
+[6] M. E. P. Davies and M. D. Plumbley. Context-dependent beat tracking of musical audio. IEEE Transactions on Audio, Speech, and Language Processing, 15(3):1009–1020, March 2007. 
+[7] N. Degara, E. Argones-R ́ ua, A. Pena, S. Torres-Guijarro, M. E. P. Davies, and M. D. Plumbley. Reliability-informed beat tracking of musical signals. IEEE Transactions on Audio, Speech and Language Processing, 20(1):290–301, January 2012.
+[8] S. Dixon. Automatic extraction of tempo and beat from expressive performances. Journal of New Music Research, 30:39–58, 2001. 
+[9] D. Eck. Beat tracking using an autocorrelation phase matrix. In Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP 2007), volume 4, pages 1313–1316, Honolulu, Hawaii, USA, April 2007. 
+[10] D. P. W. Ellis. Beat tracking by dynamic programming. Journal of New Music Research, 2007:51–60, 2007. 
+[11] A. Gkiokas, V. Katsouros, G. Carayannis, and T. Stafylakis. Music tempo estimation and beat tracking by applying source separation and metrical relations. In Proceedings of the 37th International Conference on Acoustics, Speech and Signal Processing (ICASSP 2012), pages 421–424, Kyoto, Japan, March 2012.
+[12] M. Goto and Y. Muraoka. Beat tracking based on multipleagent architecture a real-time beat tracking system for audio signals. In Proceedings of the International Conference on Multiagent Systems, pages 103–110, 1996. 
+[13] F. Gouyon, A. Klapuri, S. Dixon, M. Alonso, G. Tzanetakis, C. Uhle, and P. Cano. An experimental comparison of audio tempo induction algorithms. IEEE Transactions on Audio, Speech, and Language Processing, 14(5):1832–1844, September 2006. 
+[14] S. Hainsworth and M. Macleod. Particle filtering applied to musical tempo tracking. EURASIP J. Appl. Signal Process., 15:2385–2395, January 2004. 
+[15] A. Holzapfel, M. E. P. Davies, J. R. Zapata, J. Oliveira, and F. Gouyon. Selective sampling for beat tracking evaluation. IEEE Transactions on Audio, Speech, and Language Processing, 20(9):2539–2548, November 2012. 
+*[16] A. Klapuri, A. Eronen, and J. Astola. Analysis of the meter of acoustic musical signals. IEEE Transactions on Audio, Speech, and Language Processing, 14(1):342–355, January 2006. 
+*[17] F. Krebs, S. B ̈ ock, and G. Widmer. Rhythmic pattern modeling for beat and downbeat tracking in musical audio. In Proceedings of the 14th International Society for Music Information Retrieval Conference (ISMIR 2013), pages 227–232, Curitiba, Brazil, November 2013. 
+[18] G. Peeters and H. Papadopoulos. Simultaneous beat and downbeat-tracking using a probabilistic framework: Theory and large-scale evaluation. IEEE Transactions on Audio, Speech, and Language Processing, 19(6):1754–1769, 2011. 
+[19] L. Rabiner. A tutorial on hidden Markov models and selected applications in speech recognition. In Proceedings of the IEEE, pages 257–286, 1989.
+[20] E. D. Scheirer. Tempo and beat analysis of acoustic musical signals. The Journal of the Acoustical Society of America, 103(1):588–601, 1998. 
+[21] N. Whiteley, A. Cemgil, and S. Godsill. Bayesian modelling of temporal structure in musical audio. In Proceedings of the 7th International Conference on Music Information Retrieval (ISMIR 2006), pages 29–34, Victoria, BC, Canada, October 2006. 
+[22] J. R. Zapata, M. E. P. Davies, and E. G ́ omez. Multi-feature beat tracking. IEEE/ACM Transactions on Audio, Speech, and Language Processing, 22(4):816–825, April 2014. -->
