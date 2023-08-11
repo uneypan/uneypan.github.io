@@ -70,6 +70,32 @@ $$
 \mathrm{P}(k) =\left[\mathrm{I}-\mathrm{K}(k)\mathrm{H}\right]\hat{\mathrm{P}}(k)
 $$
 
+### 扩展
+
+> A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
+
+节拍跟踪器的动力学基本模型可以在几个方向上扩展：
+
+1. 放松卡尔曼滤波器的线性约束。在一个由 $w = \log_2 \Delta$ 映射的对数空间中定义状态方程。对数映射使得周期 $\hat{\Delta}$ 永远是正的。对数映射也使得音乐速度的变化在听觉上更佳合理，例如 $\Delta \rightarrow 2\Delta$ 和 $\Delta \rightarrow \Delta/2$ 会产生相同的变化。于是
+$$
+\hat{\tau}_j = \hat{\tau}_{j-1} + 2^{\hat{w}_{j-1}}
+$$
+2. 引入惯性状态变量 $\hat{a}_j$。将状态变量 $\hat{\mathrm{x}}_j $ 扩展为 $\begin{bmatrix} \hat{\mathrm{x}}_j \\ \hat{a}_j \end{bmatrix}$。附加变量存储关于过去状态的信息，例如加速度。给系统引入惯性。惯性减少了状态空间中的随机行走行为，并使平滑的状态轨迹更有可能，并可以产生更准确的预测。
+
+3. 混合高斯建模的噪声。观测值中的离群值（Outliers）可以通过使用高斯混合来建模。例如，一个“窄”高斯用于建模正常观测，一个为“宽”高斯用于建模离群值。离散变量 $c_j$ 用于指示第 $j$ 个观测是否为离群值。这样，离群值噪声的分布为 $\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$。由于 $c_j$ 不能被观测，定义先验 $c_j \sim p(c)$，然后对 $c_j$ 进行积分，即 $p(\mathrm{w}_j) = \sum_{c_j}p(c_j)p(\mathrm{w}_j\mid c_j)$。
+
+于是，动力学模型变为：
+
+$$
+\begin{bmatrix} \hat{\mathrm{x}}_j \\ \hat{a}_j \end{bmatrix} = \mathrm{F} \begin{bmatrix} \hat{\mathrm{x}}_{j-1} \\ \hat{a}_{j-1} \end{bmatrix}+\mathrm{v}_j
+$$
+
+$$
+\begin{bmatrix} \tau_{j} \\ w_{j} \end{bmatrix} = \begin{bmatrix} \hat{\tau}_{j} \\ \hat{w}_{j} \end{bmatrix} + \mathrm{w}_j
+$$
+
+其中，$c_j$ 选取为离散的开关变量，$\mathrm{v}_j \sim \mathcal{N}(0,\mathrm{Q})$，$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$，且$c_j \sim p(c)$。注意到，这样给出的观测值变为2维的（包括 $\tau_{j}$ 和 $w_{j}$）。
+
 ## 流式速度估计
 
 > Percival, Graham, and George Tzanetakis. "Streamlined tempo estimation based on autocorrelation and cross-correlation with pulses." IEEE/ACM Transactions on Audio, Speech, and Language Processing 22.12 (2014): 1765-1776.
@@ -202,17 +228,23 @@ $$
 
 ## 隐马尔可夫模型
 > A. Klapuri, A. Eronen, and J. Astola. Analysis of the meter of acoustic musical signals. IEEE Transactions on Audio, Speech, and Language Processing, 14(1):342–355, January 2006.
-N. Degara, E. Argones-R ́ ua, A. Pena, S. Torres-Guijarro, M. E. P. Davies, and M. D. Plumbley. Reliability-informed beat tracking of musical signals. IEEE Transactions on Audio, Speech and Language Processing, 20(1):290–301, January 2012.
-G. Peeters and H. Papadopoulos. Simultaneous beat and downbeat-tracking using a probabilistic framework: Theory and large-scale evaluation. IEEE Transactions on Audio, Speech, and Language Processing, 19(6):1754–1769, 2011. 
+
+> N. Degara, E. Argones-R ́ ua, A. Pena, S. Torres-Guijarro, M. E. P. Davies, and M. D. Plumbley. Reliability-informed beat tracking of musical signals. IEEE Transactions on Audio, Speech and Language Processing, 20(1):290–301, January 2012.
+
+> G. Peeters and H. Papadopoulos. Simultaneous beat and downbeat-tracking using a probabilistic framework: Theory and large-scale evaluation. IEEE Transactions on Audio, Speech, and Language Processing, 19(6):1754–1769, 2011. 
 
 ## 粒子滤波
+
 > S. Hainsworth and M. Macleod. Particle filtering applied to musical tempo tracking. EURASIP J. Appl. Signal Process., 15:2385–2395, January 2004. 
-Heydari, Mojtaba & Cwitkowitz, Frank & Duan, Zhiyao. (2021). BeatNet: CRNN and Particle Filtering for Online Joint Beat Downbeat and Meter Tracking. 
+
+> Heydari, Mojtaba & Cwitkowitz, Frank & Duan, Zhiyao. (2021). BeatNet: CRNN and Particle Filtering for Online Joint Beat Downbeat and Meter Tracking. 
 
 
 ## 动态贝叶斯网络
-> A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
-F. Krebs, S. B ̈ ock, and G. Widmer. Rhythmic pattern modeling for beat and downbeat tracking in musical audio. In Proceedings of the 14th International Society for Music Information Retrieval Conference (ISMIR 2013), pages 227–232, Curitiba, Brazil, November 2013. 
+
+
+
+> F. Krebs, S. B ̈ ock, and G. Widmer. Rhythmic pattern modeling for beat and downbeat tracking in musical audio. In Proceedings of the 14th International Society for Music Information Retrieval Conference (ISMIR 2013), pages 227–232, Curitiba, Brazil, November 2013. 
 
 <!-- 然后，大多数系统从这些周期性中确定最主要的节奏，然后使用多种代理方法 [8,12]、动态规划 [6,10]、隐马尔可夫模型 (HMM) [7,16,18] 或循环神经网络（RNN）[2]。其他系统直接对输入特征进行操作，并使用动态贝叶斯网络（DBN）共同确定节拍的节奏和相位[3,14,17,21]。
 
