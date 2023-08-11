@@ -2,7 +2,7 @@
 layout: article
 title: 节拍跟踪相关算法
 mathjax: true
-mathjax_autoNumber: true
+# mathjax_autoNumber: true
 ---
 
 ## 卡尔曼滤波
@@ -35,7 +35,7 @@ $$\mathrm{y}(k)=\mathrm{H}\mathrm{x}(k)+\mathrm{w},\quad \mathrm{H}=\begin{bmatr
 
 ### 最优估计
 
-1.预测步：先验状态估计、先验估计协方差、先验观测
+预测步：先验状态估计、先验估计协方差、先验观测
 
 $$
 \hat{\mathrm{x}}(k) = \mathrm{F}{\mathrm{x}}(k-1)\\
@@ -45,18 +45,15 @@ $$
 \hat{\mathrm{P}}(k) = \mathrm{F}\mathrm{P}(k-1)\mathrm{F}^{\mathrm{T}}+\mathrm{Q}
 $$
 
-
 $$
 \hat{\mathrm{y}}(k) = \mathrm{H}\hat{\mathrm{x}}(k-1)
 $$
 
-2.更新步：计算卡尔曼增益、后验状态估计及对应协方差
+更新步：计算卡尔曼增益、后验状态估计及对应协方差
 
 $$
 \mathrm{S}(k)= \mathrm{H}\mathrm{P}(k)\mathrm{H}^{\mathrm{T}}+\mathrm{R}
 $$
-
-
 
 $$
 \mathrm{K}(k)= \hat{\mathrm{P}}(k)\mathrm{H}^{\mathrm{T}}\mathrm{S}(k)^{-1}
@@ -76,13 +73,16 @@ $$
 
 节拍跟踪器的动力学基本模型可以在几个方向上扩展：
 
-1. 放松卡尔曼滤波器的线性约束。在一个由 $w = \log_2 \Delta$ 映射的对数空间中定义状态方程。对数映射使得周期 $\hat{\Delta}$ 永远是正的。对数映射也使得音乐速度的变化在听觉上更佳合理，例如 $\Delta \rightarrow 2\Delta$ 和 $\Delta \rightarrow \Delta/2$ 会产生相同的变化。于是
+-  放松卡尔曼滤波器的线性约束。在一个由 $w = \log_2 \Delta$ 映射的对数空间中定义状态方程。对数映射使得周期 $\hat{\Delta}$ 永远是正的。对数映射也使得音乐速度的变化在听觉上更佳合理，例如 $\Delta \rightarrow 2\Delta$ 和 $\Delta \rightarrow \Delta/2$ 会产生相同的变化。于是
 $$
 \hat{\tau}_j = \hat{\tau}_{j-1} + 2^{\hat{w}_{j-1}}
 $$
-2. 引入惯性状态变量 $\hat{a}_j$。将状态变量 $\hat{\mathrm{x}}_j $ 扩展为 $\begin{bmatrix} \hat{\mathrm{x}}_j \\ \hat{a}_j \end{bmatrix}$。附加变量存储关于过去状态的信息，例如加速度。给系统引入惯性。惯性减少了状态空间中的随机行走行为，并使平滑的状态轨迹更有可能，并可以产生更准确的预测。
+-  引入惯性状态变量 $\hat{a}_j$。将状态变量 $\hat{\mathrm{x}}_j $ 扩展为 $\begin{bmatrix} \hat{\mathrm{x}}_j \\ \hat{a}_j \end{bmatrix}$。附加变量存储关于过去状态的信息，例如加速度。给系统引入惯性。惯性减少了状态空间中的随机行走行为，并使平滑的状态轨迹更有可能，并可以产生更准确的预测。
 
-3. 混合高斯建模的噪声。观测值中的离群值（Outliers）可以通过使用高斯混合来建模。例如，一个“窄”高斯用于建模正常观测，一个为“宽”高斯用于建模离群值。离散变量 $c_j$ 用于指示第 $j$ 个观测是否为离群值。这样，离群值噪声的分布为 $\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$。由于 $c_j$ 不能被观测，定义先验 $c_j \sim p(c)$，然后对 $c_j$ 进行积分，即 $p(\mathrm{w}_j) = \sum_{c_j}p(c_j)p(\mathrm{w}_j\mid c_j)$。
+-  混合高斯建模的噪声。观测值中的离群值（Outliers）可以通过使用高斯混合来建模。例如，一个“窄”高斯用于建模正常观测，一个为“宽”高斯用于建模离群值。离散变量 $c_j$ 用于指示第 $j$ 个观测是否为离群值。这样，离群值噪声的分布为 
+$$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$$ 
+由于 $c_j$ 不能被观测，定义先验 $c_j \sim p(c)$，然后对 $c_j$ 进行积分，即
+$$ \displaystyle p(\mathrm{w}_j) = \sum_{c_j}p(c_j)p(\mathrm{w}_j\mid c_j) $$
 
 于是，动力学模型变为：
 
@@ -94,7 +94,7 @@ $$
 \begin{bmatrix} \tau_{j} \\ w_{j} \end{bmatrix} = \begin{bmatrix} \hat{\tau}_{j} \\ \hat{w}_{j} \end{bmatrix} + \mathrm{w}_j
 $$
 
-其中，$c_j$ 选取为离散的开关变量，$\mathrm{v}_j \sim \mathcal{N}(0,\mathrm{Q})$，$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$，且$c_j \sim p(c)$。注意到，这样给出的观测值变为2维的（包括 $\tau_{j}$ 和 $w_{j}$）。
+其中，$c_j$ 选取为离散的开关变量，$$\mathrm{v}_j \sim \mathcal{N}(0,\mathrm{Q})$$，$$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$$，且 $$c_j \sim p(c)$$。注意到，这样给出的观测值变为2维的（包括 $\tau_{j}$ 和 $w_{j}$）。
 
 ## 流式速度估计
 
@@ -102,7 +102,7 @@ $$
 
 Percival 等人提出一种针对音频流的实时速度估计算法，算法利用速度谱图（Tempogram）和累加器分步估计速度，用“广义自相关”和快速傅里叶变换加快自相关运算，在计算量和精度上取得不错的平衡。
 
-**1.起始点强度信号**
+### 起始点强度信号
 
 1）分帧：将源音频（44100 Hz）按每帧 1024 个采样点、步长128 点分割，产生一系列采样率约为 344.5 Hz 的帧。  
 2）对数能量谱：每一帧都乘以汉宁窗，然后用离散傅里叶变换计算对数幅值谱 $L_P$。假设幅值谱用$|{X(k,n)}|$表示，那么
@@ -119,7 +119,7 @@ $$
 
 4）低通滤波：用 14 阶 FIR 滤波器对信号进行低通滤波，截止频率为 7 Hz ，汉明窗方法。
 
-**2.节拍周期检测**
+### 节拍周期检测
 
 1）分帧：取 2048 个 $\mathrm{Flux}$ 帧  （ 2048 / 344.5 ≈ 6 s）进行分析，步长 128 点（128 / 344.5 ≈  0.37 s）。假设总共会产生 M 个这种分析帧，采样率为 1 / 0.37 ≈ 2.7 Hz。
 
