@@ -38,7 +38,7 @@ $$\mathrm{y}(k)=\mathrm{H}\mathrm{x}(k)+\mathrm{w},\quad \mathrm{H}=\begin{bmatr
 预测步：先验状态估计、先验估计协方差、先验观测
 
 $$
-\hat{\mathrm{x}}(k) = \mathrm{F}{\mathrm{x}}(k-1)\\
+\hat{\mathrm{x}}(k) = \mathrm{F}{\mathrm{x}}(k-1)
 $$
 
 $$
@@ -73,15 +73,20 @@ $$
 
 节拍跟踪器的动力学基本模型可以在几个方向上扩展：
 
--  放松卡尔曼滤波器的线性约束。在一个由 $w = \log_2 \Delta$ 映射的对数空间中定义状态方程。对数映射使得周期 $\hat{\Delta}$ 永远是正的。对数映射也使得音乐速度的变化在听觉上更佳合理，例如 $\Delta \rightarrow 2\Delta$ 和 $\Delta \rightarrow \Delta/2$ 会产生相同的变化。于是
+A.放松卡尔曼滤波器的线性约束。在一个由 $w = \log_2 \Delta$ 映射的对数空间中定义状态方程。对数映射使得周期 $\hat{\Delta}$ 永远是正的。对数映射也使得音乐速度的变化在听觉上更佳合理，例如 $\Delta \rightarrow 2\Delta$ 和 $\Delta \rightarrow \Delta/2$ 会产生相同的变化。于是
+
 $$
 \hat{\tau}_j = \hat{\tau}_{j-1} + 2^{\hat{w}_{j-1}}
 $$
--  引入惯性状态变量 $\hat{a}_j$。将状态变量 $\hat{\mathrm{x}}_j $ 扩展为 $\begin{bmatrix} \hat{\mathrm{x}}_j \\ \hat{a}_j \end{bmatrix}$。附加变量存储关于过去状态的信息，例如加速度。给系统引入惯性。惯性减少了状态空间中的随机行走行为，并使平滑的状态轨迹更有可能，并可以产生更准确的预测。
 
--  混合高斯建模的噪声。观测值中的离群值（Outliers）可以通过使用高斯混合来建模。例如，一个“窄”高斯用于建模正常观测，一个为“宽”高斯用于建模离群值。离散变量 $c_j$ 用于指示第 $j$ 个观测是否为离群值。这样，离群值噪声的分布为 
+B.引入惯性状态变量 $\hat{a}_j$。将状态变量 $\hat{\mathrm{x}}_j $ 扩展为 $\begin{bmatrix} \hat{\mathrm{x}}_j  & \hat{a}_j \end{bmatrix}^T$。附加变量存储关于过去状态的信息，例如加速度。给系统引入惯性。惯性减少了状态空间中的随机行走行为，并使平滑的状态轨迹更有可能，并可以产生更准确的预测。
+
+C.混合高斯建模的噪声。观测值中的离群值（Outliers）可以通过使用高斯混合来建模。例如，一个“窄”高斯用于建模正常观测，一个为“宽”高斯用于建模离群值。离散变量 $c_j$ 用于指示第 $j$ 个观测是否为离群值。这样，离群值噪声的分布为 
+
 $$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$$ 
+
 由于 $c_j$ 不能被观测，定义先验 $c_j \sim p(c)$，然后对 $c_j$ 进行积分，即
+
 $$ \displaystyle p(\mathrm{w}_j) = \sum_{c_j}p(c_j)p(\mathrm{w}_j\mid c_j) $$
 
 于是，动力学模型变为：
@@ -95,6 +100,46 @@ $$
 $$
 
 其中，$c_j$ 选取为离散的开关变量，$$\mathrm{v}_j \sim \mathcal{N}(0,\mathrm{Q})$$，$$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$$，且 $$c_j \sim p(c)$$。注意到，这样给出的观测值变为2维的（包括 $\tau_{j}$ 和 $w_{j}$）。
+
+## 节拍图表示
+
+> A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
+
+> Grosche, Peter, Meinard Müller, and Frank Kurth. “Cyclic tempogram - A mid-level tempo representation for music signals.” ICASSP, 2010.
+
+为了从局部的起始点序列 $ \mathrm{t} = [t_i]$ 中推断出节拍轨 $(\tau,\Delta)$，定义一个贝叶斯概率模型
+
+$$
+p(\tau,\Delta,\mid \mathrm{t}) \propto p( \mathrm{t}\mid \tau,\Delta)p(\tau,\Delta)
+$$
+
+其中 $ \mathrm{t} = [t_i]$ 是起始点序列，局部节拍 $\tau$ 和局部周期 $\Delta$ 由卡尔曼滤波器给出。公式的第一项 $p( \mathrm{t} \mid \tau,\Delta)$ 是似然函数，可以看成给定节拍轨 $(\tau,\Delta)$ 下观测到起始点序列 $t$ 的概率，第二项 $p(\tau,\Delta)$ 是节拍的先验分布。
+
+一个合理的假设是当节拍轨 $(\tau,\Delta)$ 与观测序列 $[t_i]$ 匹配时，似然函数 $p( \mathrm{t} \mid \tau,\Delta)$ 较大，由此可以构造观测数据与局部节拍轨的相似性度量函数。
+
+首先定义一个连续时域信号 $$x(t) = \sum_{i=1}^I G(t-t_i)$$，其中 $G(t)$ 是一个方差为 $\sigma_x^2$ 的高斯函数 $$G(t)=\exp(-t^2 / 2\sigma_x^2)$$ 。
+
+局部节拍轨由一个脉冲序列 $$\phi(t;\tau,\Delta) = \sum_m \alpha_m \delta(t-\tau - m \Delta)$$表示，其中 $$\delta(t-t_0)$$是一个转换后的 Dirac delta 函数，表示位于 $t$ 处的脉冲。$\alpha_m$ 是脉冲的幅度，是一个正的常数，且满足 $$\sum_m \alpha_m = 1$$。 如果需要计算的因果性，可以在 $m > 0$ 限制 $\alpha_m = 0$ 。当 $\alpha_m$ 是指数响应序列，即 $$\alpha_m = \alpha_0^m $$ 时，它变成无限脉冲响应（IIR）梳状滤波器。定义 $x(t)$ 在 $(\tau,\Delta)$ 处的节拍图（Tempogram）为 $x(t)$ 与脉冲序列的内积
+
+$$
+\mathrm{Tg_x}(\tau,\Delta) = \int_{-\infty}^{\infty} x(t)\phi(t;\tau,\Delta)dt
+$$
+
+<div align="center">
+<img src="/pictures/CemgilTempogramCalculat.png" width=400px>
+</div>
+
+节拍图表示可以被解释为梳状滤波器组的响应，并且类似于多尺度表示（例如小波变换），其中 $\tau,\Delta$ 对应于转换和缩放参数。将似然函数定义为节拍图的对数
+
+$$p( \mathrm{t}\mid \tau,\Delta) \propto \exp (\mathrm{Tg_x(\tau,\Delta)})$$
+
+假设 $\tau$ 和 $\Delta$ 的先验概率分布是平坦的，将 $\tau$ 边缘化得到 $\Delta$ 的概率分布 
+
+$$
+p(\Delta\mid \mathrm{t}) \propto \int \exp\left( \mathrm{Tg_x}(\tau,\Delta)\right) \mathrm{d} \tau
+$$
+
+<img src="/pictures/CemgilTempogram1.png" width=400px> <img src="/pictures/CemgilTempogram2.png" width=400px>
 
 ## 流式速度估计
 
