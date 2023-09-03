@@ -126,7 +126,7 @@ $$
 $$
 
 <div align="center">
-<img src="/pictures/CemgilTempogramCalculat.png" width=400px>
+<img src="/pictures/CemgilTempogramCalculat.png" width=600px>
 </div>
 
 节拍图表示可以被解释为梳状滤波器组的响应，并且类似于多尺度表示（例如小波变换），其中 $\tau,\Delta$ 对应于转换和缩放参数。将似然函数定义为节拍图的对数
