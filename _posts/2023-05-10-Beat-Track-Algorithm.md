@@ -179,7 +179,7 @@ $$
 \mathcal{C}(t,[\tau])= \sum_{\lambda \in [\tau]} \mathcal{T}(t,\lambda)
 $$
 
-其中 $[\tau]$ 是 $\tau$ 的 $2^k$ 倍数的集合，例如对于 $\tau = 120$，$[\tau] = \{\dots,30,60,120,240,480,\dots\}$。
+其中 $[\tau]$ 是 $\tau$ 的 $2^k$ 倍数的集合，例如对于 $\tau = 120$，$$[\tau] = \left\{ \dots,30,60,120,240,480,\dots \right\}$$。
 
 给定一个参考速度 $\rho$ BPM，循环速度谱图映射为 $\mathcal{C}_{\rho}$ 
 
