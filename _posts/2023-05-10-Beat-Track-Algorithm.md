@@ -101,11 +101,11 @@ $$
 
 其中，$c_j$ 选取为离散的开关变量，$$\mathrm{v}_j \sim \mathcal{N}(0,\mathrm{Q})$$，$$\mathrm{w}_j\mid c_j \sim \mathcal{N}(0,\mathrm{R_c})$$，且 $$c_j \sim p(c)$$。注意到，这样给出的观测值变为2维的（包括 $\tau_{j}$ 和 $w_{j}$）。
 
-## 节拍图表示
+## 节奏分析
+
+### 节拍图
 
 > A. T. Cemgil, H. Kappen, P. Desain, and H. Honing. On tempo tracking: Tempogram Representation and Kalman filtering. Journal of New Music Research, 28:4:259–273, 2001.
-
-> Grosche, Peter, Meinard Müller, and Frank Kurth. “Cyclic tempogram - A mid-level tempo representation for music signals.” ICASSP, 2010.
 
 为了从局部的起始点序列 $ \mathrm{t} = [t_i]$ 中推断出节拍轨 $(\tau,\Delta)$，定义一个贝叶斯概率模型
 
@@ -140,6 +140,58 @@ p(\Delta\mid \mathrm{t}) \propto \int \exp\left( \mathrm{Tg_x}(\tau,\Delta)\righ
 $$
 
 <img src="/pictures/CemgilTempogram1.png" width=400px> <img src="/pictures/CemgilTempogram2.png" width=400px>
+
+### 速度谱图
+
+> Grosche, Peter, Meinard Müller, and Frank Kurth. “Cyclic tempogram - A mid-level tempo representation for music signals.” ICASSP, 2010.
+
+$\Delta$ 表示检测函数，长度为 6s 的 Hann 窗 $W$ 进行 STFT，对于频率 $\omega$，复数域的傅立叶系数 $\mathcal{F}(t,\omega)$ 定义为
+
+$$
+\mathcal{F}(t,\omega) = \sum_{n\in \mathbb{Z}} \Delta(n)\cdot W(n-t)e^{-2\pi i\omega n}
+$$
+
+离散傅立叶速度谱图（Discrete Fourier Tempogram）定义为
+
+$$
+\mathcal{T}^{F}(t,\tau) = \left|\mathcal{F}(t,\tau/60)\right|
+$$
+
+其中 $\tau$ 是 BPM，$\mathcal{T}^{F}(t,\tau)$ 表示在时刻 $t$ 时，以 $\tau$ BPM 进行的傅立叶变换的幅度。
+
+保持窗宽 6s，检测函数的无偏局部自相关
+
+$$
+\mathcal{A}(t,l) = \dfrac{\sum_{n\in \mathbb{Z}} \Delta(n)\Delta(n+l) \cdot W(n-t)}{2N + 1 -l}
+$$
+
+自相关速度谱图（Autocorrelation Tempogram）定义为
+
+$$
+\mathcal{T}^{A}(t,\tau) = \mathcal{A}(t,l)
+$$
+
+其中，速度 $\tau = 60/(r\cdot l)$ BPM，$l \in [1:N]$ 是滞后，$r$ 对应于 STFT 步长。
+
+为了避免谐波的干扰，引入循环速度谱图（Cyclic Tempogram）
+
+$$
+\mathcal{C}(t,[\tau])= \sum_{\lambda \in [\tau]} \mathcal{T}(t,\lambda)
+$$
+
+其中 $[\tau]$ 是 $\tau$ 的 $2^k$ 倍数的集合，例如对于 $\tau = 120$，$[\tau] = \{\dots,30,60,120,240,480,\dots\}$。
+
+给定一个参考速度 $\rho$ BPM，循环速度谱图映射为 $\mathcal{C}_{\rho}$ 
+
+$$
+\mathcal{C}_{\rho}(t,s)= \mathcal{C}(t,[\rho\cdot s])
+$$
+
+注意到 $$\mathcal{C}_{\rho}(t,s) = \mathcal{C}_{\rho}(t,2^k s)$$，因此 $\mathcal{C}_{\rho}(t,s)$ 由因子 $s\in [1,2)$ 完全定义。
+
+<div align="center">
+<img src="/pictures/Cyclic_Tempogram_Waltz.png" width=400px> 
+</div>
 
 ## 流式速度估计
 
