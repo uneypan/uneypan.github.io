@@ -96,9 +96,11 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 
 ### 典型相关分析(Canonical Correlation Analysis, CCA)
 
-CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。模板信号的前2行是刺激频率的正弦和余弦信号，往下的行是刺激频率的高次谐波信号，即
+CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。模板信号定义为刺激频率的正弦和余弦信号，及其高次谐波信号组成的矩阵，即
 
-$$\mathbf{Y}=\frac{1}{\sqrt{N}}\begin{bmatrix}\sin\left(\omega \cdot 0\right)&\cdots&\sin\left(\omega(N-1)\right)\\\cos\left(\omega \cdot 0\right)&\cdots&\cos\left(\omega(N-1)\right)\\\sin\left(2\omega \cdot 0\right)&\cdots&\sin\left(2\omega(N-1)\right)\\\cos\left(2\omega \cdot 0\right)&\cdots&\cos\left(2\omega(N-1)\right)\\\vdots&\vdots&\vdots\\\sin\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\sin\left(\frac{L_2}{2}\omega(N-1)\right)\\\cos\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\cos\left(\frac{L_2}{2}\omega(N-1)\right)\end{bmatrix}$$
+$$
+\mathbf{Y}=\frac{1}{\sqrt{N}}\begin{bmatrix}\sin\left(\omega \cdot 0\right)&\cdots&\sin\left(\omega(N-1)\right)\\\cos\left(\omega \cdot 0\right)&\cdots&\cos\left(\omega(N-1)\right)\\\sin\left(2\omega \cdot 0\right)&\cdots&\sin\left(2\omega(N-1)\right)\\\cos\left(2\omega \cdot 0\right)&\cdots&\cos\left(2\omega(N-1)\right)\\\vdots&\vdots&\vdots\\\sin\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\sin\left(\frac{L_2}{2}\omega(N-1)\right)\\\cos\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\cos\left(\frac{L_2}{2}\omega(N-1)\right)\end{bmatrix}
+$$
 
 其中 $\omega$ 为刺激频率 $f$ 和采样频率 $f_s$ 下的刺激角频率，等于 $$ 2\pi f / f_s$$；$\frac{L_2}{2}$ 为刺激频率的最高谐波次数或模板倍频数。
 
@@ -113,7 +115,7 @@ $$\mathbf{Y}=\frac{1}{\sqrt{N}}\begin{bmatrix}\sin\left(\omega \cdot 0\right)&\c
 
 **CCA 算法推导**
 
-在统计学中，**皮尔逊积矩相关系数（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
+在统计学中，**皮尔逊积矩相关系数**（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）**用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
 
 $$
 \rho(\mathbf{x},\mathbf{y}) = \frac{\text{cov}(\mathbf{x},\mathbf{y})}{\sqrt{D(\mathbf{x})}\sqrt{D(\mathbf{y})}}
