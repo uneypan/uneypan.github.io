@@ -96,90 +96,127 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 
 ### 典型相关分析(Canonical Correlation Analysis, CCA)
 
-CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。在统计学中，**皮尔逊积矩相关系数（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
+CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。模板信号的前2行是刺激频率的正弦和余弦信号，往下的行是刺激频率的高次谐波信号，即
+
+$$\mathbf{Y}=\frac{1}{\sqrt{N}}\begin{bmatrix}\sin\left(\omega \cdot 0\right)&\cdots&\sin\left(\omega(N-1)\right)\\\cos\left(\omega \cdot 0\right)&\cdots&\cos\left(\omega(N-1)\right)\\\sin\left(2\omega \cdot 0\right)&\cdots&\sin\left(2\omega(N-1)\right)\\\cos\left(2\omega \cdot 0\right)&\cdots&\cos\left(2\omega(N-1)\right)\\\vdots&\vdots&\vdots\\\sin\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\sin\left(\frac{L_2}{2}\omega(N-1)\right)\\\cos\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\cos\left(\frac{L_2}{2}\omega(N-1)\right)\end{bmatrix}$$
+
+其中 $\omega$ 为刺激频率 $f$ 和采样频率 $f_s$ 下的刺激角频率，等于 $$ 2\pi f / f_s$$；$\frac{L_2}{2}$ 为刺激频率的最高谐波次数或模板倍频数。
+
+**以 SVD 方法为例，CCA 算法的流程为**
+
+1. 计算 $\mathbf{X}$ 的方差 $$\mathbf{S}_{XX}$$，$\mathbf{Y}$ 的方差 $$\mathbf{S}_{YY}$$，以及 $$\mathbf{X}$$ 和 $\mathbf{Y}$ 的协方差 $$\mathbf{S}_{XY}$$
+2. 计算矩阵 $$ \mathbf{M} = \mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}$$
+3. 对矩阵 $$\mathbf{M}$$ 进行 SVD 分解，最大的奇异值 $\rho$ 和对应的奇异向量为 $\mathbf{u}$ 和 $\mathbf{v}$，即 $$\displaystyle \rho = \max_{\mathbf{u},\mathbf{v}}\mathbf{u}^T\mathbf{M}\mathbf{v}$$
+4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$
+ 
+可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
+
+**CCA 算法推导**
+
+在统计学中，**皮尔逊积矩相关系数（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
 
 $$
 \rho(\mathbf{x},\mathbf{y}) = \frac{\text{cov}(\mathbf{x},\mathbf{y})}{\sqrt{D(\mathbf{x})}\sqrt{D(\mathbf{y})}}
 $$
 
-但是PCCs不能直接用于高维数据，高维数据难以计算矩阵相关性的原因有以下几点：
+但是，**PCCs不能直接用于高维数据**，高维数据难以计算矩阵相关性的原因有以下几点：
 - **维度灾难**：随着维度的增加，数据的样本量通常远小于变量数，样本点在高维空间中变得稀疏。假设有两个变量之间存在一些相关性，但是由于维度灾难，很可能只有少数几个样本点实际上能够展现这种关系。这会导致计算协方差时的样本点不足，产生不准确的估计。而且，高维空间中的任意两个向量之间的夹角较大，相关性的度量也变得不敏感，导致矩阵相关性的估计不稳定，容易受到异常值的影响，而且在低样本量时存在过高偏倚；
 - **计算量**：高维数据的矩阵相关性的计算量很大，需要对两个矩阵进行交叉乘积，然后求解特征值和特征向量，这在维数很高时会非常耗时，目前稀疏矩阵的计算仍然是难题。
 
 **CCA 的主要思想是将高维的两组数据分别降维到1维，然后用相关系数分析相关性**。但是有一个问题是，降维的标准是如何选择的呢？回想下主成分分析 PCA，降维的原则是投影方差最大；再回想下线性判别分析 LDA，降维的原则是同类的投影方差小，异类间的投影方差大。**CCA 选择的投影标准是降维后两组数据的 PCCs 最大**。
 
-对于两组多元变量 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，$$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
+假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{a}$ 和 $\mathbf{b}$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
 
 $$
-\mathbf{x} = \mathbf{w}_x^T \mathbf{X} \\ 
-\mathbf{y} = \mathbf{w}_y^T \mathbf{Y}
+\mathbf{x} = \mathbf{a}^T \mathbf{X} \\ 
+\mathbf{y} = \mathbf{b}^T \mathbf{Y}
 $$
 
-CCA 的优化目标是最大化相关系数 $$\rho(\mathbf{x}, \mathbf{y})$$ 得到对应的投影向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$
+CCA 的优化目标是最大化相关系数 $$\rho(\mathbf{x}, \mathbf{y})$$ 得到对应的投影向量 $\mathbf{a}$ 和 $\mathbf{b}$
 
 $$
-\arg\max_{\mathbf{w}_x,\mathbf{w}_y}\rho(\mathbf{x}, \mathbf{y})
+\arg\max_{\mathbf{a},\mathbf{b}}\rho(\mathbf{x}, \mathbf{y})
 $$
 
 
 在投影前，我们一般会把原始数据进行标准化，对于每个特征，计算其平均值和标准差。然后，对每个特征的每个数据点减去平均值后除以标准差，得到 $\mathbf{X}$ 和 $\mathbf{Y}$ 为每个特征的均值为 0 而方差为 1 的数据，即 $E(\mathbf{X}) = \mathbf{0}$， $D(\mathbf{X}) = \mathbf{I}$。
 
-记 $$\mathbf{s}_{XX} = \text{cov}(\mathbf{X},\mathbf{X})$$，$$\mathbf{s}_{YY} = \text{cov}(\mathbf{Y},\mathbf{Y})$$， $$\mathbf{s}_{XY} = \text{cov}(\mathbf{X},\mathbf{Y})$$ 有：
+记 $$\mathbf{S}_{XX} = \text{cov}(\mathbf{X},\mathbf{X})$$，$$\mathbf{S}_{YY} = \text{cov}(\mathbf{Y},\mathbf{Y})$$， $$\mathbf{S}_{XY} = \text{cov}(\mathbf{X},\mathbf{Y})$$ 有：
 
 $$
-\mathbf{s}_{XX} = \text{cov}(\mathbf{X},\mathbf{X}) = E(\mathbf{X}\mathbf{X}^T) - E(\mathbf{X})E(\mathbf{X})^T = E(\mathbf{X}\mathbf{X}^T)，\\
-\mathbf{s}_{YY} = E(\mathbf{Y}\mathbf{Y}^T), \mathbf{s}_{XY} = E(\mathbf{X}\mathbf{Y}^T)
+\mathbf{S}_{XX} = \text{cov}(\mathbf{X},\mathbf{X}) = E(\mathbf{X}\mathbf{X}^T) - E(\mathbf{X})E(\mathbf{X})^T = E(\mathbf{X}\mathbf{X}^T)，\\
+\mathbf{S}_{YY} = E(\mathbf{Y}\mathbf{Y}^T), \mathbf{S}_{XY} = E(\mathbf{X}\mathbf{Y}^T)
 $$
 
 于是，可以得到 $\mathbf{x},\mathbf{y}$ 的方差和协方差为
 
 $$
-D(\mathbf{x}) = D(\mathbf{w}_x^T \mathbf{X}) = \mathbf{w}_x^T E(\mathbf{X} \mathbf{X}^T) \mathbf{w}_x  = \mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x \\
-D(\mathbf{y}) = D(\mathbf{w}_y^T \mathbf{Y}) = \mathbf{w}_y^T E(\mathbf{Y} \mathbf{Y}^T) \mathbf{w}_y  = \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y
+D(\mathbf{x}) = D(\mathbf{a}^T \mathbf{X}) = \mathbf{a}^T E(\mathbf{X} \mathbf{X}^T) \mathbf{a}  = \mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} \\
+D(\mathbf{y}) = D(\mathbf{b}^T \mathbf{Y}) = \mathbf{b}^T E(\mathbf{Y} \mathbf{Y}^T) \mathbf{b}  = \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b}
 $$
 
 $$ 
 \begin{aligned}
-\text{cov} (\mathbf{x}, \mathbf{y}) &= \text{cov}(\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y})\\
-&= E[<\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}>] 
-= E[ (\mathbf{w}_x^T\mathbf{X}) (\mathbf{w}_y^T \mathbf{Y})^T] \\
-&= \mathbf{w}_x^T E(\mathbf{X} \mathbf{Y}^T) \mathbf{w}_y 
-= \mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y
+\text{cov} (\mathbf{x}, \mathbf{y}) &= \text{cov}(\mathbf{a}^T \mathbf{X}, \mathbf{b}^T \mathbf{Y})\\
+&= E[<\mathbf{a}^T \mathbf{X}, \mathbf{b}^T \mathbf{Y}>] 
+= E[ (\mathbf{a}^T\mathbf{X}) (\mathbf{b}^T \mathbf{Y})^T] \\
+&= \mathbf{a}^T E(\mathbf{X} \mathbf{Y}^T) \mathbf{b} 
+= \mathbf{a}^T \mathbf{S}_{XY} \mathbf{b}
 \end{aligned}
 $$
 
 则优化目标可以转化为：
 
 $$
-\arg\max_{\mathbf{w}_x,\mathbf{w}_y}\frac{\mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y}{\sqrt{\mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y}}
+\arg\max_{\mathbf{a},\mathbf{b}}\frac{\mathbf{a}^T \mathbf{S}_{XY} \mathbf{b}}{\sqrt{\mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b}}}
 $$
 
 可以采用和SVM类似的优化方法，固定分母，优化分子，具体的转化为：
 
 $$
-\arg\max_{\mathbf{w}_x,\mathbf{w}_y} \mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y \\
-\text{s.t.}\quad \mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x = 1, \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y = 1
+\arg\max_{\mathbf{a},\mathbf{b}} \mathbf{a}^T \mathbf{S}_{XY} \mathbf{b} \\
+\text{s.t.}\quad \mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} = 1, \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b} = 1
 $$
 
-也就是说，我们的CCA算法的目标最终转化为一个凸优化过程，只要我们求出了这个优化目标的最大值，就是我们前面提到的多维 $\mathbf{X}$ 和 $\mathbf{Y}$ 的相关性度量，而对应的 $\mathbf{w}_x,\mathbf{w}_y$ 则为降维时的投影向量，或者说线性系数。
+也就是说，算法的目标最终转化为一个凸优化过程，只要我们求出了这个优化目标的最大值，就是我们前面提到的多维 $\mathbf{X}$ 和 $\mathbf{Y}$ 的相关性度量，而对应的 $\mathbf{a},\mathbf{b}$ 则为降维时的投影向量，或者说线性系数。
 
-假设多导 EEG 脑电信号 $\mathbf{X}\in\mathbb{R}^{L\times N}$, SSVEP 模板信号为 $$\mathbf{Y}^{\{q\}}\in\mathbb{R}^{l\times N}$$, 则最大典型相关 $\rho_{max}$ 可以被用来识别 SSVEP 目标。记为
+
+对于上面的优化目标，我们可以做一次矩阵标准化，就可以用SVD来求解了。首先，我们令 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$，有
 
 $$
-\begin{aligned}
-\rho_{max}^{\{q\}} &= \max_{\mathbf{w}_{x},\mathbf{w}_{y}}\frac{\mathbf{w}_{x}^{T}E\left(\mathbf{XY}^{\{q\}^{T}}\right)\mathbf{w}_{y}^{T}}{\sqrt{E\left(\mathbf{w}_{x}^{T}\mathbf{XX}^{T}\mathbf{w}_{x}\right)E\left(\mathbf{w}_{y}^{T}\mathbf{Y}^{\{q\}}\mathbf{Y}^{\{q\}^{T}}\mathbf{w}_{y}\right)}}
-\end{aligned}
+\mathbf{a}^T\mathbf{S}_{XX}\mathbf{a} =1 \Rightarrow \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XX}\mathbf{S}_{XX}^{-1/2}\mathbf{u} =1  \Rightarrow  \mathbf{u}^T\mathbf{u}=1 \\ 
+\mathbf{b}^T\mathbf{S}_{YY}\mathbf{b} =1 \Rightarrow \mathbf{v}^T\mathbf{S}_{YY}^{-1/2}\mathbf{S}_{YY}\mathbf{S}_{YY}^{-1/2}v=1  \Rightarrow  \mathbf{v}^T\mathbf{v}=1 \\ 
+\mathbf{a}^T\mathbf{S}_{XY}\mathbf{b} = \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v}
 $$
 
-其中第 $q$ 个可能目标，对应的模板信号 $$\mathbf{Y}^{\{q\}}$$
 
+也就是说，我们的优化目标变成
+
+$$
+\arg\max_{\mathbf{u},\mathbf{v}} \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} \\
+\text{s.t.} \quad \mathbf{u}^T\mathbf{u}=1, \mathbf{v}^T\mathbf{v}=1
+$$
+
+如果将 $\mathbf{u},\mathbf{v}$ 看成矩阵 $$\mathbf{M} =\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2} $$ 的某一个奇异值左右奇异向量，那么利用奇异值分解，我们可以得到 
+
+$$
+ \mathbf{M} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T
+$$
+
+其中 $\mathbf{U},\mathbf{V}$ 为正交矩阵，$\mathbf{\Sigma}$ 为对角矩阵，对角线上的元素为奇异值。由于 $\mathbf{U},\mathbf{V}$ 的每一列都是标准正交基，因此 $ \mathbf{u}^T\mathbf{U} $ 和 $ \mathbf{v}^T\mathbf{V} $ 会得到一个只有一个标量值为1，其余标量值为0的向量。此时我们有
+
+$$
+\mathbf{u}^T\mathbf{M}\mathbf{v} = \mathbf{u}^T\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T\mathbf{v} = \sigma_{uv}
+$$
+
+也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。
 
 ## Ref:
 
 1. Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
 
+3. [论文笔记] 高维数据矩阵相关性：[https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
+
+4. 典型关联分析(CCA)原理总结：[https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
+
 2. 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
-
-3. [论文笔记] 高维数据矩阵相关性: [https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
-
-4. [https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
