@@ -6,16 +6,18 @@ article_header:
   type: overlay
   theme: dark
   background_color: '#203028'
-#   background_image:
-#     gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .5),  rgba(255, 255, 255 , .0))'
-#     src:  /pictures/ANYmal.png
+  background_image:
+    gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .5),  rgba(255, 255, 255 , .0))'
+    # src:  /pictures/BCI/大脑皮层.png
 ---
+
+<!--more-->
 
 大脑分为四个叶：额叶、顶叶、枕叶和颞叶。中央沟将额叶与顶叶分开。它还分离中央前回（红色表示）和中央后回（蓝色表示）。颞叶和额叶被侧裂分开。枕叶位于大脑的后部。以下皮层区域对脑机接口特别重要：**运动区、体感皮层、后顶叶皮层和视觉皮层。**
 
 ![](/pictures/BCI/大脑皮层.png)
 
-<!--more-->
+
 
 ## 脑机接口分类
 
@@ -90,8 +92,59 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 ![](/pictures/BCI/不同频率范围刺激下%20SSVEP%20响应曲线示意图.png)
 
 
+## 常用算法
+
+### 典型关联分析(Canonical Correlation Analysis, CCA)
+
+CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。在统计学中，**皮尔逊积矩相关系数（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
+
+$$
+\rho(\mathbf{x},\mathbf{y}) = \frac{\text{cov}(\mathbf{x},\mathbf{y})}{\sqrt{D(\mathbf{x})}\sqrt{D(\mathbf{y})}}
+$$
+
+高维数据难以计算矩阵相关性的原因有以下几点：
+- **维度灾难**：随着维度的增加，数据的样本量通常远小于变量数，样本点在高维空间中变得稀疏。假设有两个变量之间存在一些相关性，但是由于维度灾难，很可能只有少数几个样本点实际上能够展现这种关系。这会导致计算协方差时的样本点不足，产生不准确的估计。而且，高维空间中的任意两个向量之间的夹角较大，相关性的度量也变得不敏感，导致矩阵相关性的估计不稳定，容易受到异常值的影响，在低样本量时存在过高偏倚；
+- **计算量**：高维数据的矩阵相关性的计算量很大，需要对两个矩阵进行交叉乘积，然后求解特征值和特征向量，这在维数很高时会非常耗时，目前稀疏矩阵的计算仍然是难题。
+
+**CCA 的主要思想是将高维的两组数据分别降维到1维，然后用相关系数分析相关性**。但是有一个问题是，降维的标准是如何选择的呢？回想下主成分分析 PCA，降维的原则是投影方差最大；再回想下线性判别分析 LDA，降维的原则是同类的投影方差小，异类间的投影方差大。**CCA 选择的投影标准是降维后两组数据的 PCCs 最大**。
+
+对于两组多元变量 $$\mathbf{X}_{n_1\times m}\in\mathbb{R}^{L_1\times N}$$，$$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
+
+$$
+\mathbf{x} = \mathbf{w}_x^T \mathbf{X} \\ 
+\mathbf{y} = \mathbf{w}_y^T \mathbf{Y}
+$$
+
+CCA 的优化目标是最大化相关系数 $$\rho(\mathbf{x}, \mathbf{y})$$ 得到对应的投影向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$
+
+$$
+\arg\max_{\mathbf{w}_x,\mathbf{w}_y}\rho(\mathbf{x}, \mathbf{y})
+$$
+
+在投影前，我们一般会把原始数据进行标准化，得到均值为0而方差为1的数据X和Y。这样我们有：
+
+$$ 
+\text{cov} (\mathbf{x}, \mathbf{y}) = \text{cov}(\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}) = \text{E}[<\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}>] = \text{E}[ (\mathbf{w}_x^T) (\mathbf{X}, \mathbf{w}_y^T \mathbf{Y})^T] = 
+\mathbf{w}_x^T \mathbf{X}^T \mathbf{Y} \mathbf{w}_y 
+$$
+
+
+假设多导 EEG 脑电信号 $\mathbf{X}\in\mathbb{R}^{L\times N}$, SSVEP 模板信号为 $$\mathbf{Y}^{\{q\}}\in\mathbb{R}^{l\times N}$$, 则最大典型相关 $\rho_{max}$ 可以被用来识别 SSVEP 目标。记为
+
+$$
+\begin{aligned}
+\rho_{max}^{\{q\}} &= \max_{\mathbf{w}_{x},\mathbf{w}_{y}}\frac{\mathbf{w}_{x}^{T}\mathbf{XY}^{\{q\}^{T}}\mathbf{w}_{y}^{T}\mathbf{XY}^{\{q\}^{T}}\mathbf{w}_{y}^{T}}{\sqrt{(\mathbf{w}_{x}^{T}\mathbf{XX}^{T}\mathbf{w}_{x})\left(\mathbf{w}_{y}^{T}\mathbf{Y}^{\{q\}}\mathbf{Y}^{\{q\}^{T}}\mathbf{w}_{y}\right)}}
+\end{aligned}
+$$
+
+其中第 $q$ 个可能目标，对应的模板信号 $$\mathbf{Y}^{\{q\}}$$
+
+
 ## Ref:
 
-[1] Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
+1. Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
 
-[2] 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
+2. 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
+
+3. [论文笔记] 高维数据矩阵相关性: [https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
+
