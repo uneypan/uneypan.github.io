@@ -94,7 +94,7 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 
 ## 常用算法
 
-### 典型关联分析(Canonical Correlation Analysis, CCA)
+### 典型相关分析(Canonical Correlation Analysis, CCA)
 
 CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。在统计学中，**皮尔逊积矩相关系数（英语：Pearson product-moment correlation coefficient，缩写：PPMCC 或 PCCs，有时简称相关系数）用于度量两组数据的变量之间的线性相关的程度**。假设有两组一维的数据集 $\mathbf{x}$ 和 $\mathbf{y}$，则 PCCs 定义为
 
@@ -102,13 +102,13 @@ $$
 \rho(\mathbf{x},\mathbf{y}) = \frac{\text{cov}(\mathbf{x},\mathbf{y})}{\sqrt{D(\mathbf{x})}\sqrt{D(\mathbf{y})}}
 $$
 
-高维数据难以计算矩阵相关性的原因有以下几点：
-- **维度灾难**：随着维度的增加，数据的样本量通常远小于变量数，样本点在高维空间中变得稀疏。假设有两个变量之间存在一些相关性，但是由于维度灾难，很可能只有少数几个样本点实际上能够展现这种关系。这会导致计算协方差时的样本点不足，产生不准确的估计。而且，高维空间中的任意两个向量之间的夹角较大，相关性的度量也变得不敏感，导致矩阵相关性的估计不稳定，容易受到异常值的影响，在低样本量时存在过高偏倚；
+但是PCCs不能直接用于高维数据，高维数据难以计算矩阵相关性的原因有以下几点：
+- **维度灾难**：随着维度的增加，数据的样本量通常远小于变量数，样本点在高维空间中变得稀疏。假设有两个变量之间存在一些相关性，但是由于维度灾难，很可能只有少数几个样本点实际上能够展现这种关系。这会导致计算协方差时的样本点不足，产生不准确的估计。而且，高维空间中的任意两个向量之间的夹角较大，相关性的度量也变得不敏感，导致矩阵相关性的估计不稳定，容易受到异常值的影响，而且在低样本量时存在过高偏倚；
 - **计算量**：高维数据的矩阵相关性的计算量很大，需要对两个矩阵进行交叉乘积，然后求解特征值和特征向量，这在维数很高时会非常耗时，目前稀疏矩阵的计算仍然是难题。
 
 **CCA 的主要思想是将高维的两组数据分别降维到1维，然后用相关系数分析相关性**。但是有一个问题是，降维的标准是如何选择的呢？回想下主成分分析 PCA，降维的原则是投影方差最大；再回想下线性判别分析 LDA，降维的原则是同类的投影方差小，异类间的投影方差大。**CCA 选择的投影标准是降维后两组数据的 PCCs 最大**。
 
-对于两组多元变量 $$\mathbf{X}_{n_1\times m}\in\mathbb{R}^{L_1\times N}$$，$$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
+对于两组多元变量 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，$$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{w}_x$ 和 $\mathbf{w}_y$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
 
 $$
 \mathbf{x} = \mathbf{w}_x^T \mathbf{X} \\ 
@@ -121,19 +121,53 @@ $$
 \arg\max_{\mathbf{w}_x,\mathbf{w}_y}\rho(\mathbf{x}, \mathbf{y})
 $$
 
-在投影前，我们一般会把原始数据进行标准化，得到均值为0而方差为1的数据X和Y。这样我们有：
 
-$$ 
-\text{cov} (\mathbf{x}, \mathbf{y}) = \text{cov}(\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}) = \text{E}[<\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}>] = \text{E}[ (\mathbf{w}_x^T) (\mathbf{X}, \mathbf{w}_y^T \mathbf{Y})^T] = 
-\mathbf{w}_x^T \mathbf{X}^T \mathbf{Y} \mathbf{w}_y 
+在投影前，我们一般会把原始数据进行标准化，对于每个特征，计算其平均值和标准差。然后，对每个特征的每个数据点减去平均值后除以标准差，得到 $\mathbf{X}$ 和 $\mathbf{Y}$ 为每个特征的均值为 0 而方差为 1 的数据，即 $E(\mathbf{X}) = \mathbf{0}$， $D(\mathbf{X}) = \mathbf{I}$。
+
+记 $$\mathbf{s}_{XX} = \text{cov}(\mathbf{X},\mathbf{X})$$，$$\mathbf{s}_{YY} = \text{cov}(\mathbf{Y},\mathbf{Y})$$， $$\mathbf{s}_{XY} = \text{cov}(\mathbf{X},\mathbf{Y})$$ 有：
+
+$$
+\mathbf{s}_{XX} = \text{cov}(\mathbf{X},\mathbf{X}) = E(\mathbf{X}\mathbf{X}^T) - E(\mathbf{X})E(\mathbf{X})^T = E(\mathbf{X}\mathbf{X}^T)，\\
+\mathbf{s}_{YY} = E(\mathbf{Y}\mathbf{Y}^T), \mathbf{s}_{XY} = E(\mathbf{X}\mathbf{Y}^T)
 $$
 
+于是，可以得到 $\mathbf{x},\mathbf{y}$ 的方差和协方差为
+
+$$
+D(\mathbf{x}) = D(\mathbf{w}_x^T \mathbf{X}) = \mathbf{w}_x^T E(\mathbf{X} \mathbf{X}^T) \mathbf{w}_x  = \mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x \\
+D(\mathbf{y}) = D(\mathbf{w}_y^T \mathbf{Y}) = \mathbf{w}_y^T E(\mathbf{Y} \mathbf{Y}^T) \mathbf{w}_y  = \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y
+$$
+
+$$ 
+\begin{aligned}
+\text{cov} (\mathbf{x}, \mathbf{y}) &= \text{cov}(\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y})\\
+&= E[<\mathbf{w}_x^T \mathbf{X}, \mathbf{w}_y^T \mathbf{Y}>] 
+= E[ (\mathbf{w}_x^T\mathbf{X}) (\mathbf{w}_y^T \mathbf{Y})^T] \\
+&= \mathbf{w}_x^T E(\mathbf{X} \mathbf{Y}^T) \mathbf{w}_y 
+= \mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y
+\end{aligned}
+$$
+
+则优化目标可以转化为：
+
+$$
+\arg\max_{\mathbf{w}_x,\mathbf{w}_y}\frac{\mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y}{\sqrt{\mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y}}
+$$
+
+可以采用和SVM类似的优化方法，固定分母，优化分子，具体的转化为：
+
+$$
+\arg\max_{\mathbf{w}_x,\mathbf{w}_y} \mathbf{w}_x^T \mathbf{s}_{XY} \mathbf{w}_y \\
+\text{s.t.}\quad \mathbf{w}_x^T \mathbf{s}_{XX} \mathbf{w}_x = 1, \mathbf{w}_y^T \mathbf{s}_{YY} \mathbf{w}_y = 1
+$$
+
+也就是说，我们的CCA算法的目标最终转化为一个凸优化过程，只要我们求出了这个优化目标的最大值，就是我们前面提到的多维 $\mathbf{X}$ 和 $\mathbf{Y}$ 的相关性度量，而对应的 $\mathbf{w}_x,\mathbf{w}_y$ 则为降维时的投影向量，或者说线性系数。
 
 假设多导 EEG 脑电信号 $\mathbf{X}\in\mathbb{R}^{L\times N}$, SSVEP 模板信号为 $$\mathbf{Y}^{\{q\}}\in\mathbb{R}^{l\times N}$$, 则最大典型相关 $\rho_{max}$ 可以被用来识别 SSVEP 目标。记为
 
 $$
 \begin{aligned}
-\rho_{max}^{\{q\}} &= \max_{\mathbf{w}_{x},\mathbf{w}_{y}}\frac{\mathbf{w}_{x}^{T}\mathbf{XY}^{\{q\}^{T}}\mathbf{w}_{y}^{T}\mathbf{XY}^{\{q\}^{T}}\mathbf{w}_{y}^{T}}{\sqrt{(\mathbf{w}_{x}^{T}\mathbf{XX}^{T}\mathbf{w}_{x})\left(\mathbf{w}_{y}^{T}\mathbf{Y}^{\{q\}}\mathbf{Y}^{\{q\}^{T}}\mathbf{w}_{y}\right)}}
+\rho_{max}^{\{q\}} &= \max_{\mathbf{w}_{x},\mathbf{w}_{y}}\frac{\mathbf{w}_{x}^{T}E\left(\mathbf{XY}^{\{q\}^{T}}\right)\mathbf{w}_{y}^{T}}{\sqrt{E\left(\mathbf{w}_{x}^{T}\mathbf{XX}^{T}\mathbf{w}_{x}\right)E\left(\mathbf{w}_{y}^{T}\mathbf{Y}^{\{q\}}\mathbf{Y}^{\{q\}^{T}}\mathbf{w}_{y}\right)}}
 \end{aligned}
 $$
 
@@ -148,3 +182,4 @@ $$
 
 3. [论文笔记] 高维数据矩阵相关性: [https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
 
+4. [https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
