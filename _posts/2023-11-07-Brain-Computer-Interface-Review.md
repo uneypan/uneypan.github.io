@@ -213,6 +213,34 @@ $$
 
 也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。
 
+### 共空间模式(Common Spatial Pattern, CSP)
+
+Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方法，特别是用于脑电信号的处理。CSP 的目标是找到一组空间滤波器，能够最大程度地增强目标类别的信号并最小程度地增强非目标类别的信号。
+
+下面是 CSP 算法的一个简单形式：
+
+假设我们有两个类别，分别用 $X_1$ 和 $X_2$ 表示，其中 $X_1$ 是目标类别，$X_2$ 是非目标类别。令 $C_1$ 和 $C_2$ 分别表示两个类别的协方差矩阵。
+
+1. 计算类别的协方差矩阵：
+
+   $$ C_1 = \frac{1}{T_1} \sum_{t=1}^{T_1} x_{1t} \cdot x_{1t}^T $$
+
+   $$ C_2 = \frac{1}{T_2} \sum_{t=1}^{T_2} x_{2t} \cdot x_{2t}^T $$
+
+   其中 $T_1$ 和 $T_2$ 分别是两个类别的样本数，$x_{1t}$ 和 $x_{2t}$ 是第 $t$ 个样本的特征向量。
+
+2. 计算类别的混合协方差矩阵：
+
+   $$ C = C_1 + C_2 $$
+
+3. 对 $C$ 进行广义特征值分解，得到矩阵 $W$ 和对角矩阵 $D$，其中 $C \cdot W = W \cdot D$。
+
+4. 选择前 $m$ 个特征值对应的特征向量，构成空间滤波器矩阵 $W_{CSP}$。
+
+最终，使用 $W_{CSP}$ 对原始信号进行空间滤波，得到在这组滤波器下的特征向量。
+
+
+
 ## Ref:
 
 1. Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
