@@ -186,8 +186,8 @@ $$
 对于上面的优化目标，我们可以做一次矩阵标准化，就可以用SVD来求解了。首先，我们令 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$，有
 
 $$
-\mathbf{a}^T\mathbf{S}_{XX}\mathbf{a} =1 \Rightarrow \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XX}\mathbf{S}_{XX}^{-1/2}\mathbf{u} =1  \Rightarrow  \mathbf{u}^T\mathbf{u}=1 \\ 
-\mathbf{b}^T\mathbf{S}_{YY}\mathbf{b} =1 \Rightarrow \mathbf{v}^T\mathbf{S}_{YY}^{-1/2}\mathbf{S}_{YY}\mathbf{S}_{YY}^{-1/2}v=1  \Rightarrow  \mathbf{v}^T\mathbf{v}=1 \\ 
+\mathbf{a}^T\mathbf{S}_{XX}\mathbf{a} =1 \Rightarrow \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XX}\mathbf{S}_{XX}^{-1/2}\mathbf{u} = 1  \Rightarrow  \mathbf{u}^T\mathbf{u}=1 \\ 
+\mathbf{b}^T\mathbf{S}_{YY}\mathbf{b} =1 \Rightarrow \mathbf{v}^T\mathbf{S}_{YY}^{-1/2}\mathbf{S}_{YY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} = 1  \Rightarrow  \mathbf{v}^T\mathbf{v}=1 \\ 
 \mathbf{a}^T\mathbf{S}_{XY}\mathbf{b} = \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v}
 $$
 
@@ -215,7 +215,7 @@ $$
 
 ### 共空间模式(Common Spatial Pattern, CSP)
 
-Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方法，特别是用于脑电信号的处理。CSP 的目标是找到一组空间滤波器，能够最大程度地增强目标类别的信号并最小程度地增强非目标类别的信号。
+Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方法，特别是用于脑电信号的处理。**CSP 的目标是找到一组空间滤波器，能够最大程度地增强目标类别的信号，并最小程度地增强非目标类别的信号**。
 
 下面是 CSP 算法的一个简单形式：
 
@@ -240,6 +240,11 @@ Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方�
 最终，使用 $W_{CSP}$ 对原始信号进行空间滤波，得到在这组滤波器下的特征向量。
 
 
+$$
+R = R_1 + R_2...(1) 混合协方差\\ R = U\Lambda U^T...(2) 特征值分解\\ P = \sqrt{\Lambda^{-1}}U...(3) 白化\\ S_1 = PR_1P^T, S_2 = PR_2P^T...(4)\\ S_1 = B_1\Lambda_1B_1^T, S_2 = B_2\Lambda_2B_2^T...(5)特征值分解\\ B_1 = B_2 = B...(6)特征向量矩阵共享\\ W = B^TP...(7)最后学习到变换矩阵\\
+
+$$
+
 
 ## Ref:
 
@@ -250,3 +255,5 @@ Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方�
 4. 典型关联分析(CCA)原理总结：[https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
 
 2. 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
+
+5. CSP共空间模式一些公式的证明：[https://zhuanlan.zhihu.com/p/142635961](https://zhuanlan.zhihu.com/p/142635961)
