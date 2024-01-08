@@ -246,6 +246,46 @@ Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方�
 
 
 
+脑电图 (EEG) 信号表示大脑的电活动。它们以微伏 (μV) 为单位进行测量。有多种方法可以从这些信号中收集原始数据。从脑电图信号中提取的一些重要频率是 delta（频率范围：0-4  Hz，主要负责深度睡眠、自然治疗和免疫系统）、theta（频率范围：4-8  Hz，代表创造力、情绪状态） 、放松）、α（频率范围：8-12  Hz，代表专注和放松的能力）、β（频率范围：12-40  Hz，负责有意识的专注和解决问题的能力）、gamma （频率范围：40–100  Hz，涉及感官结合、认知和学习）。上述频率代表了脑电图信号成分的主要分类。
+
+## Preprocessing
+Covariance Matrix Adaptation Evolution Strategy (CMA-ES)
+
+## Feature extraction techniques
+
+Principal Component Analysis (PCA) 
+Independent Component Analysis (ICA) 
+Fast fourier transform (FFT)
+Short Term Fourier Transform (STFT)
+Auto Regressive Model (AR)
+Wavelet Transform (WT)
+Wavelet Packet Transform (WPT)
+Wavelet Packet Best Basis Decomposition (WPBBD)
+Wavelet Packet Decomposition (WPD)
+Power Spectrum Density (PSD)
+Common spatial pattern (CSP)
+Common Spatio-Spectral Pattern (CSSP)
+Common Sparse Spectral-Spatial Pattern (CSSSP)
+Sub Band Common Spatial Pattern (SBCSP)
+Filter Bank Common Spatial Pattern (FBCSP)
+Discriminative FBCSP (DFBCSP)
+Separable Common Spatio Spectral Patterns (SCSSP)
+
+## Classification techniques
+
+Linear Discriminate Analysis (LDA)
+Regularized Fisher LDA
+Support vector machine (SVM)
+Transition Detection based SVM (TD-SVM)
+Neural network (NN)
+Multilayer Perceptron (MLP)
+Radial Basis Function (RBF)
+Online Meta neuron based Learning Algorithm (OMLA)
+Deep learning
+Deep Belief Network (DBN)
+Convolutional Neural Network (CNN)
+
+
 ## Ref:
 
 1. Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
