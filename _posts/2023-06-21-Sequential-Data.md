@@ -1,6 +1,6 @@
 ---
 layout: article
-title: 顺序数据
+title: PRML笔记 Ch13.顺序数据
 mathjax: true
 article_header:
   type: overlay

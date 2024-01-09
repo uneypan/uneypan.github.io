@@ -1,6 +1,6 @@
 ---
 layout: article
-title: EM算法
+title: PRML笔记 Ch9.EM算法
 mathjax: true
 article_header:
   type: overlay

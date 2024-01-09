@@ -1,6 +1,6 @@
 ---
 layout: article
-title: 概率图模型
+title: PRML笔记 Ch8.概率图模型
 mathjax: true
 article_header:
   type: overlay
