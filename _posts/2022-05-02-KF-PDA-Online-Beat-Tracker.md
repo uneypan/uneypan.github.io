@@ -18,7 +18,7 @@ mathjax: true
 
 分帧：将源音频（44.1 kHz）按每帧 1024 个采样点、步长128 点分割，产生一系列采样率约为 344.5 Hz 的帧
 
-对数能量谱：每一帧都乘以汉宁窗，然后用离散傅里叶变换计算对数幅值谱 $L_P$。假设幅值谱用 $|{X(k,n)}|$ 表示，那么对数能量谱就是
+对数能量谱：每一帧都乘以汉宁窗，然后用离散傅里叶变换计算对数幅值谱 $L_P$。假设幅值谱用 $\lvert{X(k,n)}\lvert$ 表示，那么对数能量谱就是
 
 $$
 L_P (k,n) = \ln{(1+1000.0 \cdot |{X(k,n)}|)};
@@ -38,7 +38,7 @@ $$
 
 音符起始点（Onset）是表示音符开始瞬间的标记，属于节拍的底层结构。一个节拍跟踪器要实现的目标在于，拟合检测到的起始点的同时产生一个有规律的节拍序列。这里主要利用梅尔频率倒谱系数（MFCC）的差分来检测音符起始点。MFCC 能够很好地反映音乐中的击打事件和和声变化，具体来说，第 0 阶系数能准确表示梅尔标度能量，而 1～3 阶系数能很好地捕捉到和声的能量变化。具体步骤如下
 
-MFCC：使用 26 通道的三角梅尔滤波器组将幅值谱 $|{X(k,n)}|$ 映射到的梅尔尺度，同样取对数得到对数功率谱，然后离散余弦变换（DCT）得到 MFCC ；
+MFCC：使用 26 通道的三角梅尔滤波器组将幅值谱 $\lvert{X(k,n)}\lvert$ 映射到的梅尔尺度，同样取对数得到对数功率谱，然后离散余弦变换（DCT）得到 MFCC ；
 
 对 0～4 阶 MFCC 对时间的正向差分进行求和得到起始点能量包络；FIR 滤波器进行低通滤波，然后进行半波整流，只保留能量正向跳变；
 
@@ -90,7 +90,7 @@ $$
 
 其中 $\mathbf{x}(k) = \begin{bmatrix} \hat{\tau}(k) \\ \hat{\Delta}(k) \end{bmatrix}$ 是 $2$ 维状态向量，$\hat{\tau}(k)$ 是节拍时间，$\hat{\Delta}(k)$ 是节拍周期；
 
-$\mathbf{z}(k)$ 是观测到的节拍位置；$\mathbf{F}(k) = \begin{bmatrix} 1&1\\0&1\end{bmatrix}$是传递矩阵，$\mathbf{H}(k) = \begin{bmatrix} 1&0\end{bmatrix}$ 是观测矩阵；
+$\mathbf{z}(k)$ 是观测到的节拍位置；$$\mathbf{F}(k) = \begin{bmatrix} 1&1\\0&1\end{bmatrix}$$是传递矩阵，$\mathbf{H}(k) = \begin{bmatrix} 1&0\end{bmatrix}$ 是观测矩阵；
 
 过程噪声 $\mathbf{w}(k) \sim \mathbf{N}(0,\mathbf{Q}(k))$ ，测量噪声 $\mathbf{y}(k) \sim \mathbf{N}(0,\mathbf{R}(k))$  均服从正态分布。
 
@@ -149,6 +149,7 @@ $$
 **数据关联**
 
 如果有效观测的数量 $m(k)>1$ ，则需要进行数据关联。已知 $m(k)$ 个观测拍的位置和起始点强度，根据全概率公式，后验状态估计可以写成
+
 $$
 \begin{aligned}
 \hat{\mathbf{x}}(k\mid k) =& E[\mathbf{x}(k)\mid \mathbf{I}_{\mathbf{z}}(k),\mathbf{Z}^k] \\ 
@@ -159,6 +160,7 @@ P[\theta_i(k)\mid \mathbf{I}_{\mathbf{z}},\mathbf{Z}^k]\\
 $$
 
 其中，$\mathbf{I}_{\mathbf{z}}(k)$ 是有效观测集 $\mathbf{Z}(k)$ 的起始点强度，$\mathbf{Z}^k = \{\mathbf{Z}(j),j=1,2,...,k\}$ 表示累积历史观测，$\theta_i(k)$ 表示事件第 $i$ 个有效观测 $z_i(k)$ 来源于目标。以观测拍的位置和强度为条件，其为正确观测的概率由残差和起始点强度两部分组成。由贝叶斯公式，最终的概率权重是两部分的乘积
+
 $$
 \begin{aligned}
 \beta_i(k) &\triangleq P[\theta_i(k)\mid \mathbf{I}_{\mathbf{z}},\mathbf{Z}^k]\\
@@ -168,6 +170,7 @@ $$
 $$
 
 对于带有均匀杂波空间的 PDA 模型，由残差取得的第 $i$ 个有效观测 $z_i(k)$ 是正确观测的概率是
+
 $$
 \begin{aligned}
 &\beta_{\nu,i}(k)\triangleq P[\theta_i(k)\mid \mathbf{Z}^k]=
@@ -186,6 +189,7 @@ $$
 实践发现，由于残差协方差 $S(k)$ 往往很小，由残差取得的概率权重 $\beta_{\nu,i},i=1,...,m(k)$ 也很小，使得更新后的协方差非常容易发散。
 
 简便起见，实践中对于 PDA 的假设作出一些简化。首先认为正确节拍被必然探测到，即 $P_D = 0$。然后假设没有错误观测，只使用观测的似然函数作为概率权重，并且由关联门的定义可得
+
 $$
 \begin{aligned}
 &\beta_{\nu,i}(k)=
@@ -198,11 +202,15 @@ P_G\frac{\mathcal{L}_{i}(k)}{\sum_{j=1}^{m(k)} \mathcal{L}_{j}(k)}, & i=1, \ldot
 其中, \quad &\mathcal{L}_{i}(k) \triangleq \mathcal{N}\left[z_{i}(k) ; \hat{z}(k \mid k-1), S(k)\right]
 \end{aligned}
 $$
+
 由于观测拍的正确概率关于强度分布的不易取得，但是通过统计可以发现节拍的起始点通常比非节拍的起始点有更高的强度分布。简单按照能量强度线性地分配概率权重。于是，由起始点强度取得的第 $i$ 个有效观测的概率可以写成
+
 $$
 \beta_{I,i} (k)\triangleq P[\mathbf{I}_{\mathbf{z}} \mid \theta_i(k),\mathbf{Z}^k]= \frac{O(z_i(k))}{\sum_{i=1}^{m(k)}{O(z_i(k))}}, 	\quad i=1, \ldots, m(k)
 $$
+
 在概率数据关联的公式中，最终的权重是两部分概率的相乘，这导致我们无法调节残差与强度对于跟踪的重要性的贡献比例。于是，这里引入一个加权系数 $\alpha$ 对两项的比例进行加和，实践发现强度对于跟踪的影响较大。
+
 $$
 \beta_i(k) = \alpha\beta_{\nu,i}(k) + (1-\alpha)\beta_{I,i}(k)
 $$
@@ -210,6 +218,7 @@ $$
 **更新步骤**
 
 先计算卡尔曼增益
+
 $$
 \mathbf{W}(k)= \mathbf{P}(k|k-1)\mathbf{H}(k)'\mathbf{S}(k)^{-1}
 $$
@@ -219,6 +228,7 @@ $$
 **a)**  如果有效观测的数量 $m(k)=1$，则更新步与一般卡尔曼滤波相同，即
 
 残差、后验状态估计及对应协方差
+
 $$
 \begin{aligned}
 &\nu(k) = {z}(k)-\hat{{z}}({k\mid k-1})\\
@@ -230,6 +240,7 @@ $$
 **b)**  如果有效观测的数量 $m(k)\ge 1$，则需对更新公式进行修改，先计算每一个观测的残差，然后使用概率数据关联得到的概率权重进行加权，得到
 
 加权残差
+
 $$
 \begin{aligned}
 &{\nu}_{i}(k) \triangleq {z}_{i}(k)-\hat{{z}}({k\mid k-1})\\
@@ -238,13 +249,24 @@ $$
 $$
 
 修改后的后验状态估计及对应协方差为
+
 $$
-\begin{aligned}
-&\hat{\mathbf{x}}(k\mid k)=\hat{\mathbf{x}}(k\mid k-1) + \mathbf{W}(k)\nu(k)\\
-&\mathbf{P}(k \mid k)=\beta_{0}(k) \mathbf{P}(k \mid k-1)+\left[1-\beta_{0}(k)\right] \mathbf{P}^{c}(k \mid k)+\widetilde{\mathbf{P}}(k)\\
-其中, \quad &\mathbf{P}^{c}(k \mid k)=\mathbf{P}(k \mid k-1)-\mathbf{W}(k) \mathbf{S}(k) \mathbf{W}(k)^{\prime}\\
-&\widetilde{\mathbf{P}}(k) \triangleq \mathbf{W}(k)\left[\sum_{i=1}^{m(k)} \beta_{i}(k) \nu_{i}(k) \nu_{i}(k)^{\prime}-\nu(k) \nu(k)^{\prime}\right] \mathbf{W}(k)^{\prime}
-\end{aligned}
+
+\hat{\mathbf{x}}(k\mid k)=\hat{\mathbf{x}}(k\mid k-1) + \mathbf{W}(k)\nu(k)
+$$
+
+$$
+\mathbf{P}(k \mid k)=\beta_{0}(k) \mathbf{P}(k \mid k-1)+\left[1-\beta_{0}(k)\right] \mathbf{P}^{c}(k \mid k)+\widetilde{\mathbf{P}}(k)
+$$
+
+其中, 
+
+$$
+\mathbf{P}^{c}(k \mid k)=\mathbf{P}(k \mid k-1)-\mathbf{W}(k) \mathbf{S}(k) \mathbf{W}(k)^{\prime}
+$$
+
+$$
+\widetilde{\mathbf{P}}(k) \triangleq \mathbf{W}(k)\left[\sum_{i=1}^{m(k)} \beta_{i}(k) \nu_{i}(k) \nu_{i}(k)^{\prime}-\nu(k) \nu(k)^{\prime}\right] \mathbf{W}(k)^{\prime}
 $$
 
 

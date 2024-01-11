@@ -73,13 +73,7 @@ $$\begin{aligned}
 &\mathbf{P}_{k \mid k-1}=\boldsymbol{\Phi}_{k} \mathbf{P}_{k-1 \mid k-1} \boldsymbol{\Phi}_{k}^{\mathrm{T}}+\mathbf{Q}_{k-1}
 \end{aligned}$$
 
-其中 
-
-$\Phi_{k} = \left[\begin{array}{ll}1 & 1 \\ 0 & 1\end{array}\right]$；
-
-$\hat{\mathbf{x}}_{k \mid k-1}$ 和 $\mathbf{P}_{k \mid k-1}$ 分别表示预测状态和协方差；
-
-过程噪声 $\mathbf{w}_{k} \sim N\left(\mathbf{0}, \mathbf{Q}_{k}\right)$；
+其中 $$\boldsymbol{\Phi}_{k} = \left[\begin{array}{ll}1 & 1 \\ 0 & 1\end{array}\right]$$；$$\hat{\mathbf{x}}_{k \mid k-1}$$ 和 $$\mathbf{P}_{k \mid k-1}$$ 分别表示预测状态和协方差；过程噪声 $$\mathbf{w}_{k} \sim N\left(\mathbf{0}, \mathbf{Q}_{k}\right)$$；
 
 卡尔曼滤波更新阶段为：  
 
@@ -92,7 +86,7 @@ $$\begin{aligned}
 
 其中  $\mathbf{K}_{k}$ 是卡尔曼增益；
 
-$\hat{\mathbf{x}}_{k \mid k}$ 和 $\mathbf{P}_{k \mid k}$ 分别表示第 $k$ 步滤波得到的状态和协方差； 
+$$\hat{\mathbf{x}}_{k \mid k}$$ 和 $$\mathbf{P}_{k \mid k}$$ 分别表示第 $k$ 步滤波得到的状态和协方差； 
 
 $\mathbf{M}_{k}=\left[\begin{array}{ll}1 & 0\end{array}\right]$, 
 
@@ -147,15 +141,13 @@ $$ \begin{aligned}
 & \propto p\left[I_{Y}(k) \mid \theta_{i}(k), \mathbf{Y}^{k}\right] p\left[\theta_{i}(k) \mid \mathbf{Y}^{k}\right]
 \end{aligned} $$
 
-其中$ I_{Y}(\cdot) $ 是重音持续时间的分布函数；$ \beta_{i}(k) $第一项由候选拍的重音强度贡献，第二项由候选拍的位置误差贡献。由文献[11]，第一项可以写为  
+其中 $$I_{Y}(\cdot)$$ 是重音持续时间的分布函数；$$\beta_{i}(k)$$ 第一项由候选拍的重音强度贡献，第二项由候选拍的位置误差贡献。由文献[11]，第一项可以写为  
 
 $$ p\left[I_{Y}(k) \mid \theta_{i}(k), \mathbf{Y}^{k}\right]=I_{i}\left(\mathbf{y}_{i}\right) \prod_{j=1, j \neq i}^{m_{k}} I_{0}\left(\mathbf{y}_{j}\right) $$  
 
-其中,  $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ 是验证观测值 $y_{i}$ 的概率分布；  
+其中,  $$I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$$ 是验证观测值 $y_{i}$ 的概率分布；$$I_{0}\left(\mathbf{y}_{j}\right)$$ 是观测值 $y_{j}$ 不在验证空间内的概率分布
 
-$I_{0}\left(\mathbf{y}_{j}\right)$ 是观测值 $y_{j}$ 不在验证空间内的概率分布
-
-但是, 验证观测值 $\mathrm{y}_{\mathrm{i}}$ 的概率分布 $I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$ : 难以快速准确地确定。
+但是, 验证观测值 $$\mathrm{y}_{\mathrm{i}}$$ 的概率分布 $$I_{i}\left(\mathbf{y}_{i}\right), i=1, \cdots, m_{k}$$ : 难以快速准确地确定。
 
 因此，使用一个固定概率分布 $I_{B}$ 来替代 $I_{i}(k)$, 此概率分布即为重音强度关于节拍位置的概率分布;使用概率分布 $I_{N}$ 来替代 $I_{0}(k)$, 此概率分布即为重音强度关于非节拍位置的概率分布。这两个固定概率分布通过统计的方法来估计。
 
@@ -171,9 +163,9 @@ $$
 p\left[\mathbf{y}_{k} \mid \mathbf{Y}^{k-1}\right]=N\left(\hat{\mathbf{y}}_{k \mid k-1}, \mathbf{S}_{k}\right)
 $$
 
-其中，预测观测值 $\hat{\mathbf{y}}_{k \mid k-1}=\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}$；
+其中，预测观测值 $$\hat{\mathbf{y}}_{k \mid k-1}=\mathbf{M}_{k} \hat{\mathbf{x}}_{k \mid k-1}$$；
 
-相关协方差矩阵 $\mathbf{S}_{k}=\mathbf{M}_{k} \mathbf{P}_{k \mid k-1} \mathbf{M}_{k}^{\mathbf{T}}+\mathbf{R}_{k}$
+相关协方差矩阵 $$\mathbf{S}_{k}=\mathbf{M}_{k} \mathbf{P}_{k \mid k-1} \mathbf{M}_{k}^{\mathbf{T}}+\mathbf{R}_{k}$$
 
 在Matlab里，权值系数```bta```计算方式如下： 
 
@@ -211,9 +203,9 @@ $$\begin{aligned} \hat{\mathbf{x}}_{k \mid k} &=E\left[\mathbf{x}_{k} \mid \math
 
 其中,  
 
-$m_{k}$ 是已验证候选拍的数量; 
+$$m_{k}$$ 是已验证候选拍的数量; 
 
-$\hat{\mathbf{x}}_{i, k \mid k}$ 是以事件 $\theta_{i}(k)$ 为条件的更新得到的状态估计;  
+$$\hat{\mathbf{x}}_{i, k \mid k}$$ 是以事件 $\theta_{i}(k)$ 为条件的更新得到的状态估计;  
 
 $\theta_{i}(k)$ 表示观测到的 $\hat{\mathbf{y}}_{i, k}$ 来自于目标拍; 
 
@@ -223,9 +215,7 @@ $\beta_{i}(k)$ 表示事件 $\theta_{i}(k)$ 发生的概率, 即
 
 $$\beta_{i}(k)=p\left[\theta_{i}(k) \mid \mathbf{Y}^{k}\right], i=0, \cdots, m_{k}$$
 
-且 
-
-$$\sum_{i=0}^{m_{k}} \beta_{i}(k)=1$$  
+且 $$\sum_{i=0}^{m_{k}} \beta_{i}(k)=1$$  
 
 为了使PDA与卡尔曼滤波在运算上相匹配, 修改卡尔曼滤波更新阶段的算法, 将残差修改为概率加权残差:  
 
@@ -256,7 +246,7 @@ $$\quad \mathbf{P}_{k \mid k}^{0}=\left(\mathbf{I}-\mathbf{K}_{k} \mathbf{M}_{k}
 $$\widetilde{\mathbf{P}}_{k}=\mathbf{K}_{k}\left[\sum_{i=1}^{m_{k}} \beta_{i}(k) \widetilde{\mathbf{y}}_{i, k} \tilde{\mathbf{y}}_{i, k}^{\mathbf{T}}-\tilde{\mathbf{y}}_{i, k} \tilde{\mathbf{y}}_{i, k}^{\mathbf{T}}\right] \mathbf{K}_{k}^{\mathbf{T}}
 $$
 
-补充说明，第 $i$ 个候选拍的测量残差 $\widetilde{\mathbf{y}}_{i,k}=\mathbf{y}_{i,k}-\hat{\mathbf{y}}_{k \mid k-1}$。
+补充说明，第 $i$ 个候选拍的测量残差 $$\widetilde{\mathbf{y}}_{i,k}=\mathbf{y}_{i,k}-\hat{\mathbf{y}}_{k \mid k-1}$$。
 
 在原有卡尔曼滤波算法的基础上，引入多个观测候选值 ```y``` 以及对应的权值系数 ```bta```，在Matlab对卡尔曼滤波算法修改如下:
 

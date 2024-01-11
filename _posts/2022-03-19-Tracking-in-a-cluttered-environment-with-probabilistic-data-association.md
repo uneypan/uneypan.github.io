@@ -37,11 +37,13 @@ Sea[2]和Singer等人[3,4]处理了这里考虑的问题，并开发了一种改
 ## 2. 问题描述
 
 轨迹中物体的动力学特性使用以下方程建模
+
 $$
 \mathbf{x}_{k+1}=\mathbf{F}_{k} \mathbf{x}_{k}+\mathbf{w}_{k}, \quad k=0,1, \ldots, \tag{2.1}
 $$
 
 其中 $\mathbf{x}_k$ 是 $n$ 维状态向量，$\mathbf{F}_k$是传递矩阵（已知），$\mathbf{w}_k$是过程噪声，假设服从均值为零的正态分布，方差为
+
 $$
 E(\mathbf{w}_k\mathbf{w}_j')=\mathbf{Q}_k \delta_{kj} \tag{2.2}
 $$
@@ -49,10 +51,13 @@ $$
 初始状态同样服从均值为$\mathbf{\hat{x}_{0\mid 0}}$，方差为$\mathbf{P_{0\mid 0}}$，与$\mathbf{w}_k$相互独立。
 
 测量系统建模如下。如果测量源于轨迹中的对象，则
+
 $$
 \mathbf{z}_k=\mathbf{H}_k \mathbf{x}_k+\mathbf{y}_k,\quad k=1,..., \tag{2.3}
 $$
+
 其中, $\mathbf{H}_k$ 是已知的 $(r \times n)$ 矩阵，$\mathbf{y}_k$ 是测量噪声，与 $\mathbf{w}_j$ 和 $\mathbf{x}_0$ 相互独立且服从均值为零的正态分布，方差为
+
 $$
 E(\mathbf{v}_k\mathbf{v}_j')=\mathbf{R}_k \delta_{kj} \tag{2.4}
 $$
@@ -64,16 +69,19 @@ $$
 错误回波值的模型如下：假设已经观察到一定数量的错误回波，则假设错误回波空间分布是一致且独立的。假设错误回波的概率分布为“分散”的均匀分布，即对其只有模糊的了解。下一节和附录C将对此进行更详细的讨论。
 
 将 $k$ 时刻有效的测量值的集合表示为
+
 $$
 Z_k = {\{ \mathbf{z}_{k,i} \}_{i=1}}^{m_k} \tag{2.5}
 $$
 
 和
+
 $$
 Z^{k} \triangleq {\left\{Z_{j}\right\}_{j=1} }^{k} \tag{2.6}
 $$
 
 因此，最小方差估计，即条件平均值
+
 $$
 \hat{\mathbf{x}}_{k \mid  k}=\int \mathbf{x}_{k}\ p\left(\mathbf{x}_{k} \mid Z^{k}\right) \mathrm{d} \mathbf{x}_{k} \tag{2.7}
 $$
@@ -83,16 +91,19 @@ $$
 ## 3. 概率数据关联（PDA）方法
 
 使用上一节中介绍的符号，定义以下事件
+
 $$
 \chi_{k, i}=\left\{\mathbf{z}_{k, i} \text { 是正确的返回值 }\right\}, \quad i=1, \ldots, m_{k} \tag{3.1}
 $$
 
 和
+
 $$
 \chi_{k, 0}=\left\{\mathbf{z}_{k, i} \text { 所有已验证的返回值都不是正确的 }\right\}. \tag{3.2}
 $$
 
 因为只有一个回波值是正确的，所以上述事件是互斥和完备的。据此，（2.7）可以写成*：
+
 $$
 \begin{aligned}
 \mathbf{x}_{k \mid k} & \triangleq E\left\{\mathbf{x}_{k} \mid Z^{k}\right\} \\
@@ -103,6 +114,7 @@ $$
 *观察到的回波数 $m_k$ 包含在条件中。
 
 因此，我们需要的是找到下式的表达
+
 $$
 \beta_{k,i} \triangleq P \{\chi_{k,i} \mid Z^k  \}, \quad i = 0,\ldots,m_k, \tag{3.4}
 $$
@@ -112,6 +124,7 @@ $$
 PDA方法中做出以下假设：
 
 (1) 以过去的数据为条件，假设一个测量值是正确的，它的概率密度为
+
 $$
 p\left(\mathbf{z}_{k, i} \mid \chi_{k, i}, Z^{k-1}\right) \triangleq f\left(\mathbf{z}_{k, i} \mid Z^{k-1}\right) \tag{3.5}
 $$
@@ -119,6 +132,7 @@ $$
 假设它可以求得。下一节将详细讨论这种概率密度，其中介绍改进后的滤波器。为了获得只占用固定内存的滤波器，将该概率密度近似为正态分布。
 
 (2) 测量值不正确的概率密度在关联门内是均匀的，关联门的体积用$V_k$表示，即
+
 $$
 p\left(\mathbf{z}_{k, i} \mid \chi_{k, j}, Z^{k-1}\right) = V_k^{-1}, j \neq i. \tag{3.6}
 $$
@@ -128,6 +142,7 @@ $$
 (4) 在已有过往数据都条件下每次回波正确的概率是相同的，即没有使用目标特征信息；可以修改程序以使用此类信息。
 
 附录C详细说明了使用贝叶斯规则推导（3.4）中定义的概率 $\beta_{k,i}$。第 $i$ 次回波正确的后验概率如下：
+
 $$
 \begin{aligned}
 \beta_{k, i} &=\left\{f\left(\mathbf{z}_{k, i} \mid Z^{k-1}\right)\right.\\
@@ -136,11 +151,13 @@ $$
 $$
 
 其中
+
 $$
 b_{k} \triangleq m_{k} V_{k}^{-1} \frac{\alpha_{1}+\alpha_{2}-\alpha_{1} \alpha_{2}}{\left(1-\alpha_{1}\right)\left(1-\alpha_{2}\right)}. \tag{3.8}
 $$
 
 $\alpha_{1}$ 是正确回波不在有效区域内的概率，$\alpha_2$是正确回波不被检测到的概率。所有回波值都不正确的后验概率是
+
 $$
 \beta_{k, 0}=b_{k} /\left[b_{k}+\sum_{i=1}^{m_{k}} f\left(z_{k, i} \mid Z^{k-1}\right)\right] \tag{3.9}
 $$
@@ -151,40 +168,49 @@ $$
 
 正如[5]中指出的，以所有有效测量值为条件计算状态的精确概率密度，即一个高斯密度和，相当于轨迹分裂，因此成本太高而不可行。因此，必须进行近似计算，才能得到一个能够实时实现的算法。
 
-为了得到这样一个滤波器，基于过去观测值的状态变量可近似为服从均值为$\hat{\mathbf{x}}_{k\mid k-1}$，方差为$\mathbf{P}_{k\mid k-1}$，即
+为了得到这样一个滤波器，基于过去观测值的状态变量可近似为服从均值为 $$\hat{\mathbf{x}}_{k\mid k-1}$$，方差为 $$\mathbf{P}_{k\mid k-1}$$，即
+
 $$
 p(\mathbf{x}_k\mid Z^{k-1})= \mathcal{N}(\hat{\mathbf{x}}_{k\mid k-1},\mathbf{P}_{k\mid k-1}) \tag{4.1}
 $$
 
 为了得到一个可行解，在其他相关问题中也做出了类似的假设，例如[8]。在[3]中也使用了这一假设，尽管没有明确说明。假设(4.1)的可行性因最终算法的简易性可认为是合理的，其在实际问题中的性能如下一节阐述。
 
-如前所述，由于计算方面的考虑，只有通过特定有效测试的测量回波才会被考虑用于更新一条特定的轨迹。紧随(4.1)，与正确回波值相对应的残差或新息[9]，这里用$\mathbf{z}_{k\mid k-1}$表示，为
+如前所述，由于计算方面的考虑，只有通过特定有效测试的测量回波才会被考虑用于更新一条特定的轨迹。紧随(4.1)，与正确回波值相对应的残差或新息[9]，这里用$$\mathbf{z}_{k\mid k-1}$$表示，为
 $$
 \mathbf{v}_{k, j} \triangleq \mathbf{z}_{k, j}-\hat{\mathbf{z}}_{k \mid k-1} \tag{4.2}
 $$
 
-其中 $\hat{z}_{k \mid k-1}$ 是在近似(4.1)基础上观测值的条件均值，同样假设其服从均值为零，方差为$S_{k}$ 的正态分布
+其中 $$\hat{z}_{k \mid k-1}$$ 是在近似(4.1)基础上观测值的条件均值，同样假设其服从均值为零，方差为 $\mathbf{S}_{k}$ 的正态分布
+
 $$
 \mathbf{S}_{k}=\mathbf{H}_{k} \mathbf{P}_{k \mid k-1} \mathbf{H}_{k}{ }^{\prime}+\mathbf{R}_{k} . \tag{4.3}
 $$
+
 有鉴于此，我们可以按如下方式编写有效测试：在k时刻接受满足以下条件的测量值
+
 $$
 \rho \triangleq \rho_k(\mathbf{v}_{k,j}) \le \gamma, \tag{4.4}
 $$
+
 其中$\gamma$是一个阈值，
+
 $$
 \rho_k(\mathbf{v}) \triangleq \boldsymbol{\nu}' \mathbf{S}_k^{-1} \boldsymbol{\nu} \tag{4.5}
 $$
-$\boldsymbol{\nu}_{k,i}$表示与测量值$\mathbf{z}_{k,i}$相对应的残差。式(4.5)定义的变量$\rho_k(\mathbf{v})$从现在起应称为距离或模的平方。
+
+$$\boldsymbol{\nu}_{k,i}$$表示与测量值$$\mathbf{z}_{k,i}$$相对应的残差。式(4.5)定义的变量$$\rho_k(\mathbf{v})$$从现在起应称为距离或模的平方。
 
 测试(4.4)实际上表示在给定的概率集中度下，一个有效的测量值需要在一个多大的椭球体内（一个置信椭球体）[10]。也就是说，常数$\gamma$是这样获得的：对于正确的回波值，其距离$\rho$服从$r$自由度$\chi^2$分布。对于一个给定的拒绝正确回波的概率值$\alpha_1$，可以通过查询$\chi^2$表来获得。
 
 根据式(4.1)，过往测量值的近似充分统计表示为
+
 $$
 Y_{k\mid k-1} = \{\hat{\mathbf{x}}_{k\mid k-1},\mathbf{P}_{k\mid k-1} \} \tag{4.6}
 $$
 
 由(4.1)-(4.5)，给定一个测量值来源于轨迹中的物体，已经有效且以$Z^{k-1}$为条件，其概率密度(3.5)是一个截断的正态分布，即
+
 $$
 f\left(\mathbf{z}_{k, i} \mid Y_{k \mid k-1}\right)=\left(1-\alpha_{1}\right)^{-1} \mathcal{N}\left(H_{k} \hat{\mathbf{x}}_{k \mid k-1}, S_{k}\right) \tag{4.7}
 $$
@@ -192,31 +218,38 @@ $$
 仅分布于关联门内，而在关联门外概率为零。
 
 根据假设(4.1)和上一节描述的PDA方法，附录A推导了概率数据关联滤波器(PDAF)。状态变量的近似条件平均值如下所示：
+
 $$
 E\left\{\mathbf{x}_{k} \mid Z_{k}, Y_{k \mid k-1}\right\} \triangleq \hat{\mathbf{x}}_{k \mid k}=\hat{\mathbf{x}}_{k \mid k-1}+\mathbf{W}_{k} \boldsymbol{\nu}_{k} \tag{4.8}
 $$
 
 其中
+
 $$
 \boldsymbol{\nu}_{k} \triangleq \sum_{i=1}^{m_{k}} \beta_{k, i} \boldsymbol{\nu}_{k, i} \tag{4.9}
 $$
-是所有有效测量值的加权残差。 估计值 $\hat{\mathbf{x}}_{k \mid k}$是通过系数 $\beta_{k, i}$的观测值的非线性函数。系数 $\beta_{k, i}$ 是 $\mathbf{z}_{k, i}$来源于轨迹中的物体的后验概率， $\mathbf{W}_{k}$ 一个加权矩阵
+
+是所有有效测量值的加权残差。 估计值 $$\hat{\mathbf{x}}_{k \mid k}$$ 是通过系数 $$\beta_{k, i}$$ 的观测值的非线性函数。系数 $$\beta_{k, i}$$ 是 $$\mathbf{z}_{k, i}$$ 来源于轨迹中的物体的后验概率， $\mathbf{W}_{k}$ 一个加权矩阵
+
 $$
 \mathbf{W}_{k}=\mathbf{P}_{k \mid k-1} \mathbf{H}_{k}{ }^{\prime} \mathbf{S}_{k}{ }^{-1}. \tag{4.10}
 $$
+
 与估计值(4.9) 相关的协方差为
+
 $$
-\mathbf{P}_{k \mid k}=\mathbf{P}_{k \mid k}^{0}+\mathbf{P}_{k},\tag{4.11}
+\mathbf{P}_{k \mid k}=\mathbf{P}^{0}_{k \mid k}+\mathbf{P}_{k},\tag{4.11}
 $$
-其中 $\mathbf{P}_{k \mid k}{ }^{0}$ 表示如果只有一个回波值时更新的方差。而
+
+其中 $\mathbf{P}_{k \mid k}^{0}$ 表示如果只有一个回波值时更新的方差。而
+
 $$
-\mathbf{P}_{k} \triangleq \mathbf{W}_{k}\left[\sum_{i=1}^{m_{k}} \beta_{k, i} \boldsymbol{\nu}_{k, i} \boldsymbol{\nu}_{k, i}{ }^{\prime}-\boldsymbol{\nu}_{k} \boldsymbol{\nu}_{k}{ }^{\prime}\right] \mathbf{W}_{k}{ }^{\prime} \tag{4.12}
+\mathbf{P}_{k} \triangleq \mathbf{W}_{k}\left[\sum_{i=1}^{m_{k}} \beta_{k, i} \boldsymbol{\nu}_{k, i} \boldsymbol{\nu}_{k, i}^{\prime}-\boldsymbol{\nu}_{k} \boldsymbol{\nu}_{k}^{\prime}\right] \mathbf{W}_{k}{ }^{\prime} \tag{4.12}
 $$
+
 是一个半正定矩阵，当增大附录A中所述的更新$\mathbf{P}_{k\mid k}$的协方差，不正确测量值的影响增大。从(4.12)中可以看出，估计的置信度是实际有效的回波数及位置的函数。这是新滤波器的一个重要功能。
 
 该算法的另一个重要特征是，当窗口中只有一个回波值时，其计算量与标准滤波器相同，并且仅当需要处理多个回波时，其计算要求才会增加。表1显示了新滤波器的计算量与标准滤波器*相比，计算机指令计数关于有效区域中回波值个数的函数近似增加。
-
-
 
 图1显示了PDAF对比轨迹分裂滤波器(TSF)，相比标准滤波器每个采样周期预期的计算量。可以看出，当每个窗口内预期错误回波值的个数 $\bar{r}$ 大于1时，TSF的计算需求随着时间的增长呈指数增长；附录B讨论了相关方程式。虽然这些数字是一个上限，因为一些轨道可能会被丢弃，但计算机可能仍然会迅速饱和。正如将在下一节中说明的那样，在TSF不可行且PDAF的性能优于标准滤波器的情况下，PDAF可以在一定的 $\bar{r}$ 范围内成功使用。
 
@@ -316,14 +349,19 @@ $$
 ## 附录A  推导PDA滤波器
 
 注意到 (3.1) 和 (3.2) 定义的$\chi_{k,i},i=0,...,m_k$，是互斥且完备的，我们有
+
 $$
 p(\mathbf{x}_{k}\mid Z_k,Y_{k\mid k-1})=\sum^{m_k}_{i=1}p(\mathbf{x}_k\mid \chi_{k,i},Z_k,Y_{k\mid k-1})\beta_{k,i}, \tag{A.1}
 $$
+
 其中
+
 $$
 \beta_{k,i} \triangleq P\{ \chi_{k,i}\mid Z_k,Y_{k\mid k-1} \} \tag{A.2}
 $$
+
 从 $\chi_{k,i}$ 的定义和 (4.1) 可以看出，对于 $i=1,...,m_k$
+
 $$
 \begin{aligned}
 p(\mathbf{x}_k\mid \chi_{k,i},Z_k,Y_{k\mid k-1})&= p(\mathbf{x}_k\mid \chi_{k,i},\mathbf{z}_{k,i},Y_{k\mid k-1})\\
@@ -331,7 +369,9 @@ p(\mathbf{x}_k\mid \chi_{k,i},Z_k,Y_{k\mid k-1})&= p(\mathbf{x}_k\mid \chi_{k,i}
 \end{aligned}
 \tag{A.3}
 $$
+
 其中
+
 $$
 \begin{aligned}
 \mathbf{x}_{k \mid k, i} =\mathbf{x}_{k \mid k-1}+\mathbf{W}_{k, i} \boldsymbol{\nu}_{k, i}, 
@@ -343,10 +383,10 @@ $$
 $$
 
 $$
-\mathbf{P}_{k \mid k, i} =\left(I-\mathbf{W}_{k} \mathbf{H}_{k}\right) \mathbf{P}_{k \mid k-1} \triangleq \mathbf{P}_{k \mid k}{ }^{*}. \tag{A.6}
+\mathbf{P}_{k \mid k, i} =\left(I-\mathbf{W}_{k} \mathbf{H}_{k}\right) \mathbf{P}_{k \mid k-1} \triangleq \mathbf{P}_{k \mid k}^{*}. \tag{A.6}
 $$
 
-注意到权重矩阵 $\mathbf{W}_{k,i}$ 和 $i$ 无关。然而，式 (A.6) 中的 $\mathbf{P}_{k\mid k,i}=\mathbf{P}_{k \mid k}{ }^{*}$ 是以 $\chi_{k,i}$ 为条件，状态估计 (A.4) 的协方差，虽然它和 $i$ 的取值无关，后面会看到它不是最终估计的协方差。
+注意到权重矩阵 $$\mathbf{W}_{k,i}$$ 和 $i$ 无关。然而，式 (A.6) 中的 $$\mathbf{P}_{k\mid k,i}=\mathbf{P}_{k \mid k}^{*}$$ 是以 $\chi_{k,i}$ 为条件，状态估计 (A.4) 的协方差，虽然它和 $i$ 的取值无关，后面会看到它不是最终估计的协方差。
 
 如果事件 $\chi_{k,0}$ 发生，即没有一个有效的回波值是正确的，则 (A.3) 和 (A.6) 保持不变，且
 $$
@@ -360,6 +400,7 @@ $$
 因此，我们现在有了 (A.1) 中进入求和的密度。
 
 由式 (A.1) 可以便利地求出状态的条件均值，写成
+
 $$
 \begin{aligned}
 E\left\{\mathbf{x}_{k} \mid Z_{k}, Y_{k \mid k-1}\right\} &\triangleq \hat{\mathbf{x}}_{k \mid k} \\
@@ -369,23 +410,30 @@ E\left\{\mathbf{x}_{k} \mid Z_{k}, Y_{k \mid k-1}\right\} &\triangleq \hat{\math
 \tag{A.7}
 $$
 其中
+
 $$
 {\boldsymbol{\nu}}_{k} \triangleq \sum_{i=1}^{m_{k}} \beta_{k, i}{\boldsymbol{\nu}}_{k, i} \tag{A.8}
 $$
-注意 $\hat{\mathbf{x}}_{k \mid k}$ 是通过系数 $\beta_{k, i}$ 的观测值的非线性函数。
+
+注意 $$\hat{\mathbf{x}}_{k \mid k}$$ 是通过系数 $\beta_{k, i}$ 的观测值的非线性函数。
 
 与上述估计相关的方差如下
+
 $$
 \mathbf{P}_{k \mid k}=\int\left[\mathbf{x}_{k}-\hat{\mathbf{x}}_{k \mid k}\right]\left[\mathbf{x}_{k}-\hat{\mathbf{x}}_{k \mid k}\right]^{\prime} p\left(\mathbf{x}_{k} \mid Z_{k}, Y_{k \mid k-1}\right) \mathrm{d} \mathbf{x}_{k}  \tag{A.9}
 $$
+
 利用全概率公式和标记 (A.2)，上式可以写成
+
 $$
 \begin{aligned}
 \mathbf{P}_{k \mid k} &=\sum_{i=0}^{m_{k}} \beta_{k, i} \\
 & \int\left[\mathbf{x}_{k}-\hat{\mathbf{x}}_{k \mid k}\right]\left[\mathbf{x}_{k}-\hat{\mathbf{x}}_{k \mid k}\right]^{\prime} p\left(\mathbf{x}_{k} \mid \chi_{k, i}, Z_{k}, Y_{k \mid k-1}\right) \mathrm{d} \mathbf{x}_{k}
 \end{aligned}  \tag{A.10}
 $$
+
 经过一些代数之后，我们得到
+
 $$
 \begin{aligned}
 P_{k \mid k} &=\mathbf{P}_{k \mid k}^{0}+\sum_{i=0}^{m_{k}} \beta_{k, i} \hat{\mathbf{x}}_{k \mid k, i} {\hat{\mathbf{x}}_{k \mid k, i}}^\prime-\hat{\mathbf{x}}_{k \mid k} {\hat{\mathbf{x}}_{k \mid k}}^{\prime} \\
@@ -393,7 +441,8 @@ P_{k \mid k} &=\mathbf{P}_{k \mid k}^{0}+\sum_{i=0}^{m_{k}} \beta_{k, i} \hat{\m
 & \triangleq \mathbf{P}_{k \mid k}^{0}+\mathbf{P}_{k} .
 \end{aligned}  \tag{A.11}
 $$
-从 (A.14) 中可以很容易看出该滤波器的自适应性：估计值的置信度是实际有效回报数的函数。矩阵 $\mathbf{P}_{k}$ 通过增加估计值的协方差来显示并非源自轨迹中对象的测量值的影响。这是因为 $\mathbf{P}_{k}$ 是半正定的，如[13]所示。
+
+从 (A.14) 中可以很容易看出该滤波器的自适应性：估计值的置信度是实际有效回报数的函数。矩阵 $$\mathbf{P}_{k}$$ 通过增加估计值的协方差来显示并非源自轨迹中对象的测量值的影响。这是因为 $\mathbf{P}_{k}$ 是半正定的，如[13]所示。
 
 请注意，协方差的计算需要实时数据。这是非线性滤波器的一般特征。
 
@@ -500,6 +549,7 @@ $$
 其中 $\alpha_1$ 是正确回波不落在关联门内的概率， $\alpha_2$ 是正确回波不被探测到的概率。
 
 对于 $i=1,..,m_k$ 我们可以将概率写在 (C.1) 的右手边
+
 $$
 \begin{aligned}
 p&\{Z_k\mid x_{k,i},Z^{k-1},m_ks\}\\
@@ -507,11 +557,15 @@ p&\{Z_k\mid x_{k,i},Z^{k-1},m_ks\}\\
 &=[V_k]^{-(m_k-1)} p(z_{k,j}\mid \chi_{k,i},Z^{k-1},m_k).
 \end{aligned} \tag{C.9}
 $$
+
 基于过往数据，$z_{k,i}$ 是正确回波的概率密度假设已知，用下式表示
+
 $$
 p(z_{k,i}\mid \chi_{k,i},Z^{k-1}) \triangleq f(z_{k,i}\mid Z^{k-1}) \tag{C.10}
 $$
+
 基于过往数据， 假设 $\chi_{k,i}$ 的概率对于所有的 $i$ 相同，除非可以使用目标的特征信息。如果没有这种信息可用，则
+
 $$
 \begin{aligned}
 P\{\chi_{k,i}\mid &Z^{k-1}\}\\
@@ -519,6 +573,7 @@ P\{\chi_{k,i}\mid &Z^{k-1}\}\\
 &=\frac{(1-\alpha_1)(1-\alpha_2)}{m_k} ,\quad i=1,...,m_k. 
 \end{aligned} \tag{C.11}
 $$
+
 将 (C.6)，(C.9) 和 (C.11) 插入 (C.1) , 构成 PDA 方法 (3.7) 和 (3.9).
 
 ## 附录D  不正确回波的仿真实验
