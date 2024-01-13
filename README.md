@@ -171,8 +171,6 @@ https://drive.google.com/uc?export=download&id=[CODE]
 可以作为图片插入文档
 
 
-
-
 ## 插入 PDF
 
 ```markdown
@@ -185,11 +183,27 @@ Push 到 [github_user].github.io 仓库
 
 等待几分钟 Github 自动编译即可。
 
-## 本地预览
+## 本地部署
 
-Jekyll 集成了一个开发用的服务器，可以让你使用浏览器在本地进行预览。
+在Windows系统上安装Ruby和Jekyll：
+- 安装Ruby: 前往 [https://rubyinstaller.org/](https://rubyinstaller.org/) 下载 RubyInstaller，并按照安装向导进行安装。在安装过程中，请确保勾选 "Add Ruby executables to your PATH" 选项。
+- 安装Jekyll: 打开命令提示符（Command Prompt）或 PowerShell，并运行以下命令：
+  ```bash
+  gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
+  ```
+  ```bash
+  gem install jekyll bundler
+  ```
+  ```bash
+  bundle install
+  ```
+- 本地预览
+Jekyll 集成了一个开发用的服务器，可以让你使用浏览器在本地进行预览。通过命令启动开发服务器:
+  ```bash
+  bundle exec jekyll serve
+  ```
 
-通过 `bundle exec jekyll serve` 命令启动开发服务器，然后你就可以访问 http://localhost:4000/ 预览你的网站了。
+然后你就可以访问 http://localhost:4000/ 预览你的网站了。
 
 ## License
 基于 [TeXt Theme](https://github.com/kitian616/jekyll-TeXt-theme) (MIT License)
