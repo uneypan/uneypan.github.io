@@ -129,7 +129,7 @@ $$
 
 ## 对偶问题与原问题的关系
 
-现在我们知道，对偶问题的目标函数是原问题的下界，对偶问题是凸问题，而凸问题的求解是方便的。**什么时候对偶问题的解也等于原问题的解呢？答案是：绝大多情况下，原问题满足KKT条件即可**。但严格的数学表述下：KKT条件只是必要条件，slater条件是充分条件，但充要条件现在还没找到。
+现在我们知道，对偶问题的目标函数是原问题的下界，对偶问题是凸问题，而凸问题的求解是方便的。**什么时候对偶问题的解也等于原问题的解呢？答案是：绝大多情况下，原问题满足KKT条件即可**。但严格的数学表述下：KKT条件只是必要条件，Slater条件是充分条件，但充要条件现在还没找到。
 
 在约束条件$h_i(x)=0$下，令 $t=f_0(x), u_i = f_i(x)$。让我们重新表述一下拉格朗日函数$(2)$：
 
@@ -177,13 +177,13 @@ $$
 
 KKT 条件：
 
-$$\left.\begin{array}{l}f_i(x) \leq 0 \\ h_i(x)=0\end{array}\right\}$$ 原问题可行条件
+原问题可行条件 $$\begin{cases}f_i(x) \leq 0 \\ h_i(x)=0\end{cases}$$ 
 
-$$\left.\begin{array}{l}\nabla_x L(x, \lambda, \nu)=0 \\ \lambda \geq 0\end{array}\right\}$$ 对偶可行条件
+对偶可行条件 $$\begin{cases}\nabla_x L(x, \lambda, \nu)=0 \\ \lambda \geq 0\end{cases}$$ 
 
-$$\left. \lambda_i f_i(x)=0\ \right\}$$ 互补松弛条件
+互补松弛条件 $$\begin{cases}\lambda_i f_i(x)=0 \end{cases}$$ 
 
-KKT 条件其实是必要不充分条件，必要条件是 slater 条件，而充要条件现在还没有找到。
+KKT 条件其实是必要不充分条件，充分条件是 Slater 条件，而充要条件现在还没有找到。
 
 ## Reference
 “拉格朗日对偶问题”如何直观理解？“KKT条件” “Slater条件” “凸优化”打包理解：[https://www.bilibili.com/video/BV1HP4y1Y79e/](https://www.bilibili.com/video/BV1HP4y1Y79e/)
