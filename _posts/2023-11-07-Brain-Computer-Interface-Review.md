@@ -112,7 +112,7 @@ $$
 
 1. 计算 $\mathbf{X}$ 的方差 $$\mathbf{S}_{XX}$$，$\mathbf{Y}$ 的方差 $$\mathbf{S}_{YY}$$，以及 $$\mathbf{X}$$ 和 $\mathbf{Y}$ 的协方差 $$\mathbf{S}_{XY}$$
 2. 计算矩阵 $$ \mathbf{M} = \mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}$$
-3. 对矩阵 $$\mathbf{M}$$ 进行 SVD 分解，最大的奇异值 $\rho$ 和对应的奇异向量为 $\mathbf{u}$ 和 $\mathbf{v}$，即 $$\displaystyle \rho = \max_{\mathbf{u},\mathbf{v}}\mathbf{u}^T\mathbf{M}\mathbf{v}$$
+3. 对矩阵 $$\mathbf{M}$$ 进行 SVD 分解，最大的奇异值 $\rho$ 和对应的奇异向量为 $\mathbf{u}$ 和 $\mathbf{v}$，即 $$\displaystyle \rho = \max_{\mathbf{u},\mathbf{v}}\mathbf{u}^\top\mathbf{M}\mathbf{v}$$
 4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$
  
 可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
@@ -134,8 +134,8 @@ $$
 假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。使用线性系数向量 $\mathbf{a}$ 和 $\mathbf{b}$ 将 $\mathbf{X}$ 和 $\mathbf{Y}$ 投影为一维向量
 
 $$
-\mathbf{x} = \mathbf{a}^T \mathbf{X} \\ 
-\mathbf{y} = \mathbf{b}^T \mathbf{Y}
+\mathbf{x} = \mathbf{a}^\top \mathbf{X} \\ 
+\mathbf{y} = \mathbf{b}^\top \mathbf{Y}
 $$
 
 CCA 的优化目标是最大化相关系数 $$\rho(\mathbf{x}, \mathbf{y})$$ 得到对应的投影向量 $\mathbf{a}$ 和 $\mathbf{b}$
@@ -150,38 +150,38 @@ $$
 记 $$\mathbf{S}_{XX} = \text{cov}(\mathbf{X},\mathbf{X})$$，$$\mathbf{S}_{YY} = \text{cov}(\mathbf{Y},\mathbf{Y})$$， $$\mathbf{S}_{XY} = \text{cov}(\mathbf{X},\mathbf{Y})$$ 有：
 
 $$
-\mathbf{S}_{XX} = \text{cov}(\mathbf{X},\mathbf{X}) = E(\mathbf{X}\mathbf{X}^T) - E(\mathbf{X})E(\mathbf{X})^T = E(\mathbf{X}\mathbf{X}^T)，\\
-\mathbf{S}_{YY} = E(\mathbf{Y}\mathbf{Y}^T), \mathbf{S}_{XY} = E(\mathbf{X}\mathbf{Y}^T)
+\mathbf{S}_{XX} = \text{cov}(\mathbf{X},\mathbf{X}) = E(\mathbf{X}\mathbf{X}^\top) - E(\mathbf{X})E(\mathbf{X})^\top = E(\mathbf{X}\mathbf{X}^\top)，\\
+\mathbf{S}_{YY} = E(\mathbf{Y}\mathbf{Y}^\top), \mathbf{S}_{XY} = E(\mathbf{X}\mathbf{Y}^\top)
 $$
 
 于是，可以得到 $\mathbf{x},\mathbf{y}$ 的方差和协方差为
 
 $$
-D(\mathbf{x}) = D(\mathbf{a}^T \mathbf{X}) = \mathbf{a}^T E(\mathbf{X} \mathbf{X}^T) \mathbf{a}  = \mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} \\
-D(\mathbf{y}) = D(\mathbf{b}^T \mathbf{Y}) = \mathbf{b}^T E(\mathbf{Y} \mathbf{Y}^T) \mathbf{b}  = \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b}
+D(\mathbf{x}) = D(\mathbf{a}^\top \mathbf{X}) = \mathbf{a}^\top E(\mathbf{X} \mathbf{X}^\top) \mathbf{a}  = \mathbf{a}^\top \mathbf{S}_{XX} \mathbf{a} \\
+D(\mathbf{y}) = D(\mathbf{b}^\top \mathbf{Y}) = \mathbf{b}^\top E(\mathbf{Y} \mathbf{Y}^\top) \mathbf{b}  = \mathbf{b}^\top \mathbf{S}_{YY} \mathbf{b}
 $$
 
 $$ 
 \begin{aligned}
-\text{cov} (\mathbf{x}, \mathbf{y}) &= \text{cov}(\mathbf{a}^T \mathbf{X}, \mathbf{b}^T \mathbf{Y})\\
-&= E[<\mathbf{a}^T \mathbf{X}, \mathbf{b}^T \mathbf{Y}>] 
-= E[ (\mathbf{a}^T\mathbf{X}) (\mathbf{b}^T \mathbf{Y})^T] \\
-&= \mathbf{a}^T E(\mathbf{X} \mathbf{Y}^T) \mathbf{b} 
-= \mathbf{a}^T \mathbf{S}_{XY} \mathbf{b}
+\text{cov} (\mathbf{x}, \mathbf{y}) &= \text{cov}(\mathbf{a}^\top \mathbf{X}, \mathbf{b}^\top \mathbf{Y})\\
+&= E[<\mathbf{a}^\top \mathbf{X}, \mathbf{b}^\top \mathbf{Y}>] 
+= E[ (\mathbf{a}^\top\mathbf{X}) (\mathbf{b}^\top \mathbf{Y})^\top] \\
+&= \mathbf{a}^\top E(\mathbf{X} \mathbf{Y}^\top) \mathbf{b} 
+= \mathbf{a}^\top \mathbf{S}_{XY} \mathbf{b}
 \end{aligned}
 $$
 
 则优化目标可以转化为：
 
 $$
-\arg\max_{\mathbf{a},\mathbf{b}}\frac{\mathbf{a}^T \mathbf{S}_{XY} \mathbf{b}}{\sqrt{\mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b}}}
+\arg\max_{\mathbf{a},\mathbf{b}}\frac{\mathbf{a}^\top \mathbf{S}_{XY} \mathbf{b}}{\sqrt{\mathbf{a}^\top \mathbf{S}_{XX} \mathbf{a} \mathbf{b}^\top \mathbf{S}_{YY} \mathbf{b}}}
 $$
 
 可以采用和SVM类似的优化方法，固定分母，优化分子，具体的转化为：
 
 $$
-\arg\max_{\mathbf{a},\mathbf{b}} \mathbf{a}^T \mathbf{S}_{XY} \mathbf{b} \\
-\text{s.t.}\quad \mathbf{a}^T \mathbf{S}_{XX} \mathbf{a} = 1, \mathbf{b}^T \mathbf{S}_{YY} \mathbf{b} = 1
+\arg\max_{\mathbf{a},\mathbf{b}} \mathbf{a}^\top \mathbf{S}_{XY} \mathbf{b} \\
+\text{s.t.}\quad \mathbf{a}^\top \mathbf{S}_{XX} \mathbf{a} = 1, \mathbf{b}^\top \mathbf{S}_{YY} \mathbf{b} = 1
 $$
 
 也就是说，算法的目标最终转化为一个凸优化过程，只要我们求出了这个优化目标的最大值，就是我们前面提到的多维 $\mathbf{X}$ 和 $\mathbf{Y}$ 的相关性度量，而对应的 $\mathbf{a},\mathbf{b}$ 则为降维时的投影向量，或者说线性系数。
@@ -190,29 +190,29 @@ $$
 对于上面的优化目标，我们可以做一次矩阵标准化，就可以用SVD来求解了。首先，我们令 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$，有
 
 $$
-\mathbf{a}^T\mathbf{S}_{XX}\mathbf{a} =1 \Rightarrow \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XX}\mathbf{S}_{XX}^{-1/2}\mathbf{u} = 1  \Rightarrow  \mathbf{u}^T\mathbf{u}=1 \\ 
-\mathbf{b}^T\mathbf{S}_{YY}\mathbf{b} =1 \Rightarrow \mathbf{v}^T\mathbf{S}_{YY}^{-1/2}\mathbf{S}_{YY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} = 1  \Rightarrow  \mathbf{v}^T\mathbf{v}=1 \\ 
-\mathbf{a}^T\mathbf{S}_{XY}\mathbf{b} = \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v}
+\mathbf{a}^\top\mathbf{S}_{XX}\mathbf{a} =1 \Rightarrow \mathbf{u}^\top\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XX}\mathbf{S}_{XX}^{-1/2}\mathbf{u} = 1  \Rightarrow  \mathbf{u}^\top\mathbf{u}=1 \\ 
+\mathbf{b}^\top\mathbf{S}_{YY}\mathbf{b} =1 \Rightarrow \mathbf{v}^\top\mathbf{S}_{YY}^{-1/2}\mathbf{S}_{YY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} = 1  \Rightarrow  \mathbf{v}^\top\mathbf{v}=1 \\ 
+\mathbf{a}^\top\mathbf{S}_{XY}\mathbf{b} = \mathbf{u}^\top\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v}
 $$
 
 
 也就是说，我们的优化目标变成
 
 $$
-\arg\max_{\mathbf{u},\mathbf{v}} \mathbf{u}^T\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} \\
-\text{s.t.} \quad \mathbf{u}^T\mathbf{u}=1, \mathbf{v}^T\mathbf{v}=1
+\arg\max_{\mathbf{u},\mathbf{v}} \mathbf{u}^\top\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}\mathbf{v} \\
+\text{s.t.} \quad \mathbf{u}^\top\mathbf{u}=1, \mathbf{v}^\top\mathbf{v}=1
 $$
 
 如果将 $\mathbf{u},\mathbf{v}$ 看成矩阵 $$\mathbf{M} =\mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2} $$ 的某一个奇异值左右奇异向量，那么利用奇异值分解，我们可以得到 
 
 $$
- \mathbf{M} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T
+ \mathbf{M} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top
 $$
 
-其中 $\mathbf{U},\mathbf{V}$ 为正交矩阵，$\mathbf{\Sigma}$ 为对角矩阵，对角线上的元素为奇异值。由于 $\mathbf{U},\mathbf{V}$ 的每一列都是标准正交基，因此 $ \mathbf{u}^T\mathbf{U} $ 和 $ \mathbf{v}^T\mathbf{V} $ 会得到一个只有一个标量值为1，其余标量值为0的向量。此时我们有
+其中 $\mathbf{U},\mathbf{V}$ 为正交矩阵，$\mathbf{\Sigma}$ 为对角矩阵，对角线上的元素为奇异值。由于 $\mathbf{U},\mathbf{V}$ 的每一列都是标准正交基，因此 $ \mathbf{u}^\top\mathbf{U} $ 和 $ \mathbf{v}^\top\mathbf{V} $ 会得到一个只有一个标量值为1，其余标量值为0的向量。此时我们有
 
 $$
-\mathbf{u}^T\mathbf{M}\mathbf{v} = \mathbf{u}^T\mathbf{U}\mathbf{\Sigma}\mathbf{V}^T\mathbf{v} = \sigma_{uv}
+\mathbf{u}^\top\mathbf{M}\mathbf{v} = \mathbf{u}^\top\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top\mathbf{v} = \sigma_{uv}
 $$
 
 也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。
@@ -227,9 +227,9 @@ Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方�
 
 1. 计算类别的协方差矩阵：
 
-   $$ C_1 = \frac{1}{T_1} \sum_{t=1}^{T_1} x_{1t} \cdot x_{1t}^T $$
+   $$ C_1 = \frac{1}{T_1} \sum_{t=1}^{T_1} x_{1t} \cdot x_{1t}^\top $$
 
-   $$ C_2 = \frac{1}{T_2} \sum_{t=1}^{T_2} x_{2t} \cdot x_{2t}^T $$
+   $$ C_2 = \frac{1}{T_2} \sum_{t=1}^{T_2} x_{2t} \cdot x_{2t}^\top $$
 
    其中 $T_1$ 和 $T_2$ 分别是两个类别的样本数，$x_{1t}$ 和 $x_{2t}$ 是第 $t$ 个样本的特征向量。
 
