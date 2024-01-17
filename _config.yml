@@ -55,7 +55,7 @@ author:
 
 ## => GitHub Repository (if the site is hosted by GitHub)
 ##############################
-repository: uenypan
+repository: uneypan/uneypan.github.io # "user_name/repo_name"
 repository_tree: master
 
 
@@ -65,7 +65,7 @@ paths:
   root    : # title link url, "/" (default)
   home    : # home layout url, "/" (default)
   archive : # "/archive.html" (default)
-  rss     : # "/feed.xml" (default)
+  rss     : https://github.com/uneypan/ # "/feed.xml" (default)
 
 
 ## => Post
@@ -122,17 +122,17 @@ comments:
 
   ## Disqus
   disqus:
-    shortname: # the Disqus shortname for the site
+    shortname: uneypan # the Disqus shortname for the site
 
   ## Gitalk
   # please refer to https://github.com/gitalk/gitalk for more info.
   gitalk:
     clientID    : 151f24e85c4effe0dbfb # GitHub Application Client ID
     clientSecret: 21c94611ece0313954f2a62dd10b1b715cbdd9b7 # GitHub Application Client Secret
-    repository  : https://github.com/uneypan/uneypan.github.io # GitHub repo
+    repository  : uneypan.github.io # GitHub repo
     owner       : uneypan # GitHub repo owner
     admin: # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST.
-      - uneypan # - your GitHub Id
+      - uneypan
 
   ## Valine
   # please refer to https://valine.js.org/en/ for more info.
