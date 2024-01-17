@@ -19,7 +19,7 @@ article_header:
 
 
 
-## 脑机接口分类
+## 脑机接口分类[^Brain-Computer]
 
 理论上，脑机接口可能会使用通过多种方法记录的大脑信号。这些包括： 
 - **电场或磁场的记录 (例如脑磁图 Magnetoencephalography, MEG)**
@@ -69,7 +69,7 @@ P300 响应是一种与决策认知过程相关的**事件诱发电位(event-rel
 
 Fig. 可用于脑机接口系统的大脑信号示例。(a)：在中央顶叶皮层上的EEG中，在刺激开始后约300ms（即 P300 ERP），穿插在无关刺激之间的相关刺激引起正峰值。脑机接口检测 P300 并执行与参与刺激相关的命令。(b)：用户控制通过感觉运动皮层记录的脑电图中 8-12 Hz $\mu$ 节律（或 18-26 Hz $\beta$ 节律）的振幅，将光标移动到屏幕顶部的目标或底部的目标（或中间位置的其他目标）。顶部和底部目标的频谱（顶部）和样本脑电图轨迹（底部）表明，该用户的控制集中在 $\mu$ 节律频带中。用户还可以学习控制二维或三维的运动。(c)：与向右移动相比，向左移动操纵杆期间，ECoG信号中的高频 γ 振荡（>30 Hz）增加。ECoG记录的 γ 振荡可能对未来脑机接口系统中的光标控制有用。 (d)：四肢瘫痪的脑机接口用户以向左或向左移动计算机光标的首选方向减少或增加单个神经元的放电。光栅图显示了单个试验的单个神经元活动，直方图是20个试验的总和。实际光标轨迹是根据具有不同优选方向的许多神经元的发射率计算的。
 
-**快速连续视觉呈现（rapid serial visual presentation, RSVP）**是一类基于 P300 信号的实验范式。P300 成分可以通过视觉、听觉等诱发，其中视觉诱发 P300 在脑机接口领域应用最为广泛。经典 P300 脑机接口中，目标字符排列为二维矩形阵列，并且每行和列按照一定次序依次闪烁，如所图 1-4 示。**用户需要注视其中某一目标，当该目标闪烁时，用户的脑电信号中便会诱发出 P300 成分**。通过检测 P300 成分出现时间，即可判断出用户关注的目标。
+**快速连续视觉呈现（rapid serial visual presentation, RSVP）**是一类基于 P300 信号的实验范式。P300 成分可以通过视觉、听觉等诱发，其中视觉诱发 P300 在脑机接口领域应用最为广泛。经典 P300 脑机接口中，目标字符排列为二维矩形阵列，并且每行和列按照一定次序依次闪烁，如所图 1-4 示[^Yang]。**用户需要注视其中某一目标，当该目标闪烁时，用户的脑电信号中便会诱发出 P300 成分**。通过检测 P300 成分出现时间，即可判断出用户关注的目标。
 
 ![](/pictures/BCI/典型基于%20P300%20信号的脑-机接口系统的信号特征及系统界面.png)
 
@@ -99,9 +99,9 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 
 ## 常用算法
 
-<!-- ### 典型相关分析(Canonical Correlation Analysis, CCA)
+### 典型相关分析(Canonical Correlation Analysis, CCA)
 
-CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测。假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。模板信号定义为刺激频率的正弦和余弦信号，及其高次谐波信号组成的矩阵，即
+CCA 主要用于在两组多元数据中寻找其内在隐含关系，被广泛应用与 SSVEP 检测[^CCA]。假设多导 EEG 脑电信号 $$\mathbf{X}\in\mathbb{R}^{L_1\times N}$$，SSVEP 模板信号为 $$\mathbf{Y}\in\mathbb{R}^{L_2\times N}$$，其中 $N$ 为样本个数，而 $L_1, L_2$ 分别为 $\mathbf{X}$ 和 $\mathbf{Y}$ 的特征维度。模板信号定义为刺激频率的正弦和余弦信号，及其高次谐波信号组成的矩阵，即
 
 $$
 \mathbf{Y}=\frac{1}{\sqrt{N}}\begin{bmatrix}\sin\left(\omega \cdot 0\right)&\cdots&\sin\left(\omega(N-1)\right)\\\cos\left(\omega \cdot 0\right)&\cdots&\cos\left(\omega(N-1)\right)\\\sin\left(2\omega \cdot 0\right)&\cdots&\sin\left(2\omega(N-1)\right)\\\cos\left(2\omega \cdot 0\right)&\cdots&\cos\left(2\omega(N-1)\right)\\\vdots&\vdots&\vdots\\\sin\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\sin\left(\frac{L_2}{2}\omega(N-1)\right)\\\cos\left(\frac{L_2}{2}\omega \cdot 0\right)&\cdots&\cos\left(\frac{L_2}{2}\omega(N-1)\right)\end{bmatrix}
@@ -114,9 +114,9 @@ $$
 1. 计算 $\mathbf{X}$ 的方差 $$\mathbf{S}_{XX}$$，$\mathbf{Y}$ 的方差 $$\mathbf{S}_{YY}$$，以及 $$\mathbf{X}$$ 和 $\mathbf{Y}$ 的协方差 $$\mathbf{S}_{XY}$$
 2. 计算矩阵 $$ \mathbf{M} = \mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}$$
 3. 对矩阵 $$\mathbf{M}$$ 进行 SVD 分解，最大的奇异值 $\rho$ 和对应的奇异向量为 $\mathbf{u}$ 和 $\mathbf{v}$，即 $$\displaystyle \rho = \max_{\mathbf{u},\mathbf{v}}\mathbf{u}^\top\mathbf{M}\mathbf{v}$$
-4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$ -->
+4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$ 
  
-<!-- 可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
+可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
 
 **CCA 算法推导**
 
@@ -126,7 +126,7 @@ $$
 \rho(\mathbf{x},\mathbf{y}) = \frac{\text{cov}(\mathbf{x},\mathbf{y})}{\sqrt{D(\mathbf{x})}\sqrt{D(\mathbf{y})}}
 $$
 
-但是，**PCCs不能直接用于高维数据**，高维数据难以计算矩阵相关性的原因有以下几点：
+但是，**PCCs不能直接用于高维数据**[^631380041]，高维数据难以计算矩阵相关性的原因有以下几点：
 - **维度灾难**：随着维度的增加，数据的样本量通常远小于变量数，样本点在高维空间中变得稀疏。假设有两个变量之间存在一些相关性，但是由于维度灾难，很可能只有少数几个样本点实际上能够展现这种关系。这会导致计算协方差时的样本点不足，产生不准确的估计。而且，高维空间中的任意两个向量之间的夹角较大，相关性的度量也变得不敏感，导致矩阵相关性的估计不稳定，容易受到异常值的影响，而且在低样本量时存在过高偏倚；
 - **计算量**：高维数据的矩阵相关性的计算量很大，需要对两个矩阵进行交叉乘积，然后求解特征值和特征向量，这在维数很高时会非常耗时，目前稀疏矩阵的计算仍然是难题。
 
@@ -216,7 +216,7 @@ $$
 \mathbf{u}^\top\mathbf{M}\mathbf{v} = \mathbf{u}^\top\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top\mathbf{v} = \sigma_{uv}
 $$
 
-也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。 -->
+也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。 
 
 ### 共空间模式（Common Spatial Pattern, CSP）
 
@@ -279,7 +279,7 @@ $$
 注意，由于不能保证 $\mathbf{\hat{R}}^{(i)}$ 非奇异，因此 $\mathbf{\hat{R}}^{(i)}$ 的逆矩阵可能不存在。因此，我们不能直接将上述方程写成 $\mathbf{\hat{R}}^{(2)-1} \mathbf{\hat{R}}^{(1)}\mathbf{W}= \mathbf{W} \boldsymbol{\Lambda}$，也就是说，不能对$\mathbf{\hat{R}}^{(2)-1} \mathbf{\hat{R}}^{(1)}$进行特征值分解。
 
 
-等价地，特征向量可以通过协方差矩阵 $\mathbf{\hat{R}}^{(1)}$和 $\mathbf{\hat{R}}^{(2)}$的联合对角化获得(证明见[5])：
+等价地，特征向量可以通过协方差矩阵 $\mathbf{\hat{R}}^{(1)}$和 $\mathbf{\hat{R}}^{(2)}$的联合对角化获得(证明见[^CSP])：
 
 $$
 \mathbf{W}^\top \mathbf{\hat{R}}^{(i)} \mathbf{W}=\boldsymbol{\Lambda}^{(i)}(i=1,2)
@@ -327,14 +327,13 @@ Deep Belief Network (DBN)
 Convolutional Neural Network (CNN) -->
 
 
-## Ref:
 
-1. Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
+[^Brain-Computer]: Graimann B., Pfurtscheller G., Allison B. Berlin, Heidelberg. Brain-Computer Interfaces: Revolutionizing Human-Computer Interaction[M]. Springer Berlin Heidelberg, 2010.
 
-3. [论文笔记] 高维数据矩阵相关性：[https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
+[^631380041]: [论文笔记] 高维数据矩阵相关性：[https://zhuanlan.zhihu.com/p/631380041](https://zhuanlan.zhihu.com/p/631380041)
 
-4. 典型关联分析(CCA)原理总结：[https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
+[^CCA]: 典型关联分析(CCA)原理总结：[https://www.cnblogs.com/pinard/p/6288716.html](https://www.cnblogs.com/pinard/p/6288716.html)
 
-2. 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
+[^Yang]: 杨晨. 面向应用的稳态视觉诱发电位脑—机接口算法及系统研究[D].清华大学, 2018.
 
-5. CSP共空间模式一些公式的证明：[https://zhuanlan.zhihu.com/p/142635961](https://zhuanlan.zhihu.com/p/142635961)
+[^CSP]: CSP共空间模式一些公式的证明：[https://zhuanlan.zhihu.com/p/142635961](https://zhuanlan.zhihu.com/p/142635961)
