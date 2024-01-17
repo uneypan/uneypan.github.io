@@ -53,10 +53,11 @@ article_header:
 
 Fig. 10-20国际标准导联系统：头部左侧视图和俯视图。
 
-![](/pictures/BCI/国际10-10系统.png)
+<img src="/pictures/BCI/国际10-10系统.png" alt="国际10-10系统" width="400">
 
-Fig. 10-10国际标准导联系统: Nasion 是额骨和鼻骨在鼻梁处的交叉点。Inion 是头骨后部颈部上方的一个小凸起。字母代表的含义：
-F: 额叶(Frontal lobe)，Fp:前额叶（Frontal poles），T: 颞叶（Temporal lobes），O: 枕叶（Occipital lobes），P: 顶叶（Parietal lobes），C: 中心部（Central） 或感觉运动皮层（sensorimotorcortex），Z: 零点（zero）即左右脑中心
+Fig. 10-10国际标准导联系统: Nasion 是额骨和鼻骨在鼻梁处的交叉点。Inion 是头骨后部颈部上方的一个小凸起。
+
+字母代表的含义：F: 额叶(Frontal lobe)，Fp:前额叶（Frontal poles），T: 颞叶（Temporal lobes），O: 枕叶（Occipital lobes），P: 顶叶（Parietal lobes），C: 中心部（Central） 或感觉运动皮层（sensorimotorcortex），Z: 零点（zero）即左右脑中心
 
 另一种类型的 MI 脑机接口依赖于更抽象、针对特定主题的运动类型。通过脑机接口的多次训练过程，人们可以学习和制定自己的 MI 策略。虽然不同受试者的表现和训练时间有所不同，但大多数受试者可以通过 1-4 小时的训练在两个选择的任务中获得良好的控制。然而，通常需要更长时间的训练才能实现足够的控制。因此，培训是许多 BCI 的重要组成部分。用户通过称为**操作性条件反射(operant conditioning)**的过程进行学习，这是心理学中的一个基本术语。在操作性条件反射中，人们学会将某种行为与反应或效果联系起来。例如，人们知道触摸热炉子很痛苦，并且再也不会这样做。在 BCI 中，想要向上移动光标的用户可能会发现，在心理上想象某个运动任务（例如握紧拳头）的效果不如思考此类运动的动觉体验有效。 BCI 学习是操作性条件反射的一个特例，原因是用户没有执行经典意义上的动作，因为他/她没有移动。尽管如此，如果想象的行为产生效果，那么条件反射仍然会发生。在 BCI 使用过程中，**操作条件反射涉及通常在计算机屏幕上显示的反馈进行训练**。正反馈表明大脑信号以所需的方式进行调节。当用户无法执行所需的任务时，会给出负面反馈或不给出反馈。 BCI 学习是一种称为**神经反馈(neurofeedback)**的反馈。反馈表明用户是否通过 BCI 很好地执行了心理任务或未能实现预期目标。用户可以利用此反馈来优化他们的心理任务并提高 BCI 性能。反馈可以是触觉的或听觉的，但最常见的是视觉的。例如，在光标移动任务中，人们了解哪种类型的想象移动最适合 BCI 控制，并可靠地向上或向下移动光标。通过进一步训练，一些受试者可以学会在两个甚至三个维度上移动光标。
 
@@ -96,7 +97,7 @@ VEP 与视觉刺激的空间和时间特性密切相关。当视觉刺激出现�
 ![](/pictures/BCI/不同频率范围刺激下%20SSVEP%20响应曲线示意图.png)
 
 
-## 常用算法
+<!-- ## 常用算法
 
 ### 典型相关分析(Canonical Correlation Analysis, CCA)
 
@@ -113,9 +114,9 @@ $$
 1. 计算 $\mathbf{X}$ 的方差 $$\mathbf{S}_{XX}$$，$\mathbf{Y}$ 的方差 $$\mathbf{S}_{YY}$$，以及 $$\mathbf{X}$$ 和 $\mathbf{Y}$ 的协方差 $$\mathbf{S}_{XY}$$
 2. 计算矩阵 $$ \mathbf{M} = \mathbf{S}_{XX}^{-1/2}\mathbf{S}_{XY}\mathbf{S}_{YY}^{-1/2}$$
 3. 对矩阵 $$\mathbf{M}$$ 进行 SVD 分解，最大的奇异值 $\rho$ 和对应的奇异向量为 $\mathbf{u}$ 和 $\mathbf{v}$，即 $$\displaystyle \rho = \max_{\mathbf{u},\mathbf{v}}\mathbf{u}^\top\mathbf{M}\mathbf{v}$$
-4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$
+4. 计算 $$\mathbf{X}$$ 和 $$\mathbf{Y}$$ 的线性系数向量 $$\mathbf{a} = \mathbf{S}_{XX}^{-1/2}\mathbf{u}$$ 和 $$\mathbf{b} = \mathbf{S}_{YY}^{-1/2}\mathbf{v}$$ -->
  
-可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
+<!-- 可见算法流程并不复杂，但是要理解这个算法需要了解一些背景知识。
 
 **CCA 算法推导**
 
@@ -215,9 +216,9 @@ $$
 \mathbf{u}^\top\mathbf{M}\mathbf{v} = \mathbf{u}^\top\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top\mathbf{v} = \sigma_{uv}
 $$
 
-也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。
+也就是说，将矩阵 $\mathbf{M}$ 做了奇异值分解后，最大的奇异值就是我们优化目标的最大值，或者说我们的 $\mathbf{X}$ 和 $\mathbf{Y}$ 之间的最大相关系数 $\rho$。利用对应的左右奇异向量 $\mathbf{u},\mathbf{v}$ 可以求出原始 $\mathbf{X},\mathbf{Y}$ 线性系数 $$\mathbf{a}=\mathbf{S}_{XX}^{-1/2}\mathbf{u}, \mathbf{b}=\mathbf{S}_{YY}^{-1/2}\mathbf{v}$$。 -->
 
-### 共空间模式(Common Spatial Pattern, CSP)
+<!-- ### 共空间模式(Common Spatial Pattern, CSP)
 
 Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方法，特别是用于脑电信号的处理。**CSP 的目标是找到一组空间滤波器，能够最大程度地增强目标类别的信号，并最小程度地增强非目标类别的信号**。
 
@@ -241,17 +242,17 @@ Common Spatial Pattern (CSP) 是一种用于脑-机接口中的特征提取方�
 
 4. 选择前 $m$ 个特征值对应的特征向量，构成空间滤波器矩阵 $W_{CSP}$。
 
-最终，使用 $W_{CSP}$ 对原始信号进行空间滤波，得到在这组滤波器下的特征向量。
+最终，使用 $W_{CSP}$ 对原始信号进行空间滤波，得到在这组滤波器下的特征向量。 -->
 
 
 
 
-脑电图 (EEG) 信号表示大脑的电活动。它们以微伏 (μV) 为单位进行测量。有多种方法可以从这些信号中收集原始数据。从脑电图信号中提取的一些重要频率是 delta（频率范围：0-4  Hz，主要负责深度睡眠、自然治疗和免疫系统）、theta（频率范围：4-8  Hz，代表创造力、情绪状态） 、放松）、α（频率范围：8-12  Hz，代表专注和放松的能力）、β（频率范围：12-40  Hz，负责有意识的专注和解决问题的能力）、gamma （频率范围：40–100  Hz，涉及感官结合、认知和学习）。上述频率代表了脑电图信号成分的主要分类。
+<!-- 脑电图 (EEG) 信号表示大脑的电活动。它们以微伏 (μV) 为单位进行测量。有多种方法可以从这些信号中收集原始数据。从脑电图信号中提取的一些重要频率是 delta（频率范围：0-4  Hz，主要负责深度睡眠、自然治疗和免疫系统）、theta（频率范围：4-8  Hz，代表创造力、情绪状态 、放松）、α（频率范围：8-12  Hz，代表专注和放松的能力）、β（频率范围：12-40  Hz，负责有意识的专注和解决问题的能力）、gamma （频率范围：40–100  Hz，涉及感官结合、认知和学习）。上述频率代表了脑电图信号成分的主要分类。 -->
 
-## Preprocessing
+<!-- Preprocessing
 Covariance Matrix Adaptation Evolution Strategy (CMA-ES)
 
-## Feature extraction techniques
+Feature extraction techniques
 
 Principal Component Analysis (PCA) 
 Independent Component Analysis (ICA) 
@@ -271,7 +272,7 @@ Filter Bank Common Spatial Pattern (FBCSP)
 Discriminative FBCSP (DFBCSP)
 Separable Common Spatio Spectral Patterns (SCSSP)
 
-## Classification techniques
+Classification techniques
 
 Linear Discriminate Analysis (LDA)
 Regularized Fisher LDA
@@ -283,7 +284,7 @@ Radial Basis Function (RBF)
 Online Meta neuron based Learning Algorithm (OMLA)
 Deep learning
 Deep Belief Network (DBN)
-Convolutional Neural Network (CNN)
+Convolutional Neural Network (CNN) -->
 
 
 ## Ref:
