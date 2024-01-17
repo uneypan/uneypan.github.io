@@ -2,6 +2,7 @@
 layout: article
 title: 脑机接口研究基础
 mathjax: True
+key: Brain-Computer-Interface-Review
 article_header:
   type: overlay
   theme: dark

@@ -129,7 +129,7 @@ comments:
   gitalk:
     clientID    : 151f24e85c4effe0dbfb # GitHub Application Client ID
     clientSecret: 21c94611ece0313954f2a62dd10b1b715cbdd9b7 # GitHub Application Client Secret
-    repository  : uneypan.github.io # GitHub repo
+    repository  : uneypan/uneypan.github.io # GitHub repo
     owner       : uneypan # GitHub repo owner
     admin: # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST.
       - uneypan
