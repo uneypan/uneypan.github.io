@@ -2,6 +2,7 @@
 layout: article
 title: 拉格朗日对偶问题
 mathjax: true
+key: Lagrangian-Duality-Problem
 article_header:
   type: overlay
   theme: dark
