@@ -280,7 +280,7 @@ $$
 注意，由于不能保证 $\mathbf{\hat{R}}^{(i)}$ 非奇异，因此 $\mathbf{\hat{R}}^{(i)}$ 的逆矩阵可能不存在。因此，我们不能直接将上述方程写成 $\mathbf{\hat{R}}^{(2)-1} \mathbf{\hat{R}}^{(1)}\mathbf{W}= \mathbf{W} \boldsymbol{\Lambda}$，也就是说，不能对$\mathbf{\hat{R}}^{(2)-1} \mathbf{\hat{R}}^{(1)}$进行特征值分解。
 
 
-等价地，特征向量可以通过协方差矩阵 $\mathbf{\hat{R}}^{(1)}$和 $\mathbf{\hat{R}}^{(2)}$的联合对角化获得(证明见[^CSP])：
+等价地，协方差矩阵 $\mathbf{\hat{R}}^{(1)}$和 $\mathbf{\hat{R}}^{(2)}$可以被同一个$\mathbf{W}$对角化，证明见[^CSP]：
 
 $$
 \mathbf{W}^\top \mathbf{\hat{R}}^{(i)} \mathbf{W}=\boldsymbol{\Lambda}^{(i)}(i=1,2)
