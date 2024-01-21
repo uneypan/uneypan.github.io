@@ -3,23 +3,18 @@ layout: article
 title: CSP的生成式模型
 mathjax: True
 key: Generative-View-of-CSP
-# article_header:
-#   type: overlay
-#   theme: dark
-#   background_color: '#203028'
-#   background_image:
-#     gradient: 'linear-gradient(0deg,rgba(0, 0, 0, .5),  rgba(255, 255, 255 , .0))'
-#     # src:  /pictures/BCI/大脑皮层.png
 ---
 
 
-## CSP的生成式模型[^Wu]
+## CSP的生成式模型
 
-[^Wu]: Wu W, Chen Z, Gao S, et al. A probabilistic framework for learning robust common spatial patterns[C].2009 Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE, 2009: 4658-4661.
+考虑两类脑电信号$\mathbf{X}^{(i)} \in \mathbb{R}^{C \times M_i}(i=1,2)$，其中$C$和$M_i$分别表示通道数和采样点数。为了简化问题，假设每个通道的信号均值为零。CSP的原始形式最终得到特征近似于正态分布[^csp]，CSP的生成式模型[^Wu]将解决方案视为从概率模型中的极大似然估计。概率模型是两个因子分析模型[^factor]的混合，每个模型都对应一类模式
 
-考虑两类脑电信号$\mathbf{X}^{(i)} \in \mathbb{R}^{C \times M_i}(i=1,2)$，其中$C$和$M_i$分别表示通道数和采样点数。为了简化问题，假设每个通道的信号均值为零。CSP的生成式模型将解决方案视为从概率模型中的极大似然估计。概率模型是两个因子分析模型[^factor]的混合，每个模型都对应一类模式
+[^csp]: [https://uneypan.github.io/2023/11/08/Brain-Computer-Interface-Algorithms.html#共空间模式common-spatial-pattern-csp](https://uneypan.github.io/2023/11/08/Brain-Computer-Interface-Algorithms.html#%E5%85%B1%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%BC%8Fcommon-spatial-pattern-csp)
 
 [^factor]: [https://www.math.pku.edu.cn/teachers/lidf/course/mvr/mvrnotes/html/_mvrnotes/mvr-factor.html](https://www.math.pku.edu.cn/teachers/lidf/course/mvr/mvrnotes/html/_mvrnotes/mvr-factor.html)
+
+[^Wu]: Wu W, Chen Z, Gao S, et al. A probabilistic framework for learning robust common spatial patterns[C].2009 Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE, 2009: 4658-4661.
 
 $$
 \begin{aligned}
@@ -39,19 +34,51 @@ CSP 算法中的转换矩阵 $\mathbf{W}$ 与混合矩阵 $\mathbf{A}$ 的最大
 
 在实际应用中，上述两个假设很难满足，这正是使得CSP容易过拟合的原因。另一个需要解决的问题是CSP对观测数据中的异常值敏感，这是由于其基本的高斯假设导致的。
 
-## 
 
-已知学生 t 分布能够表示为高斯分布的无限混合，这些分布具有相同的均值，但方差由一个缩放因子 $\nu$ 控制。因此，可以将CSP的生成式模型重新表达为
+
+
+为了使用极大似然估计解决上述问题，首先需要定义似然函数。在这里，我们可以考虑每个类别的联合概率密度函数。对于类别$i$的样本$\mathbf{X}^{(i)}$，其概率密度函数可以写成：
+
+$$
+\begin{aligned}
+p(\mathbf{X}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) &= p(\mathbf{Z}^{(i)}, \mathbf{E}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) \\
+&= p(\mathbf{Z}^{(i)}|\mathbf{\Lambda}^{(i)}) \cdot p(\mathbf{E}^{(i)}|\mathbf{\Psi}^{(i)}) \\
+&= \frac{1}{(2\pi)^{M_iS/2}|\mathbf{\Lambda}^{(i)}|^{M_i/2}} \exp\left(-\frac{1}{2}\text{tr}(\mathbf{Z}^{(i)T}(\mathbf{\Lambda}^{(i)})^{-1}\mathbf{Z}^{(i)})\right) \\
+&\quad \cdot \frac{1}{(2\pi)^{M_iC/2}|\mathbf{\Psi}^{(i)}|^{M_i/2}} \exp\left(-\frac{1}{2}\text{tr}((\mathbf{E}^{(i)})^T(\mathbf{\Psi}^{(i)})^{-1}\mathbf{E}^{(i)})\right)
+\end{aligned}
+$$
+
+其中，$\text{tr}(\cdot)$表示矩阵的迹运算，$|\cdot|$表示矩阵的行列式。通过对数化简，上述概率密度函数的对数似然函数可以写成：
+
+$$
+\begin{aligned}
+\ln p(\mathbf{X}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) &= -\frac{M_iS}{2}\ln(2\pi) - \frac{M_i}{2}\ln|\mathbf{\Lambda}^{(i)}| \\
+&\quad -\frac{1}{2}\text{tr}(\mathbf{Z}^{(i)T}(\mathbf{\Lambda}^{(i)})^{-1}\mathbf{Z}^{(i)}) \\
+&\quad -\frac{M_iC}{2}\ln(2\pi) - \frac{M_i}{2}\ln|\mathbf{\Psi}^{(i)}| \\
+&\quad -\frac{1}{2}\text{tr}((\mathbf{E}^{(i)})^T(\mathbf{\Psi}^{(i)})^{-1}\mathbf{E}^{(i)})
+\end{aligned}
+$$
+
+接下来，通过最大化对数似然函数来估计参数，即对$\mathbf{A}$、$\mathbf{\Lambda}^{(i)}$和$\mathbf{\Psi}^{(i)}$分别求偏导并令其等于零。由于这涉及到矩阵的微积分，求解可以变得相对复杂。通常，使用数值优化算法，例如迭代法（如EM算法）或梯度下降等，来近似最大化对数似然函数。
+
+
+## Student's t-分布表示下的鲁棒CSP
+
+已知Student's t-分布[^student-t]能够表示为高斯分布的无限混合，这些分布具有相同的均值，但方差由一个缩放因子 $\nu$ 控制。因此，可以将CSP的生成式模型重新表达为
+
+[^student-t]: [https://uneypan.github.io/2023/06/20/Distribution.html#13-%E5%AD%A6%E7%94%9F-t%E5%88%86%E5%B8%83%E8%BF%9E%E7%BB%AD---python-code](https://uneypan.github.io/2023/06/20/Distribution.html#13-%E5%AD%A6%E7%94%9F-t%E5%88%86%E5%B8%83%E8%BF%9E%E7%BB%AD---python-code)
 
 $$
 \begin{aligned}
 &\mathbf{X}^{(i)} = \mathbf{A} \mathbf{Z}^{(i)} + \mathbf{E}^{(i)} \quad (i=1,2) \\
-\text{where} \quad &\mathbf{Z}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1} \mathbf{\Lambda}^{(i)} ), \quad \mathbf{E}^{(i)} \sim \mathcal{N}(\mathbf{0}, \mathbf{\Psi}^{(i)} )
+\text{where} \quad &\mathbf{Z}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1} \mathbf{\Lambda}^{(i)} ), \quad \mathbf{E}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1}\mathbf{\Psi}^{(i)})\\
+&u^{(i)} \sim \text{Gam}(\frac{\nu}{2}, \frac{\nu}{2} )
 \end{aligned}
 $$
 
+这样一来，就将 $\mathbf{Z}^{(i)}$ 和 $\mathbf{E}^{(i)}$ 变为了Student's t-分布。当 $\nu \rightarrow \infty$ 时，Student's t-分布趋近于高斯分布。因此，当 $\nu$ 趋近于无穷大时，模型的表现将与原始的CSP模型相同。
 
-## $\mathbf{W} = \hat{\mathbf{A}}^{-\top}$ 的证明
+## $\mathbf{W} = \hat{\mathbf{A}}^{-\top}$ 的证明[^Wu]
 
 1. 使用KL散度的定义将对数似然函数重新表达
 
