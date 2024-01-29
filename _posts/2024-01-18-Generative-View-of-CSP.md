@@ -25,60 +25,12 @@ $$
 
 $\mathbf{A} \in \mathbb{R}^{C \times S}$是因子载荷矩阵（也称为混合矩阵，$S$ 是因子的数量），$\mathbf{Z}^{(i)} \in \mathbb{R}^{S \times M_i}$是因子，$\mathbf{E}^{(i)} \in \mathbb{R}^{C \times M_i}$是噪声信号，由于假定因子不相关，协方差矩阵$\mathbf{\Lambda}^{(i)},\mathbf{\Psi}^{(i)} \in \mathbb{R}^{C \times C}$都是对角阵。
 
-CSP 算法中的转换矩阵 $\mathbf{W}$ 与混合矩阵 $\mathbf{A}$ 的最大似然估计 $\hat{\mathbf{A}}$ 之间的关系为  $\mathbf{W} = \hat{\mathbf{A}}^{-\top}$。
-
-该定理附带两个额外的假设：
+CSP 算法中的转换矩阵 $\mathbf{W}$ 与混合矩阵 $\mathbf{A}$ 的极大似然估计 $\hat{\mathbf{A}}$ 之间的关系为  $\mathbf{W} = \hat{\mathbf{A}}^{-\top}$。该定理附带两个额外的假设：
 
 - （i）附加噪声趋近于零；
 - （ii）混合矩阵 $\mathbf{A}$ 是一个方阵。
 
-在实际应用中，上述两个假设很难满足，这正是使得CSP容易过拟合的原因。另一个需要解决的问题是CSP对观测数据中的异常值敏感，这是由于其基本的高斯假设导致的。
-
-
-
-
-为了使用极大似然估计解决上述问题，首先需要定义似然函数。在这里，我们可以考虑每个类别的联合概率密度函数。对于类别$i$的样本$\mathbf{X}^{(i)}$，其概率密度函数可以写成：
-
-$$
-\begin{aligned}
-p(\mathbf{X}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) &= p(\mathbf{Z}^{(i)}, \mathbf{E}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) \\
-&= p(\mathbf{Z}^{(i)}|\mathbf{\Lambda}^{(i)}) \cdot p(\mathbf{E}^{(i)}|\mathbf{\Psi}^{(i)}) \\
-&= \frac{1}{(2\pi)^{M_iS/2}|\mathbf{\Lambda}^{(i)}|^{M_i/2}} \exp\left(-\frac{1}{2}\text{tr}(\mathbf{Z}^{(i)T}(\mathbf{\Lambda}^{(i)})^{-1}\mathbf{Z}^{(i)})\right) \\
-&\quad \cdot \frac{1}{(2\pi)^{M_iC/2}|\mathbf{\Psi}^{(i)}|^{M_i/2}} \exp\left(-\frac{1}{2}\text{tr}((\mathbf{E}^{(i)})^T(\mathbf{\Psi}^{(i)})^{-1}\mathbf{E}^{(i)})\right)
-\end{aligned}
-$$
-
-其中，$\text{tr}(\cdot)$表示矩阵的迹运算，$|\cdot|$表示矩阵的行列式。通过对数化简，上述概率密度函数的对数似然函数可以写成：
-
-$$
-\begin{aligned}
-\ln p(\mathbf{X}^{(i)}|\mathbf{A}, \mathbf{\Lambda}^{(i)}, \mathbf{\Psi}^{(i)}) &= -\frac{M_iS}{2}\ln(2\pi) - \frac{M_i}{2}\ln|\mathbf{\Lambda}^{(i)}| \\
-&\quad -\frac{1}{2}\text{tr}(\mathbf{Z}^{(i)T}(\mathbf{\Lambda}^{(i)})^{-1}\mathbf{Z}^{(i)}) \\
-&\quad -\frac{M_iC}{2}\ln(2\pi) - \frac{M_i}{2}\ln|\mathbf{\Psi}^{(i)}| \\
-&\quad -\frac{1}{2}\text{tr}((\mathbf{E}^{(i)})^T(\mathbf{\Psi}^{(i)})^{-1}\mathbf{E}^{(i)})
-\end{aligned}
-$$
-
-接下来，通过最大化对数似然函数来估计参数，即对$\mathbf{A}$、$\mathbf{\Lambda}^{(i)}$和$\mathbf{\Psi}^{(i)}$分别求偏导并令其等于零。由于这涉及到矩阵的微积分，求解可以变得相对复杂。通常，使用数值优化算法，例如迭代法（如EM算法）或梯度下降等，来近似最大化对数似然函数。
-
-
-## Student's t-分布表示下的鲁棒CSP
-
-已知Student's t-分布[^student-t]能够表示为高斯分布的无限混合，这些分布具有相同的均值，但方差由一个缩放因子 $\nu$ 控制。因此，可以将CSP的生成式模型重新表达为
-
-[^student-t]: [https://uneypan.github.io/2023/06/20/Distribution.html#13-%E5%AD%A6%E7%94%9F-t%E5%88%86%E5%B8%83%E8%BF%9E%E7%BB%AD---python-code](https://uneypan.github.io/2023/06/20/Distribution.html#13-%E5%AD%A6%E7%94%9F-t%E5%88%86%E5%B8%83%E8%BF%9E%E7%BB%AD---python-code)
-
-$$
-\begin{aligned}
-&\mathbf{X}^{(i)} = \mathbf{A} \mathbf{Z}^{(i)} + \mathbf{E}^{(i)} \quad (i=1,2) \\
-\text{where} \quad &\mathbf{Z}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1} \mathbf{\Lambda}^{(i)} ), \quad \mathbf{E}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1}\mathbf{\Psi}^{(i)})\\
-&u^{(i)} \sim \text{Gam}(\frac{\nu}{2}, \frac{\nu}{2} )
-\end{aligned}
-$$
-
-这样一来，就将 $\mathbf{Z}^{(i)}$ 和 $\mathbf{E}^{(i)}$ 变为了Student's t-分布。当 $\nu \rightarrow \infty$ 时，Student's t-分布趋近于高斯分布。因此，当 $\nu$ 趋近于无穷大时，模型的表现将与原始的CSP模型相同。
-
-## $\mathbf{W} = \hat{\mathbf{A}}^{-\top}$ 的证明[^Wu]
+## $\mathbf{A}$ 的极大似然估计
 
 1. 使用KL散度的定义将对数似然函数重新表达
 
@@ -109,3 +61,26 @@ $$
 3. 对数似然的最大化
 
     第一个KL散度项的归零条件是 $\mathbf{A}^{-1} \hat{\mathbf{R}}^{(i)} \mathbf{A}^{-\top}$ 是一个对角矩阵。换句话说，为了最大化对数似然，需要确保通过混合矩阵的逆的转置对 $\hat{\mathbf{R}}^{(i)}$ 进行线性变换后得到的矩阵$\mathbf{A}^{-1} \hat{\mathbf{R}}^{(i)} \mathbf{A}^{-\top}$是对角的。由于 $\boldsymbol{\Lambda}^{(1)}$ 和 $\boldsymbol{\Lambda}^{(2)}$ 是对角矩阵，因此，不论混合矩阵 $\mathbf{A}$ 取什么值，第二个KL散度项恒等于零。换句话说，只有当 $\mathbf{A}^{-\top}$ 联合对角化 $\hat{\mathbf{R}}^{(1)}$ 和 $\hat{\mathbf{R}}^{(2)}$ 时，对数似然函数才能达到最大化。
+
+
+在实际应用中，上述两个假设很难满足，这正是使得CSP容易过拟合的原因。另一个需要解决的问题是CSP对观测数据中的异常值敏感，这是由于其基本的高斯假设导致的。
+
+
+
+## Student's t-分布表示下的鲁棒CSP
+
+已知Student's t-分布[^student-t]能够表示为高斯分布的无限混合，这些分布具有相同的均值，但方差由一个缩放因子 $\nu$ 控制。因此，可以将CSP的生成式模型重新表达为
+
+[^student-t]: [https://uneypan.github.io/2023/06/20/Distribution.html#13-学生-t分布连续---python-code](https://uneypan.github.io/2023/06/20/Distribution.html#13-学生-t分布连续---python-code)
+
+$$
+\begin{aligned}
+&\mathbf{X}^{(i)} = \mathbf{A} \mathbf{Z}^{(i)} + \mathbf{E}^{(i)} \quad (i=1,2) \\
+\text{where} \quad &\mathbf{Z}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1} \mathbf{\Lambda}^{(i)} ), \quad \mathbf{E}^{(i)} \sim \mathcal{N}(\mathbf{0}, u^{(i)-1}\mathbf{\Psi}^{(i)})\\
+&u^{(i)} \sim \text{Gam}(\frac{\nu}{2}, \frac{\nu}{2} )
+\end{aligned}
+$$
+
+这样一来，就将 $\mathbf{Z}^{(i)}$ 和 $\mathbf{E}^{(i)}$ 变为了Student's t-分布。当 $\nu \rightarrow \infty$ 时，Student's t-分布趋近于高斯分布。因此，当 $\nu$ 趋近于无穷大时，模型的表现将与原始的CSP模型相同。
+
+
