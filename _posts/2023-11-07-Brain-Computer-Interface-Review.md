@@ -31,7 +31,7 @@ key: Brain-Computer-Interface-Review
 **电场记录**测量中枢神经系统突触、神经元和轴突在接收和传递信息时膜电位的变化。神经元接收并整合突触输入，然后以动作电位的形式将结果传递到轴突。突触电位和动作电位反映了离子在神经元膜上流动的变化。这种活动产生的电场记录为
 - 由头皮上的电极记录头皮电压变化：**脑电图 (electroencephalograph, EEG)** 
 - 由皮层表面的电极记录皮层表面电压变化：**皮层脑电 (electrocorticography, ECoG)** 
-- 由插入皮层的电极阵列记录大脑内电压变化：**局部场电位 (local field potential, LFP)** 和 **神经元动作电位（spikes）** 
+- 由插入皮层的电极阵列记录大脑内电压变化：**局部场电位 (local field potential, LFP)** 和 **神经元动作电位（spikes，也译作神经元脉冲峰电位、神经元尖峰电位）** 
 
 ![](/pictures/BCI/检测大脑电活动的三种不同方法：EEG、ECoG和皮质内记录.png)
 
